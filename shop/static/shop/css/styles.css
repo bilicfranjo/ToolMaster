@@ -1,0 +1,20 @@
+/* Reset stilova */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Osnovne postavke */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Teko', sans-serif;
+
+}
+
+/* Navbar */
+
