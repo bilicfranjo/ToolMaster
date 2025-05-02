@@ -6,15 +6,91 @@
 }
 
 /* Osnovne postavke */
-
 html {
     scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Teko', sans-serif;
-
+    background-color: black;
 }
 
-/* Navbar */
+body,
+a,
+p,
+h1, h2, h3, h4, h5, h6,
+.navbar a,
+footer,
+button {
+    font-family: 'Teko', sans-serif !important;
+}
 
+
+/* NAVBAR */
+
+.navbar {
+    background-color: #4A5D23;
+    color: white;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 8px solid #f1c40f;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    padding: 8px 0;
+    border-bottom: 2px solid #f1c40f;
+}
+
+.navbar-container {
+    width: 100%;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Lijevi i desni linkovi */
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Centrirani logo */
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-img {
+    height: 30px;
+    width: auto;
+    display: block;
+    margin-top: -4px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.navbar a:hover {
+    color: #f1c40f;
+}
+
+.divider {
+    color: white;
+    font-weight: 300;
+    user-select: none;
+}
+
+.logo-img:hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+    transition: 0.3s;
+}

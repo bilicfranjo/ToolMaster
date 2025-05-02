@@ -3,6 +3,6 @@ from .models import Banner
 
 def home_view(request):
     banners = Banner.objects.all()
-    return render(request, 'home.html', {'banners' : banners,})
+    return render(request, 'shop/home.html', {'banners' : banners,})
 
 
