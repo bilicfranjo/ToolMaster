@@ -4,42 +4,60 @@
 
 <!-- Banner -->
 <section class="hero container mt-4">
-    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for banner in banners %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ banner.image.url }}" class="d-block w-100" alt="{{ banner.title }}">
-                {% if banner.title or banner.link %}
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>{{ banner.title }}</h5>
-                    {% if banner.link %}
-                    <a href="{{ banner.link }}" class="btn btn-primary">Vidi više</a>
-                    {% endif %}
+    <div class="carousel-wrapper position-relative">
+
+        <!-- Strelice trebaju biti ovdje! -->
+        <button class="carousel-control-prev custom-carousel-arrow" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </button>
+
+        <button class="carousel-control-next custom-carousel-arrow" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
+            </svg>
+        </button>
+
+        <!-- Carousel mora biti unutar .carousel-wrapper ali bez strelica -->
+        <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for banner in banners %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="carousel-banner d-flex flex-wrap">
+
+                        <!-- Tekst lijevo -->
+                        <div class="carousel-text">
+                            <div class="yellow-line"></div>
+                            <h2>{{ banner.title }}</h2>
+                            {% if banner.link %}
+                            <a href="{{ banner.link }}" class="banner-button">Pogledaj ponudu</a>
+                            {% endif %}
+                        </div>
+
+                        <!-- Slika desno -->
+                        <div class="carousel-image" style="background-image: url('{{ banner.image.url }}');"></div>
+
+                    </div>
                 </div>
-                {% endif %}
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-
     </div>
+
 </section>
 
 
-
-{% endblock %}
-
 <!-- Kategorije -->
+
+
 
 <!-- Istaknuti proizvodi -->
 
 <!-- DIY sekcija -->
 
 <!-- Footer -->
+
+{% endblock %}
+

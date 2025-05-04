@@ -25,6 +25,9 @@ button {
     font-family: 'Teko', sans-serif !important;
 }
 
+/* Footer */
+
+
 
 /* NAVBAR */
 
@@ -52,14 +55,12 @@ button {
     align-items: center;
 }
 
-/* Lijevi i desni linkovi */
 .nav-left, .nav-right {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-/* Centrirani logo */
 .nav-center {
     position: absolute;
     left: 50%;
@@ -93,4 +94,108 @@ button {
     filter: brightness(1.2);
     transform: scale(1.05);
     transition: 0.3s;
+}
+
+
+/* BANNER */
+
+.carousel-wrapper {
+    position: relative;
+}
+
+.carousel-banner {
+    position: relative; /* Dodano da strelice budu u odnosu na ovaj blok */
+    display: flex;
+    width: 100%;
+    min-height: 600px;
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.carousel-text {
+    flex: 1;
+    background-color: #4A5D23;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    line-height: 1.4;
+    border-top: 1px solid #f1c40f;
+}
+
+.carousel-text h2 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.carousel-image {
+    flex: 3;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 400px;
+}
+
+.banner-button {
+    align-self: flex-start;
+    background-color: #f1c40f;
+    color: black;
+    padding: 8px 12px;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: 0.3s;
+    font-size: 28px;
+}
+
+.banner-button:hover {
+    background-color: #d4ac0d;
+}
+
+
+/* Strelice carousela */
+
+/* Strelice carousela — s dodatnom specifičnošću */
+.carousel-wrapper .carousel-control-prev.custom-carousel-arrow,
+.carousel-wrapper .carousel-control-next.custom-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+/* Lijeva strelica — specifično pozicioniranje na prijelaz */
+.carousel-wrapper .carousel-control-prev.custom-carousel-arrow {
+    left: calc(0% - 65px);  /* Pozicionirano na sredinu teksta */
+}
+
+/* Desna strelica — specifično pozicioniranje na prijelaz */
+.carousel-wrapper .carousel-control-next.custom-carousel-arrow {
+    right: calc(0% - 65px); /* Na početak slike */
+}
+
+/* SVG ikone unutar strelica */
+.carousel-wrapper .custom-carousel-arrow svg {
+    width: 28px;
+    height: 28px;
+    fill: black;
+}
+
+.yellow-line {
+    height: 4px;
+    width: 100%;
+    background-color: #f1c40f;
+    margin: 20px 0;
 }
