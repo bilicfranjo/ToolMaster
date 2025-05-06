@@ -50,6 +50,22 @@
 
 
 <!-- Kategorije -->
+<section class="category-section mt-5 py-5">
+    <div class="container">
+        <h2 class="section-title-left mb-4">Pretražite po kategorijama...</h2>
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-md-6">
+                <div class="category-card-img" style="background-image: url('{% if category.image %}{{ category.image.url }}{% endif %}');">
+                    <div class="overlay">
+                        <h3>{{ category.name }}</h3>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
 
 

@@ -35,7 +35,7 @@ button {
     background-color: #4A5D23;
     color: white;
     padding: 15px 0;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 999;
     border-bottom: 8px solid #f1c40f;
@@ -198,4 +198,56 @@ button {
     width: 100%;
     background-color: #f1c40f;
     margin: 20px 0;
+}
+
+
+/* KATEGORIJE */
+
+/* Sekcija kategorija s pozadinom */
+.category-section {
+    background-color: #4A5D23;
+}
+
+/* Naslov sekcije lijevo */
+.section-title-left {
+    font-size: 36px;
+    font-weight: bold;
+    color: #f1c40f;
+    text-align: left;
+    padding-left: 12px;
+}
+
+/* Kartica kao slika s overlay slojem */
+.category-card-img {
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+.category-card-img:hover {
+    transform: scale(1.02);
+}
+
+/* Sloj preko slike */
+.category-card-img .overlay {
+    background: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tekst unutar kartice */
+.category-card-img h3 {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 1px 1px 2px black;
 }
