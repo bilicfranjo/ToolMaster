@@ -55,7 +55,7 @@
         <h2 class="section-title-left mb-4">Pretražite po kategorijama...</h2>
         <div class="row g-4">
             {% for category in categories %}
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="category-card-img" style="background-image: url('{% if category.image %}{{ category.image.url }}{% endif %}');">
                     <div class="overlay">
                         <h3>{{ category.name }}</h3>
@@ -67,11 +67,29 @@
     </div>
 </section>
 
+<!-- Divider -->
 
+<div class="divider-svg">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#4A5D23" fill-opacity="1" d="M0,32L720,96L1440,32L1440,0L720,0L0,0Z"></path>
+    </svg>
+</div>
+
+<!-- DIY sekcija -->
+
+<section class="diy-section py-5">
+    <div class="container text-center">
+        <h2 class="section-title mb-4">Do It Yourself</h2>
+        <p class="diy-text mb-4">
+            Imate volju napraviti nešto vlastitim rukama? Pogledajte našu DIY sekciju s projektima i video vodičima koji će vas inspirirati!
+        </p>
+        <a href="#" class="btn btn-warning btn-lg">Pogledaj DIY projekte</a>
+    </div>
+</section>
 
 <!-- Istaknuti proizvodi -->
 
-<!-- DIY sekcija -->
+
 
 <!-- Footer -->
 
