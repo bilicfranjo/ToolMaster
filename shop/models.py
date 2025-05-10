@@ -16,6 +16,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/')
     description = models.TextField(blank=True)
     in_stock = models.BooleanField(default=True)
+    popular = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name

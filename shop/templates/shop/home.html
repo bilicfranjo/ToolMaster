@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<!-- Banner -->
+<!-- BANNER -->
 <section class="hero container mt-4">
     <div class="carousel-wrapper position-relative">
 
@@ -49,7 +49,7 @@
 </section>
 
 
-<!-- Kategorije -->
+<!-- KATEGORIJE-->
 <section class="category-section mt-5 py-5">
     <div class="container">
         <h2 class="section-title-left mb-4">Pretražite po kategorijama...</h2>
@@ -68,15 +68,13 @@
 </section>
 
 <!-- Divider -->
-
 <div class="divider-svg">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path fill="#4A5D23" fill-opacity="1" d="M0,32L720,96L1440,32L1440,0L720,0L0,0Z"></path>
     </svg>
 </div>
 
-<!-- DIY sekcija -->
-
+<!-- DIY -->
 <section class="diy-section py-5">
     <div class="container text-center">
         <h2 class="section-title mb-4">Do It Yourself</h2>
@@ -87,11 +85,96 @@
     </div>
 </section>
 
-<!-- Istaknuti proizvodi -->
+<!-- POPULARNI PROIZVODI -->
+<section class="popular-products-section py-5">
+    <div class="container">
+        <!-- Divider -->
+        <div class="diy-popular-divider"></div>
+        <h2 class="section-title-left mb-4">Popularni proizvodi</h2>
+
+        <!-- Swiper (IZVAN container-a!) -->
+        <div class="swiper popularSwiper">
+        <div class="swiper-wrapper">
+            {% for product in popular_products %}
+            <div class="swiper-slide">
+                <div class="card product-card">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.price }} €</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+        <!-- Strelice -->
+        <div class="swiper-button-prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </div>
+        
+        <div class="swiper-button-next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- O NAMA -->
+<section class="about-section py-5">
+    <div class="container text-center">
+        <h2 class="about-title mb-4">O nama</h2>
+        <p class="about-text mb-4">
+            ToolMaster je specijalizirana online trgovina za alate, materijale i dodatke koji će vašu radionicu i dom 
+            učiniti potpunima. Naša misija je pružiti vrhunske proizvode po pristupačnim cijenama uz brzu i sigurnu dostavu.
+            Ponosimo se širokom ponudom brendova i stručnom podrškom za svaku kupnju!
+        </p>
+        
+        <div class="contact-info d-flex flex-column align-items-center gap-3 mt-4">
+            <div class="d-flex align-items-center gap-2">
+                <span class="contact-icon">📞</span>
+                <span class="contact-text">+385 91 234 5678</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="contact-icon">📧</span>
+                <span class="contact-text">podrska@toolmaster.hr</span>
+            </div>
+        </div>
+    </div>
+</section>
 
 
-
-<!-- Footer -->
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const swiper = new Swiper(".popularSwiper", {
+          slidesPerView: 4,
+          spaceBetween: 30,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          speed: 500,
+          breakpoints: {
+            320: {
+              slidesPerView: 1,
+            },
+            576: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            992: {
+              slidesPerView: 4,
+            }
+          }
+        });
+    });
+    </script>
+    
 {% endblock %}
 

@@ -27,6 +27,19 @@ button {
 
 /* Footer */
 
+.site-footer {
+    background-color: black;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 22px;
+    color: white;
+    font-weight: 600;
+}
+
+
+.site-footer p {
+    margin: 0;
+}
 
 /* Divider */
 
@@ -37,6 +50,12 @@ button {
     line-height: 0;
 }
 
+.diy-popular-divider {
+    height: 4px;
+    width: 100%;
+    background-color: #4A5D23;
+    margin-bottom: 40px;
+}
 
 /* NAVBAR */
 
@@ -262,7 +281,7 @@ button {
 }
 
 
-/* DIY dio*/
+/* DIY */
 
 .diy-section {
     background-color: white; /* ili neka druga boja koja ti paše */
@@ -286,3 +305,124 @@ button {
     font-size: 28px;
     font-weight: 500;
 }
+
+/* POPULARNI PROIZVODI */
+
+.popular-products-section h2 {
+    color: #4A5D23;
+}
+
+.swiper {
+    padding: 20px 10px;
+}
+
+
+.product-card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    height: 300px;
+}
+
+.product-card:hover {
+    transform: scale(1.06);
+}
+
+.product-card img {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+    background: white;
+    border-radius: 5px;
+}
+
+.card-title {
+    font-size: 24px;
+}
+
+.card-text {
+    font-size: 24px;
+}
+
+
+.popular-products-section {
+    position: relative;
+}
+
+
+/* Swiper strelice */
+.popular-products-section .swiper-button-next,
+.popular-products-section .swiper-button-prev {
+    position: absolute;
+    top: 65%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Lijeva i desna pozicija */
+.popular-products-section .swiper-button-prev {
+    left: 40px;
+}
+
+.popular-products-section .swiper-button-next {
+    right: 40px;
+}
+
+/* SVG unutar strelice */
+.popular-products-section .swiper-button-next svg,
+.popular-products-section .swiper-button-prev svg {
+    width: 28px;
+    height: 28px;
+    fill: black;
+    display: block;
+}
+
+/* Disabled strelice */
+.popular-products-section .swiper-button-next.swiper-button-disabled,
+.popular-products-section .swiper-button-prev.swiper-button-disabled {
+    opacity: 0;
+}
+
+.popular-products-section .swiper-button-next::after,
+.popular-products-section .swiper-button-prev::after {
+    display: none;
+}
+
+
+/* O NAMA */
+.about-section {
+    background-color: #4A5D23;
+    padding: 60px 20px;
+    color: white;
+}
+
+.about-title {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #f1c40f;
+}
+
+.about-text {
+    font-size: 26px;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.contact-info .contact-icon {
+    font-size: 24px;
+}
+
+.contact-info .contact-text {
+    font-size: 26px;
+}
+
