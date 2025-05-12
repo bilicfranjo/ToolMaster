@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Banner, Category, Product
+from django.contrib.auth import login, authenticate, logout
+from .forms import CustomAuthenticationForm, CustomUserCreationForm
+from django.contrib.auth.models import User
 
 def home_view(request):
     banners = Banner.objects.all()
@@ -12,3 +15,40 @@ def home_view(request):
         })
 
 
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'shop/register.html', {'form': form})
+
+def login_view(request):
+    error_message = None
+
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                error_message = "Neispravno korisničko ime ili lozinka."
+        else:
+            error_message = "Neispravan unos. Pokušaj ponovno."
+    else:
+        form = CustomAuthenticationForm()
+
+    return render(request, 'shop/login.html', {'form': form, 'error_message': error_message})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')

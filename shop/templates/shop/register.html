@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Registracija - ToolMaster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="preload" as="image" href="{% static 'shop/images/register-bg.webp' %}">
+
+    <link rel="stylesheet" href="{% static 'shop/css/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-image-side register-bg-image"></div>
+
+    <div class="auth-form-side">
+        <!--
+        <div class="back-link">
+            <a href="{% url 'home' %}">← Povratak u trgovinu</a>
+        </div>-->
+
+        <div class="logo-wrapper">
+            <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
+        </div>
+
+        <h2>Registriraj račun</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Registriraj se</button>
+        </form>
+
+        <p class="login-link">Već imaš račun? <a href="{% url 'login' %}">Prijavi se</a></p>
+    </div>
+</div>
+
+</body>
+</html>

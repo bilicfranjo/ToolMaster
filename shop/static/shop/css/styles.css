@@ -238,7 +238,7 @@ button {
 
 /* Naslov sekcije lijevo */
 .section-title-left {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: bold;
     color: #f1c40f;
     text-align: left;
@@ -316,6 +316,9 @@ button {
     padding: 20px 10px;
 }
 
+.popular-products-section .section-title-left {
+    font-size: 40px;
+}
 
 .product-card {
     border: none;

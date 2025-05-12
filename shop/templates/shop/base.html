@@ -24,7 +24,7 @@
         <div class="navbar-container navbar-content">
 
             <div class="nav-left">
-                <a href="#">Početna</a>
+                <a href="/">Početna</a>
                 <span class="divider">|</span>
                 <a href="#">Kategorije</a>
                 <span class="divider">|</span>
@@ -33,7 +33,7 @@
 
             <div class="nav-center">
                 <a href="/" class="logo">
-                    <img src="{% static 'images/logo.png' %}" alt="ToolMaster logo" class="logo-img">
+                    <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img">
                 </a>
             </div>
 
@@ -45,11 +45,11 @@
                     <span class="divider">|</span>
                     <a href="#">Profil</a>
                     <span class="divider">|</span>
-                    <a href="#">Odjava</a>
+                    <a href="{% url 'logout' %}">Odjava</a>
                 {% else %}
-                    <a href="#">Prijava</a>
+                    <a href="{% url 'login' %}">Prijava</a>
                     <span class="divider">|</span>
-                    <a href="#">Registracija</a>
+                    <a href="{% url 'register' %}">Registracija</a>
                 {% endif %}
             </div>
 

@@ -1,0 +1,187 @@
+/* REGISTRACIJA */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Glavni layout */
+.auth-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Teko', sans-serif;
+}
+
+
+/* Lijeva strana – slika */
+.auth-image-side {
+    flex-basis: 50%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-bg-image {
+    background-image: url('/static/shop/images/login-bg.webp');
+}
+.register-bg-image {
+    background-image: url('/static/shop/images/register-bg.webp');
+}
+
+
+.auth-form-side {
+    flex-basis: 50%;
+    height: 100%;
+    background-color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Link za povratak */
+.back-link {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.back-link a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #4A5D23;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+/* Logo */
+.logo-wrapper {
+    text-align: center;
+    padding-top: 50px;
+    margin-bottom: 10px;
+}
+
+.logo-wrapper img {
+    max-height: 40px;
+    width: auto;
+}
+
+
+/* Naslov */
+.auth-form-side h2 {
+    font-size: 36px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #4A5D23;
+}
+
+/* Forma */
+form {
+    width: 100%;
+    max-width: 400px;
+}
+
+form div {
+    margin-bottom: 20px;
+}
+
+
+form input {
+    width: 100%;
+    padding: 4px;
+    font-size: 24px;
+    margin-bottom: 2px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Teko', sans-serif;
+}
+
+form label {
+    font-size: 20px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    font-size: 20px;
+    background-color: #f1c40f;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Teko', sans-serif;
+}
+
+ul.errorlist {
+    padding: 0;
+    margin-bottom: 10px;
+    color: red;
+    font-size: 18px;
+    list-style: none;
+}
+
+
+form button:hover {
+    background-color: #d4ac0d;
+}
+
+/* Link za login */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+.login-link a {
+    color: #4A5D23;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.login-error {
+    color: red;
+    font-size: 20px;
+    /*text-align: center;*/
+    margin-bottom: 15px;
+    font-family: 'Teko', sans-serif;
+}
+
+/* Responsivnost */
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+    }
+
+    .auth-image-side {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .auth-form-side {
+        width: 100%;
+        padding: 30px 20px;
+    }
+}

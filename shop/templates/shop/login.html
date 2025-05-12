@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Prijava - ToolMaster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+
+    <!-- Google font Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="preload" as="image" href="{% static 'shop/images/login-bg.webp' %}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'shop/css/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-container">
+
+    <!-- Lijeva strana: forma -->
+    <div class="auth-form-side">
+
+        <div class="logo-wrapper">
+            <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
+        </div>
+
+        <h2>Prijava</h2>
+
+        {% if error_message %}
+            <div class="login-error">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div>
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+
+            <button type="submit">Prijavi se</button>
+        </form>
+
+        <p class="login-link">Nemaš račun? <a href="{% url 'register' %}">Registriraj se</a></p>
+
+    </div>
+
+    <!-- Desna strana: slika -->
+    <div class="auth-image-side login-bg-image"></div>
+
+</div>
+
+</body>
+</html>
