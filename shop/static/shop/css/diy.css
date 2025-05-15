@@ -1,0 +1,136 @@
+/* DIY LISTA */
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* DIY PREGLED PROJEKTA */
+
+
+.diy-detail-page {
+    padding-top: 40px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.video-wrapper {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.video-wrapper video {
+    width: 100%;
+    max-width: 900px;
+}
+
+.video-description {
+    font-size: 24px;
+    color: black;
+    max-width: 900px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* GUMB + NASLOV U ISTOJ LINJI */
+
+.diy-header-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    height: 60px;
+    margin-bottom: 30px;
+}
+
+.diy-header-wrapper a {
+    z-index: 2;
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 1px solid black;
+    color: black;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.diy-header-wrapper a:hover {
+    background-color: #f1c40f;
+    color: black;
+    border-color: #f1c40f;
+}
+
+.diy-centered-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 32px;
+    color: #4A5D23;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* ALATI KORIŠTENI U VIDEU */
+
+.tools-swiper-section {
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.tools-swiper-section .swiper-button-next,
+.tools-swiper-section .swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tools-swiper-section .swiper-button-prev {
+    left: -70px;
+}
+
+.tools-swiper-section .swiper-button-next {
+    right: -70px;
+}
+
+.tools-swiper-section .swiper-button-next svg,
+.tools-swiper-section .swiper-button-prev svg {
+    width: 28px;
+    height: 28px;
+    fill: black;
+    display: block;
+}
+
+.tools-swiper-section .swiper-button-next.swiper-button-disabled,
+.tools-swiper-section .swiper-button-prev.swiper-button-disabled {
+    opacity: 0;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    display: none;
+}

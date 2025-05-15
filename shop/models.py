@@ -30,3 +30,19 @@ class Banner(models.Model):
     def __str__(self):
         return self.title
     
+
+class DIYVideo(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    video = models.FileField(upload_to='diy_videos/')
+    thumbnail = models.ImageField(upload_to='diy_thumbnails/', null=True, blank=True)
+    video_thumbnail = models.ImageField(upload_to='diy_video_thumbnails/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    tools_used = models.ManyToManyField(Product, blank=True)
+    
+    def __str__(self):
+        return self.title
+    
+
+
+    

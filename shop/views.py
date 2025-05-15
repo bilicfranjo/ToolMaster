@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Banner, Category, Product
+from .models import Banner, Category, Product, DIYVideo
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomAuthenticationForm, CustomUserCreationForm
 from django.contrib.auth.models import User
@@ -52,3 +52,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def diy_list_view(request):
+    videos = DIYVideo.objects.all().order_by("-created_at")
+    return render(request, 'shop/diy_list.html', {'videos': videos})
+
+
+def diy_detail_view(request, pk):
+    video = DIYVideo.objects.get(pk=pk)
+    return render(request, 'shop/diy_detail.html', {'video': video})

@@ -8,6 +8,17 @@
 /* Osnovne postavke */
 html {
     scroll-behavior: smooth;
+    height: 100%;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
 }
 
 body {
@@ -24,6 +35,8 @@ footer,
 button {
     font-family: 'Teko', sans-serif !important;
 }
+
+
 
 /* Footer */
 

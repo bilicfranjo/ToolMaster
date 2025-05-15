@@ -1,0 +1,89 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+<link rel="stylesheet" href="{% static 'shop/css/diy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="diy-header-wrapper mb-4">
+        <a href="{% url 'diy_list' %}" class="btn btn-outline-secondary">← Nazad</a>
+        <h2 class="diy-centered-title">{{ video.title }}</h2>
+    </div>
+
+    <div class="video-wrapper mb-4">
+        <video id="diy-video" controls playsinline preload="auto" {% if video.video_thumbnail %}poster="{{ video.video_thumbnail.url }}"{% else %}poster="{{ video.thumbnail.url }}"{% endif %}>
+            <source src="{{ video.video.url }}" type="video/mp4">
+            Vaš preglednik ne podržava video tag.
+        </video>
+    </div>
+
+    <p class="video-description text-center">{{ video.description }}</p>
+
+    {% if video.tools_used.all %}
+    <div class="mt-5">
+        <h3 class="mb-3">Alati korišteni u ovom videu</h3>
+        <div class="diy-popular-divider"></div>
+
+        <div class="tools-swiper-section position-relative">
+            <div class="swiper popularSwiper">
+                <div class="swiper-wrapper">
+                    {% for tool in video.tools_used.all %}
+                    <div class="swiper-slide">
+                        <div class="card product-card">
+                            <img src="{{ tool.image.url }}" class="card-img-top" alt="{{ tool.name }}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ tool.name }}</h5>
+                                <p class="card-text">{{ tool.price }} €</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Strelice -->
+            <div class="swiper-button-prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
+                </svg>
+            </div>
+
+            <div class="swiper-button-next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script>
+    window.onload = () => {
+        const player = new Plyr('#diy-video');
+
+        const swiper = new Swiper(".popularSwiper", {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            speed: 500,
+            breakpoints: {
+                320: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                992: { slidesPerView: 4 }
+            }
+        });
+    };
+</script>
+{% endblock %}
