@@ -19,7 +19,9 @@ html {
 
 main {
     flex: 1;
+    padding-top: 70px;
 }
+
 
 body {
     font-family: 'Teko', sans-serif;
@@ -72,18 +74,19 @@ button {
 
 /* NAVBAR */
 
-.navbar {
+.custom-navbar {
     background-color: #4A5D23;
     color: white;
-    padding: 15px 0;
+    padding: 12px 0;
     position: fixed;
     top: 0;
+    width: 100%;
     z-index: 999;
     border-bottom: 8px solid #f1c40f;
     transition: all 0.3s ease;
 }
 
-.navbar.scrolled {
+.custom-navbar.scrolled {
     padding: 8px 0;
     border-bottom: 2px solid #f1c40f;
 }
@@ -109,19 +112,25 @@ button {
 }
 
 .logo-img {
-    height: 30px;
+    height: 26px;
     width: auto;
     display: block;
     margin-top: -4px;
+    transition: all 0.3s ease;
 }
 
-.navbar a {
+.scrolled-logo {
+    height: 22px;
+}
+
+
+.custom-navbar a {
     color: white;
     text-decoration: none;
     font-size: 24px;
 }
 
-.navbar a:hover {
+.custom-navbar a:hover {
     color: #f1c40f;
 }
 
@@ -135,6 +144,64 @@ button {
     filter: brightness(1.2);
     transform: scale(1.05);
     transition: 0.3s;
+}
+
+/* Pretraži u navbaru */
+.search-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#search-form {
+    display: none;
+    position: relative;
+}
+
+#search-form input {
+    padding: 2px 10px;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background-color: white;
+    color: black;
+    font-family: 'Teko', sans-serif;
+    width: 280px;
+    transition: all 0.3s ease;
+}
+
+#search-form button#search-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    padding: 0 8px;
+    cursor: pointer;
+    color: black;
+    font-family: 'Teko', sans-serif;
+    transition: color 0.3s ease;
+}
+
+#search-form button#search-close:hover {
+    color: #f1c40f;
+}
+
+.search-toggle-wrapper.show-input .search-link {
+    display: none;
+}
+
+.search-toggle-wrapper.show-input #search-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 

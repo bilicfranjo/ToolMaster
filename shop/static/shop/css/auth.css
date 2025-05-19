@@ -52,6 +52,7 @@ body {
 }
 
 /* Link za povratak */
+
 .back-link {
     position: absolute;
     top: 20px;
@@ -168,6 +169,33 @@ form button:hover {
     margin-bottom: 15px;
     font-family: 'Teko', sans-serif;
 }
+
+
+/*GUMB NAZAD*/
+/*
+.back-link a {
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 1px solid black;
+    color: black;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    text-decoration: none;
+    background-color: transparent;
+    font-weight: 500;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.back-link a:hover {
+    background-color: #f1c40f;
+    color: black;
+    border-color: #f1c40f;
+}
+
+*/
+
 
 /* Responsivnost */
 @media (max-width: 768px) {
