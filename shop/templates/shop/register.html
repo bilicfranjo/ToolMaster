@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--Favicon-->
-    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'shop/images/favicon.png' %}">
 
     <!-- Google font Teko -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,9 +38,34 @@
 
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <div>
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div>
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div>
+                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+
+            <div>
+                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
             <button type="submit">Registriraj se</button>
         </form>
+
 
         <p class="login-link">Već imaš račun? <a href="{% url 'login' %}">Prijavi se</a></p>
     </div>

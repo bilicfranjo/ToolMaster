@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 def home_view(request):
     banners = Banner.objects.all()
-    categories = Category.objects.filter(image__isnull=False)[:4]
+    categories = Category.objects.filter(featured=True)
     popular_products = Product.objects.filter(popular=True)
     return render(request, 'shop/home.html', {
         'banners': banners,

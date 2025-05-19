@@ -316,6 +316,10 @@ button {
     background-color: #4A5D23;
 }
 
+.category-section .container {
+    position: relative;
+}
+
 /* Naslov sekcije lijevo */
 .section-title-left {
     font-size: 40px;
@@ -358,6 +362,70 @@ button {
     font-weight: bold;
     text-align: center;
     text-shadow: 1px 1px 2px black;
+}
+/* Swiper za kategorije */
+
+.category-section .swiper-button-prev,
+.category-section .swiper-button-next {
+    top: 55%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
+
+.category-section .swiper-button-prev {
+    left: -60px;
+}
+
+.category-section .swiper-button-next {
+    right: -60px;
+}
+
+.category-section .swiper-button-next svg,
+.category-section .swiper-button-prev svg {
+    width: 28px;
+    height: 28px;
+    fill: black;
+}
+
+.category-section .swiper {
+    padding: 20px 10px;
+}
+
+.category-section .swiper-button-next::after,
+.category-section .swiper-button-prev::after {
+    display: none;
+}
+
+.category-section .swiper-button-next.swiper-button-disabled,
+.category-section .swiper-button-prev.swiper-button-disabled {
+    opacity: 0;
+}
+
+.view-all-link {
+    padding-right: 10px;
+}
+
+.view-all-anchor {
+    font-size: 22px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.view-all-anchor:hover {
+    border-bottom: 2px solid white;
+    cursor: pointer;
 }
 
 

@@ -53,19 +53,43 @@
 <section class="category-section mt-5 py-5">
     <div class="container">
         <h2 class="section-title-left mb-4">Pretražite po kategorijama...</h2>
-        <div class="row g-4">
-            {% for category in categories %}
-            <div class="col-md-3">
-                <div class="category-card-img" style="background-image: url('{% if category.image %}{{ category.image.url }}{% endif %}');">
-                    <div class="overlay">
-                        <h3>{{ category.name }}</h3>
+
+        <div class="swiper categorySwiper">
+            <div class="swiper-wrapper">
+                {% for category in categories %}
+                <div class="swiper-slide">
+                    <div class="category-card-img" style="background-image: {% if category.image %}url('{{ category.image.url }}'){% else %}linear-gradient(135deg, #4A5D23, #f1c40f){% endif %};">
+                        <div class="overlay">
+                            <h3>{{ category.name }}</h3>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
+
+        <div class="view-all-link mt-4 text-end">
+                <a href="#" class="view-all-anchor">
+                    Svi proizvodi →
+                </a>
+        </div>
+
+        <!-- Strelice -->
+        <div class="swiper-button-prev category-swiper-prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </div>
+
+        <div class="swiper-button-next category-swiper-next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
+            </svg>
+        </div>
+        
     </div>
 </section>
+
 
 <!-- Divider -->
 <div class="divider-svg">
@@ -147,33 +171,46 @@
 </section>
 
 
+{% block extra_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const swiper = new Swiper(".popularSwiper", {
-          slidesPerView: 4,
-          spaceBetween: 30,
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          speed: 500,
-          breakpoints: {
-            320: {
-              slidesPerView: 1,
+        // Popularni proizvodi
+        new Swiper(".popularSwiper", {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
             },
-            576: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            992: {
-              slidesPerView: 4,
+            speed: 500,
+            breakpoints: {
+                320: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                992: { slidesPerView: 4 }
             }
-          }
+        });
+
+        // Kategorije
+        new Swiper(".categorySwiper", {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: ".category-swiper-next",
+                prevEl: ".category-swiper-prev",
+            },
+            speed: 500,
+            breakpoints: {
+                320: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                992: { slidesPerView: 4 }
+            }
         });
     });
-    </script>
+</script>
+{% endblock %}
+
     
 {% endblock %}
 
