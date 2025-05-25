@@ -1,0 +1,57 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+
+{% block title %}Dodaj proizvod{% endblock %}
+
+{% block content %}
+<h2>{{ action }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <hr>
+    <h4>Atributi proizvoda</h4>
+    <div id="attributes-wrapper"></div>
+    <button type="submit" class="btn btn-success">Spremi</button>
+    <a href="{% url 'admin_products_list' %}" class="btn btn-secondary">Odustani</a>
+</form>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const categorySelect = document.getElementById('id_category');
+    const attributesWrapper = document.getElementById('attributes-wrapper');
+
+    // Prethodno spremljene vrijednosti atributa (iz Django view-a)
+    const existingValues = {{ attribute_values|safe }};
+
+    function createAttributeInput(attr) {
+        const div = document.createElement('div');
+        const val = existingValues && existingValues[attr.id] ? existingValues[attr.id] : '';
+        div.className = 'mb-3';
+        div.innerHTML = `
+            <label class="form-label">${attr.name}</label>
+            <input type="text" class="form-control" name="attribute_${attr.id}" value="${val}">
+        `;
+        return div;
+    }
+
+    categorySelect.addEventListener('change', function () {
+        const categoryId = this.value;
+        if (!categoryId) return;
+
+        fetch(`/dashboard/api/atributi/${categoryId}/`)
+            .then(response => response.json())
+            .then(data => {
+                attributesWrapper.innerHTML = '';
+                data.forEach(attr => {
+                    attributesWrapper.appendChild(createAttributeInput(attr));
+                });
+            });
+    });
+
+    // Ako je stranica za uređivanje, automatski pokreni dohvat ako je odabrana kategorija
+    if (categorySelect.value) {
+        categorySelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Teko', sans-serif;
+}
+
+.dashboard-wrapper {
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+
+
+/* NAVBAR */
+
+.custom-navbar {
+    background-color: #4A5D23;
+    color: white;
+    padding: 12px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    border-bottom: 8px solid #f1c40f;
+    transition: all 0.3s ease;
+}
+
+.custom-navbar.scrolled {
+    padding: 8px 0;
+    border-bottom: 2px solid #f1c40f;
+}
+
+.navbar-container {
+    width: 100%;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo-img {
+    height: 26px;
+    width: auto;
+    display: block;
+    margin-top: -4px;
+    transition: all 0.3s ease;
+}
+
+.scrolled-logo {
+    height: 22px;
+}
+
+
+.custom-navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.custom-navbar a:hover {
+    color: #f1c40f;
+}
+
+.divider {
+    color: white;
+    font-weight: 300;
+    user-select: none;
+}
+
+.logo-img:hover {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+.divider {
+    color: white;
+    font-weight: 300;
+    user-select: none;
+}
+
+
+
+/* Stilizacija forme*/
+form label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+form input,
+form textarea,
+form select {
+    font-size: 16px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Select2 kod DIY forme */
+.select2-container--default .select2-selection--multiple {
+    font-size: 16px;
+    padding: 6px;
+    min-height: 50px;
+    border-radius: 6px;
+}
+
+
+/* Stilzacija lista */
+
+.table {
+    font-size: 18px;
+}
+
+.table th {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table .btn {
+    font-size: 18px;
+    padding: 6px 12px;
+}
+
+.btn.btn-success {
+    font-size: 18px;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+

@@ -1,0 +1,65 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>DIY Videi</h2>
+    <a href="{% url 'admin_diy_create' %}" class="btn btn-success">+ Dodaj novi</a>
+</div>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Naslov</th>
+            <th>Thumbnail</th>
+            <th>Datum</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for video in videos %}
+        <tr>
+            <td>{{ video.title }}</td>
+            <td>
+                {% if video.thumbnail %}
+                    <img src="{{ video.thumbnail.url }}" alt="thumbnail" width="80">
+                {% else %}
+                    <span class="text-muted">Nema slike</span>
+                {% endif %}
+            </td>
+            <td>{{ video.created_at|date:"d.m.Y" }}</td>
+            <td>
+                <a href="{% url 'admin_diy_edit' video.pk %}" class="btn btn-sm btn-primary">Uredi</a>
+                <!-- Gumb za brisanje -->
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ video.id }}">
+                    Obriši
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal{{ video.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ video.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="POST" action="{% url 'admin_diy_delete' video.pk %}">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ video.id }}">Potvrdi brisanje</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Jeste li sigurni da želite obrisati <strong>{{ video.title }}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                                    <button type="submit" class="btn btn-danger">Obriši</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

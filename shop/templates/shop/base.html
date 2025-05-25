@@ -49,6 +49,10 @@
                 </div>
 
                 <div class="nav-right">
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard_home' %}">Dashboard</a>
+                        <span class="divider">|</span>
+                    {% endif %}
                     {% if user.is_authenticated %}
                         <a href="#">Favoriti</a>
                         <span class="divider">|</span>

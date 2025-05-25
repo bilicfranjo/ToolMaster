@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from .models import Product, DIYVideo, Banner, Category, ProductAttribute
+from django.forms import modelformset_factory
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email')
@@ -22,7 +25,6 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['password1'].label = 'Lozinka'
         self.fields['password2'].label = 'Ponovi lozinku'
 
-        # Prevedene poruke grešaka
         self.error_messages.update({
             'password_mismatch': _("Lozinke se ne podudaraju."),
         })
@@ -53,3 +55,63 @@ class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label='Korisničko ime')
     password = forms.CharField(label='Lozinka')
     
+    
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'category', 'slug', 'price', 'image', 'description', 'in_stock', 'popular']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }
+        
+class DIYVideoForm(forms.ModelForm):
+    class Meta:
+        model = DIYVideo
+        fields = ['title', 'description', 'video', 'thumbnail', 'video_thumbnail', 'tools_used']
+        labels = {
+            'title': 'Naslov',
+            'description': 'Opis',
+            'video': 'Video datoteka',
+            'thumbnail': 'Slika (thumbnail)',
+            'video_thumbnail': 'Video thumbnail (slika za početak)',
+            'tools_used': 'Korišteni alati',
+        }
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'tools_used': forms.SelectMultiple(attrs={'class': 'form-select select2'}),
+        }
+        
+           
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        fields = ['title', 'image', 'link']
+        labels = {
+            'title': 'Naslov bannera',
+            'image': 'Slika bannera',
+            'link': 'Poveznica (opcionalno)',
+        }
+        widgets = {
+            'link': forms.URLInput(attrs={'placeholder': 'https://...'}),
+        }
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'slug', 'parent', 'image', 'featured']
+        labels = {
+            'name': 'Naziv kategorije',
+            'slug': 'Slug (automatski ako se ne unese)',
+            'parent': 'Roditeljska kategorija (opcionalno)',
+            'image': 'Slika',
+            'featured': 'Istaknuta na početnoj stranici?',
+        }
+
+ProductAttributeFormSet = modelformset_factory(
+    ProductAttribute,
+    fields=('name',),
+    extra=1,
+    can_delete=True,
+    labels={'name': 'Naziv atributa'}
+)

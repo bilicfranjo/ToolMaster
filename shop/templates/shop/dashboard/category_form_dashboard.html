@@ -1,0 +1,51 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="mb-4">{{ action }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <hr>
+        <h4>Atributi</h4>
+        {{ formset.management_form }}
+        <div id="atributi-wrapper">
+            {% for subform in formset %}
+                <div class="atribut-item mb-2 border p-2">
+                    {{ subform.id }}
+                    {{ subform.name }}
+                    {{ subform.DELETE }} <label>Obriši</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary mb-3" id="add-atribut">+ Dodaj atribut</button>
+
+        <br>
+        <button type="submit" class="btn btn-success">Spremi</button>
+        <a href="{% url 'admin_category_list' %}" class="btn btn-secondary">Odustani</a>
+    </form>
+</div>
+
+<script>
+document.getElementById('add-atribut').addEventListener('click', function () {
+    const wrapper = document.getElementById('atributi-wrapper');
+    const total = document.getElementById('id_form-TOTAL_FORMS');
+    const formNum = parseInt(total.value);
+    const newForm = wrapper.children[0].cloneNode(true);
+
+    newForm.querySelectorAll('input').forEach(input => {
+        input.name = input.name.replace(`form-0`, `form-${formNum}`);
+        input.id = input.id.replace(`form-0`, `form-${formNum}`);
+        if (input.type !== 'hidden') input.value = '';
+        if (input.name.endsWith('-DELETE')) input.checked = false;
+    });
+
+    total.value = formNum + 1;
+    wrapper.appendChild(newForm);
+});
+</script>
+{% endblock %}

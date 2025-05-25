@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard - ToolMaster{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="{% static 'shop/images/favicon.png' %}">
+    
+    <!-- Bootstrap i CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'shop/css/dashboard.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navigacija -->
+<header class="custom-navbar" id="main-navbar">
+    <div class="navbar-container navbar-content">
+
+        <div class="nav-left">
+            <a href="{% url 'dashboard_home' %}">Nadzorna ploča</a>
+            <span class="divider">|</span>
+            <a href="{% url 'admin_products_list' %}">Proizvodi</a>
+            <span class="divider">|</span>
+            <a href="{% url 'admin_category_list' %}">Kategorije</a>
+            <span class="divider">|</span>
+            <a href="{% url 'admin_diy_list' %}">DIY</a>
+            <span class="divider">|</span>
+            <a href="{% url 'admin_banner_list'%}">Banneri</a>
+        </div>
+
+        <div class="nav-center">
+            <a href="{% url 'dashboard_home' %}" class="logo">
+                <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img" id="main-logo">
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <a href="/">← Nazad u trgovinu</a>
+            <span class="divider">|</span>
+            <a href="{% url 'logout' %}">Odjava</a>
+        </div>
+
+    </div>
+</header>
+
+
+<!-- Sadržaj stranice -->
+<div class="dashboard-wrapper container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.addEventListener('scroll', function () {
+    const navbar = document.getElementById('main-navbar');
+    const logo = document.getElementById('main-logo');
+
+    if (window.scrollY > 10) {
+        navbar.classList.add('scrolled');
+        logo.classList.add('scrolled-logo');
+    } else {
+        navbar.classList.remove('scrolled');
+        logo.classList.remove('scrolled-logo');
+    }
+});
+
+</script>
+</body>
+</html>

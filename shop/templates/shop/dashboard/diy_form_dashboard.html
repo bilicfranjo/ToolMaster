@@ -1,0 +1,57 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="mb-4">{{ action }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.title.id_for_label }}" class="form-label">Naslov</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}" class="form-label">Opis</label>
+            {{ form.description }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.video.id_for_label }}" class="form-label">Video datoteka</label>
+            {{ form.video }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.thumbnail.id_for_label }}" class="form-label">Slika (thumbnail)</label>
+            {{ form.thumbnail }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.video_thumbnail.id_for_label }}" class="form-label">Video thumbnail</label>
+            {{ form.video_thumbnail }}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Alati korišteni u videu</label>
+            {{ form.tools_used }}
+        </div>
+
+        <button type="submit" class="btn btn-success">Spremi</button>
+        <a href="{% url 'admin_diy_list' %}" class="btn btn-secondary">Odustani</a>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '50%',
+                placeholder: "Odaberi alate...",
+                allowClear: true,
+            });
+        });
+    </script>
+
+</div>
+{% endblock %}
