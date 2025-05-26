@@ -1,0 +1,65 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Korisnici</h2>
+</div>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Korisničko ime</th>
+            <th>Email</th>
+            <th>Datum registracije</th>
+            <th>Staff</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.date_joined|date:"d.m.Y. H:i" }}</td>
+            <td>{% if user.is_staff %}✅{% else %}—{% endif %}</td>
+            <td>
+                {% if not user.is_superuser %}
+                <a href="{% url 'admin_user_staff_toggle' user.pk %}" class="btn btn-sm btn-warning">
+                    {% if user.is_staff %}Ukloni staff{% else %}Dodaj staff{% endif %}
+                </a>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.pk }}">Obriši</button>
+                {% else %}
+                    <span class="text-muted">Superuser</span>
+                {% endif %}
+            </td>
+
+        </tr>
+
+        <!-- MODAL -->
+        {% if not user.is_superuser %}
+        <div class="modal fade" id="deleteModal{{ user.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.pk }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="post" action="{% url 'admin_user_delete' user.pk %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel{{ user.pk }}">Potvrda brisanja</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                </div>
+                <div class="modal-body">
+                  Jeste li sigurni da želite obrisati korisnika <strong>{{ user.username }}</strong>?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                  <button type="submit" class="btn btn-danger">Obriši</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

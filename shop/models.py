@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 class Category(models.Model):
@@ -75,5 +76,39 @@ class DIYVideo(models.Model):
         return self.title
     
 
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Na čekanju'),
+        ('processing', 'U obradi'),
+        ('shipped', 'Poslana'),
+        ('completed', 'Dovršena'),
+        ('cancelled', 'Otkazana'),
+    ]
 
-    
+    code = models.CharField(max_length=20, unique=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    def __str__(self):
+        return f"{self.code} - {self.user.username}"
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            from uuid import uuid4
+            self.code = f"ORD-{uuid4().hex[:8].upper()}"
+        super().save(*args, **kwargs)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # cijena u trenutku kupnje
+
+    def __str__(self):
+        return f"{self.product.name} x{self.quantity}"
+
+    def total(self):
+        return self.price * self.quantity

@@ -6,7 +6,9 @@ from .views import (home_view, register_view, login_view,
                     admin_diy_create, admin_diy_edit, admin_diy_delete,
                     admin_banner_list, admin_banner_create, admin_banner_edit,
                     admin_banner_delete, admin_category_list, admin_category_create,
-                    admin_category_edit, admin_category_delete, get_attributes_for_category)
+                    admin_category_edit, admin_category_delete, get_attributes_for_category,
+                    admin_user_list, admin_user_delete, toggle_user_staff_status,
+                    admin_order_list, admin_order_detail)
 
 urlpatterns = [
     path('', home_view, name="home"),
@@ -33,5 +35,11 @@ urlpatterns = [
     path('dashboard/kategorije/<int:pk>/uredi/', admin_category_edit, name='admin_category_edit'),
     path('dashboard/kategorije/<int:pk>/obrisi/', admin_category_delete, name='admin_category_delete'),
     path('dashboard/api/atributi/<int:category_id>/', get_attributes_for_category, name='api_get_attributes'),
+    path('dashboard/korisnici/', admin_user_list, name='admin_user_list'),
+    path('dashboard/korisnici/<int:pk>/obrisi/', admin_user_delete, name='admin_user_delete'),
+    path('dashboard/korisnici/<int:pk>/staff-toggle/', toggle_user_staff_status, name='admin_user_staff_toggle'),
+    path('dashboard/narudzbe/', admin_order_list, name='admin_order_list'),
+    path('dashboard/narudzbe/<int:pk>/', admin_order_detail, name='admin_order_detail'),
+
 ]
 

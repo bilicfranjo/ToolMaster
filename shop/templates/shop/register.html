@@ -17,6 +17,14 @@
     <link rel="preload" as="image" href="{% static 'shop/images/register-bg.webp' %}">
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'shop/css/auth.css' %}">
+
+    <style>
+        .register-bg-image::before {
+            content: "";
+            background-image: url("{% static 'shop/images/register-bg.webp' %}");
+            display: none;
+        }
+    </style>
 </head>
 <body>
 

@@ -1,0 +1,31 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% block content %}
+<h2>Narudžbe</h2>
+
+<table class="table table-bordered table-striped align-middle mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>Kod</th>
+            <th>Korisnik</th>
+            <th>Datum</th>
+            <th>Status</th>
+            <th>Ukupno</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.code }}</td>
+            <td>{{ order.user.username }}</td>
+            <td>{{ order.created_at|date:"d.m.Y. H:i" }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>{{ order.total_price }} €</td>
+            <td>
+                <a href="{% url 'admin_order_detail' order.pk %}" class="btn btn-sm btn-primary">Detalji</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

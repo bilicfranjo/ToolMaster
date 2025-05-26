@@ -35,6 +35,7 @@ body {
 }
 .register-bg-image {
     background-image: url('/static/shop/images/register-bg.webp');
+    background-position: top center;
 }
 
 .auth-form-side {

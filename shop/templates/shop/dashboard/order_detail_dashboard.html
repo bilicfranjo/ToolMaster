@@ -1,0 +1,51 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Detalji narudžbe</h2>
+
+<div class="mt-4 mb-4">
+    <p><strong>Kod narudžbe:</strong> {{ order.code }}</p>
+    <p><strong>Korisnik:</strong> {{ order.user.username }}</p>
+    <p><strong>Datum:</strong> {{ order.created_at|date:"d.m.Y. H:i" }}</p>
+    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Ukupna cijena:</strong> {{ order.total_price|floatformat:2 }} €</p>
+</div>
+
+<h4>Stavke u narudžbi:</h4>
+
+<table class="table table-bordered table-striped align-middle mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>Slika</th>
+            <th>Proizvod</th>
+            <th>Količina</th>
+            <th>Cijena</th>
+            <th>Ukupno</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td>
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="60">
+                {% else %}
+                    <span class="text-muted">Nema slike</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'admin_product_edit' item.product.pk %}">{{ item.product.name }}</a>
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price|floatformat:2 }} €</td>
+            <td>{{ item.total|floatformat:2 }} €</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">Nema stavki u ovoj narudžbi.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'admin_order_list' %}" class="btn btn-secondary mt-3">← Natrag na sve narudžbe</a>
+{% endblock %}

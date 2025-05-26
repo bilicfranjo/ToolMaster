@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue
+from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomAuthenticationForm, CustomUserCreationForm
 from django.contrib.auth.models import User
@@ -70,7 +70,17 @@ def diy_detail_view(request, pk):
 # Admin
 @staff_member_required
 def dashboard_home(request):
-    return render(request, 'shop/dashboard/home_dashboard.html')
+    recent_orders = Order.objects.select_related('user').order_by('-created_at')[:3]
+    
+    context = {
+        'product_count': Product.objects.count(),
+        'category_count': Category.objects.count(),
+        'diy_count': DIYVideo.objects.count(),
+        'user_count': User.objects.count(),
+        'order_count': Order.objects.count(),
+        'recent_orders': recent_orders,
+    }
+    return render(request, 'shop/dashboard/home_dashboard.html', context)
 
 # Proizvodi admin
 @staff_member_required
@@ -282,3 +292,43 @@ def admin_category_delete(request, pk):
     if request.method == 'POST':
         category.delete()
     return redirect('admin_category_list')
+
+
+
+# Korisnici admin
+@staff_member_required
+def admin_user_list(request):
+    users = User.objects.all().order_by('-date_joined')
+    return render(request, 'shop/dashboard/users_list_dashboard.html', {'users': users})
+
+
+@staff_member_required
+def admin_user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST' and not user.is_superuser:
+        user.delete()
+    return redirect('admin_users_list')
+
+@staff_member_required
+def toggle_user_staff_status(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if user.is_superuser:
+        return redirect('admin_user_list')
+
+    user.is_staff = not user.is_staff
+    user.save()
+    return redirect('admin_user_list')
+
+# Narudžba admin
+@staff_member_required
+def admin_order_list(request):
+    from .models import Order
+    orders = Order.objects.all().order_by('-created_at')
+    return render(request, 'shop/dashboard/orders_list_dashboard.html', {'orders': orders})
+
+
+@staff_member_required
+def admin_order_detail(request, pk):
+    from .models import Order
+    order = get_object_or_404(Order, pk=pk)
+    return render(request, 'shop/dashboard/order_detail_dashboard.html', {'order': order})

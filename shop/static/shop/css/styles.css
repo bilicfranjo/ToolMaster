@@ -22,7 +22,6 @@ main {
     padding-top: 70px;
 }
 
-
 body {
     font-family: 'Teko', sans-serif;
     background-color: black;
@@ -37,8 +36,6 @@ footer,
 button {
     font-family: 'Teko', sans-serif !important;
 }
-
-
 
 /* Footer */
 
@@ -473,6 +470,25 @@ button {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     transition: transform 0.3s;
     height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-corner-arrow {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background-color: #f1c40f;
+    border-radius: 4px;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
 }
 
 .product-card:hover {

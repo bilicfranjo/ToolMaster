@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from .models import Product, DIYVideo, Banner, Category, ProductAttribute
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, PasswordInput
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -53,7 +53,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label='Korisničko ime')
-    password = forms.CharField(label='Lozinka')
+    password = forms.CharField(label='Lozinka', widget=forms.PasswordInput)
     
     
 class ProductForm(forms.ModelForm):

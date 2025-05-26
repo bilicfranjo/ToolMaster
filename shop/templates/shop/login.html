@@ -18,6 +18,14 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'shop/css/auth.css' %}">
+
+    <style>
+        .login-bg-image::before {
+            content: "";
+            background-image: url("{% static 'shop/images/login-bg.webp' %}");
+            display: none;
+        }
+    </style>
 </head>
 <body>
 

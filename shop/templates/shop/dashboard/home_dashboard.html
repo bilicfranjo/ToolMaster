@@ -1,8 +1,94 @@
 {% extends 'shop/dashboard/base_dashboard.html' %}
+{% load static %}
 
 {% block title %}Nadzorna ploča - ToolMaster{% endblock %}
 
 {% block content %}
-<h2>Dobrodošao u nadzornu ploču</h2>
-<p>Ovdje možeš upravljati proizvodima, kategorijama, bannerima i DIY videima.</p>
+<div class="container dashboard-wrapper dashboard-home">
+    <h2 class="mb-4">Dobrodošao u nadzornu ploču</h2>
+
+    <div class="stat-cards">
+        <div class="stat-card">
+            <div class="stat-header">PROIZVODI</div>
+            <div class="stat-body">
+                <div class="stat-number">{{ product_count }}</div>
+                <div class="stat-icon">🔨</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">KATEGORIJE</div>
+            <div class="stat-body">
+                <div class="stat-number">{{ category_count }}</div>
+                <div class="stat-icon">🛠️</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">DIY VIDEI</div>
+            <div class="stat-body">
+                <div class="stat-number">{{ diy_count }}</div>
+                <div class="stat-icon">🎥</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">KORISNICI</div>
+            <div class="stat-body">
+                <div class="stat-number">{{ user_count }}</div>
+                <div class="stat-icon">👤</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">NARUDŽBE</div>
+            <div class="stat-body">
+                <div class="stat-number">{{ order_count }}</div>
+                <div class="stat-icon">📦</div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Brze radnje</h4>
+    <div class="quick-actions">
+        <a href="{% url 'admin_product_create' %}">+ Dodaj proizvod</a>
+        <a href="{% url 'admin_diy_create' %}">+ Dodaj DIY video</a>
+        <a href="{% url 'admin_category_create' %}">+ Dodaj kategoriju</a>
+        <a href="{% url 'admin_user_list' %}">Upravljaj korisnicima</a>
+        <a href="{% url 'admin_order_list' %}">Pregledaj narudžbe</a>
+    </div>
+
+    <h4 class="mt-5 mb-3">Zadnje narudžbe</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center align-middle" style="font-size: 18px;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Šifra</th>
+                    <th>Korisnik</th>
+                    <th>Ukupno</th>
+                    <th>Status</th>
+                    <th>Datum</th>
+                    <th>Detalji</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td>{{ order.code }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.total_price }} €</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                    <td><a href="{% url 'admin_order_detail' order.pk %}" class="btn btn-sm btn-outline-success">Pogledaj</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">Nema narudžbi.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
 {% endblock %}
