@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const categorySelect = document.getElementById('id_category');
     const attributesWrapper = document.getElementById('attributes-wrapper');
 
-    // Prethodno spremljene vrijednosti atributa (iz Django view-a)
     const existingValues = {{ attribute_values|safe }};
 
     function createAttributeInput(attr) {

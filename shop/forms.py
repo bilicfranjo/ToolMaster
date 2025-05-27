@@ -115,3 +115,26 @@ ProductAttributeFormSet = modelformset_factory(
     can_delete=True,
     labels={'name': 'Naziv atributa'}
 )
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    phone = forms.CharField(label="Broj mobitela", required=False)
+    address = forms.CharField(label="Adresa", required=False, widget=forms.Textarea(attrs={'rows': 2}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def __init__(self, *args, **kwargs):
+        self.profile = kwargs.pop('profile')
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'Korisničko ime'
+        self.fields['email'].label = 'Email'
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        self.profile.phone = self.cleaned_data['phone']
+        self.profile.address = self.cleaned_data['address']
+        if commit:
+            self.profile.save()
+        return user

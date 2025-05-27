@@ -1,0 +1,53 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container py-5 profile-info">
+    <h2 class="mb-4">Moj profil</h2>
+
+    <!-- Korisnički podaci -->
+    <div class="mb-4">
+        <p><strong>Korisničko ime:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Broj mobitela:</strong> {{ profile.phone|default:"Nije uneseno" }}</p>
+        <p><strong>Adresa:</strong> {{ profile.address|default:"Nije uneseno" }}</p>
+        <div class="d-flex gap-2 mt-2">
+            <a href="{% url 'user_profile_edit' %}" class="btn btn-outline-success">Uredi profil</a>
+            <a href="{% url 'password_change' %}" class="btn btn-outline-warning">Promijeni lozinku</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Moje narudžbe -->
+    <h3 class="mb-3 mt-4">Moje narudžbe</h3>
+
+    {% if orders %}
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Šifra</th>
+                    <th>Ukupno</th>
+                    <th>Status</th>
+                    <th>Datum</th>
+                    <th>Detalji</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.code }}</td>
+                    <td>{{ order.total_price }} €</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                    <td><a href="#" class="btn btn-sm btn-outline-primary">Prikaži</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>Još nemaš narudžbi.</p>
+    {% endif %}
+</div>
+{% endblock %}

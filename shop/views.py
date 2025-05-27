@@ -7,6 +7,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Order, UserProfile
+from .forms import ProfileUpdateForm
 
 # Home 
 def home_view(request):
@@ -18,6 +21,33 @@ def home_view(request):
         'categories': categories, 
         'popular_products' : popular_products,
         })
+
+# Profil 
+@login_required
+def profile_view(request):
+    profile = UserProfile.objects.get(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'shop/profile.html', {
+        'user': request.user,
+        'profile': profile,
+        'orders': orders,
+    })
+
+
+@login_required
+def profile_edit_view(request):
+    profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, instance=request.user, profile=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')
+    else:
+        form = ProfileUpdateForm(instance=request.user, profile=profile)
+
+    return render(request, 'shop/profile_edit.html', {'form': form})
+
 
 # Autentikacija
 def register_view(request):

@@ -170,7 +170,7 @@ body {
 
 /* Stilizacija forme*/
 form label {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 4px;
 }
@@ -178,18 +178,26 @@ form label {
 form input,
 form textarea,
 form select {
-    font-size: 16px;
+    font-size: 20px;
     padding: 10px 12px;
     border-radius: 6px;
     border: 1px solid #ccc;
 }
 
 form button {
-    font-size: 16px;
+    font-size: 18px;
     padding: 10px 20px;
     border-radius: 6px;
     font-weight: bold;
 }
+
+.clearable-file-input {
+    font-size: 20px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 600;
+}
+
+
 
 /* Select2 kod DIY forme */
 .select2-container--default .select2-selection--multiple {
@@ -203,7 +211,7 @@ form button {
 /* Stilzacija lista */
 
 .table {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .table th {

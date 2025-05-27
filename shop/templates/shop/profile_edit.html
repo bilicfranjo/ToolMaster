@@ -1,0 +1,37 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Uredi profil</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Korisničko ime</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_phone" class="form-label">Broj mobitela</label>
+            {{ form.phone }}
+            {{ form.phone.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_address" class="form-label">Adresa</label>
+            {{ form.address }}
+            {{ form.address.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-warning">Spremi promjene</button>
+        <a href="{% url 'user_profile' %}" class="btn btn-secondary">Odustani</a>
+    </form>
+</div>
+{% endblock %}

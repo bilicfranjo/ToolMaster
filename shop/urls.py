@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from .views import (home_view, register_view, login_view, 
                     logout_view, diy_list_view, diy_detail_view, 
                     dashboard_home, admin_products_list, admin_product_create,
@@ -8,7 +9,7 @@ from .views import (home_view, register_view, login_view,
                     admin_banner_delete, admin_category_list, admin_category_create,
                     admin_category_edit, admin_category_delete, get_attributes_for_category,
                     admin_user_list, admin_user_delete, toggle_user_staff_status,
-                    admin_order_list, admin_order_detail)
+                    admin_order_list, admin_order_detail, profile_view, profile_edit_view)
 
 urlpatterns = [
     path('', home_view, name="home"),
@@ -40,6 +41,9 @@ urlpatterns = [
     path('dashboard/korisnici/<int:pk>/staff-toggle/', toggle_user_staff_status, name='admin_user_staff_toggle'),
     path('dashboard/narudzbe/', admin_order_list, name='admin_order_list'),
     path('dashboard/narudzbe/<int:pk>/', admin_order_detail, name='admin_order_detail'),
-
+    path('profil/', profile_view, name='user_profile'),
+    path('profil/uredi/', profile_edit_view, name='user_profile_edit'),
+    path('profil/promijeni-lozinku/', auth_views.PasswordChangeView.as_view(template_name='shop/password_change.html'), name='password_change'),
+path('profil/promijeni-lozinku/gotovo/', auth_views.PasswordChangeDoneView.as_view(template_name='shop/password_change_done.html'), name='password_change_done'),
 ]
 
