@@ -1,0 +1,57 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'shop/css/profile.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container py-5 user-order-detail">
+    <h2 class="mb-4">Detalji narudžbe</h2>
+
+    <div class="mb-4 order-detail-info">
+        <p><strong>Šifra narudžbe:</strong> {{ order.code }}</p>
+        <p><strong>Datum:</strong> {{ order.created_at|date:"d.m.Y. H:i" }}</p>
+        <p><strong>Adresa:</strong> {{ order.shipping_address|default:"-" }}</p>
+        <p><strong>Broj mobitela:</strong> {{ order.phone|default:"-" }}</p>
+        <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+        <p><strong>Ukupna cijena:</strong> {{ order.total_price|floatformat:2 }} €</p>
+    </div>
+
+    <h4>Stavke u narudžbi:</h4>
+    <table class="table table-bordered table-striped align-middle mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Slika</th>
+                <th>Proizvod</th>
+                <th>Količina</th>
+                <th>Cijena</th>
+                <th>Ukupno</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="60">
+                    {% else %}
+                        <span class="text-muted">Nema slike</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {# <a href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a> #}
+                    <a href="#">{{ item.product.name }}</a>
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price|floatformat:2 }} €</td>
+                <td>{{ item.total|floatformat:2 }} €</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'user_profile' %}" class="btn btn-secondary mt-4">← Natrag na profil</a>
+</div>
+{% endblock %}

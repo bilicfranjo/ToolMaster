@@ -48,6 +48,11 @@ def profile_edit_view(request):
 
     return render(request, 'shop/profile_edit.html', {'form': form})
 
+@login_required
+def user_order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    return render(request, 'shop/order_detail_user.html', {'order': order})
+
 
 # Autentikacija
 def register_view(request):
@@ -359,6 +364,13 @@ def admin_order_list(request):
 
 @staff_member_required
 def admin_order_detail(request, pk):
-    from .models import Order
     order = get_object_or_404(Order, pk=pk)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        if new_status in dict(Order.STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+            return redirect('admin_order_detail', pk=pk)
+
     return render(request, 'shop/dashboard/order_detail_dashboard.html', {'order': order})

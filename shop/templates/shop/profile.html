@@ -1,4 +1,10 @@
 {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'shop/css/profile.css' %}">
+{% endblock %}
+
 
 {% block content %}
 <div class="container py-5 profile-info">
@@ -40,7 +46,7 @@
                     <td>{{ order.total_price }} €</td>
                     <td>{{ order.get_status_display }}</td>
                     <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                    <td><a href="#" class="btn btn-sm btn-outline-primary">Prikaži</a></td>
+                    <td><a href="{% url 'user_order_detail' order.pk %}" class="btn btn-primary btn-sm">Prikaži</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

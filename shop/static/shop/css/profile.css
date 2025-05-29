@@ -1,0 +1,57 @@
+/* PROFIL */
+
+.profile-info p,
+.profile-info a,
+.profile-info table {
+    font-size: 20px;
+}
+
+.profile-info .table th {
+    font-weight: 600;
+}
+
+.profile-info .btn {
+    font-size: 18px;
+    padding: 6px 8px;
+}
+
+/* PROFILNA FORMA I PROMJENA LOZINKE */
+
+.profile-edit-container,
+.password-change-container {
+    font-size: 20px;
+}
+
+.password-change-container form label,
+.password-change-container form input,
+.password-change-container form button,
+.password-change-container form a,
+.profile-edit-container form label,
+.profile-edit-container form input,
+.profile-edit-container form button,
+.profile-edit-container form a {
+    font-size: 20px;
+}
+
+
+/* DETALJI NARUDŽBE KORISNIKA */
+.user-order-detail {
+    font-size: 20px;
+}
+
+.user-order-detail h2,
+.user-order-detail h4 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.user-order-detail p {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.user-order-detail .btn {
+    font-size: 18px;
+    padding: 6px 12px;
+}

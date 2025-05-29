@@ -234,3 +234,19 @@ form button {
     font-weight: 600;
 }
 
+/* Detalji narudžbe */
+
+.order-detail-info p {
+    font-size: 20px;
+}
+
+.order-status-form select.form-select {
+    font-size: 18px;
+    padding: 6px 30px;
+}
+
+.order-status-form button,
+.order-form-back-button  {
+    font-size: 20px;
+    padding: 6px 8px;
+}
