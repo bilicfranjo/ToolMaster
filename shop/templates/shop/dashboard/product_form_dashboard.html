@@ -8,6 +8,19 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    <h4>Dodatne slike proizvoda</h4>
+    {{ formset.management_form }}
+    {% for form in formset %}
+        <div class="mb-3">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+            {% if form.instance.pk %}
+                <label>
+                    {{ form.DELETE }} Obriši ovu sliku
+                </label>
+            {% endif %}
+        </div>
+    {% endfor %}
     <hr>
     <h4>Atributi proizvoda</h4>
     <div id="attributes-wrapper"></div>

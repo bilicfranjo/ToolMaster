@@ -99,3 +99,103 @@
 .breadcrumb .active {
     color: black;
 }
+
+
+
+
+/* DETALNJI PRIKAZ PROIZVODA */
+
+.product-title {
+    color: #4A5D23;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.product-price {
+    font-size: 28px;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.thumb-image {
+    width: 100px;
+    height: auto;
+}
+
+.additional-images img {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.3s ease;
+}
+
+.additional-images img:hover {
+    border-color: #f1c40f;
+}
+
+/* Slika zoom */
+.main-product-image {
+    overflow: hidden;
+    max-width: 100%;
+    position: relative;
+}
+
+/* Dostupnost i količina */
+.product-availability {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.product-quantity {
+    font-size: 24px;
+}
+
+.product-quantity input {
+    font-size: 20px;
+}
+
+
+/* Gumb za košaricu */ 
+.add-to-cart-btn {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 14px 28px;
+    border: 2px solid #f1c40f;
+    background-color: white;
+    color: black;
+    transition: 0.3s ease;
+    width: 100%;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #f1c40f;
+    color: black;
+}
+
+/* Ikonice i dodatne informacije */
+.product-icons .icon-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.product-icons {
+    font-size: 18px;
+    color: black;
+    margin-top: 15px;
+}
+
+.product-icons .icon-box img {
+    flex-shrink: 0;
+}
+
+.product-icons .icon-box span {
+    display: inline-block;
+    line-height: 1.4;
+}
+
+
+/* Specifikacije proizvoda*/
+.product-specs {
+    font-size: 20px;
+}

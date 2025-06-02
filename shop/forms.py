@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from .models import Product, DIYVideo, Banner, Category, ProductAttribute
+from .models import Product, DIYVideo, Banner, Category, ProductAttribute, ProductImage
 from django.forms import modelformset_factory, PasswordInput
 
 
@@ -59,11 +59,22 @@ class CustomAuthenticationForm(AuthenticationForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'category', 'manufacturer', 'slug', 'price', 'image', 'description', 'in_stock', 'popular']
+        fields = ['name', 'category', 'manufacturer', 'model','slug', 'price', 'image', 'description', 'in_stock', 'popular']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
         
+
+ProductImageFormSet = forms.inlineformset_factory(
+    Product,
+    ProductImage,
+    fields=('image',),
+    extra=1,
+    can_delete=True,
+    labels={'image': 'Dodatna slika'}
+)
+
+
 class DIYVideoForm(forms.ModelForm):
     class Meta:
         model = DIYVideo

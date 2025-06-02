@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import CustomAuthenticationForm, CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet
+from .forms import ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -87,25 +87,29 @@ def products_list_view(request, slug=None):
         except ValueError:
             pass
 
-    selected_manufacturer = request.GET.get('manufacturer')
-    if selected_manufacturer:
-        products = products.filter(manufacturer=selected_manufacturer)
+    # Višestruki proizvođači (checkbox logika)
+    selected_manufacturers = request.GET.getlist('manufacturer')
+    if selected_manufacturers:
+        products = products.filter(manufacturer__in=selected_manufacturers)
 
-    # Filtriranje po dodatnim atributima
+    # Višestruki atributi (checkbox logika po OR-u)
     selected_attributes = {}
+    attribute_queries = Q()
+
     for key, values in request.GET.lists():
         if key.startswith('attr_'):
-            selected_attributes[key] = values  # sačuvaj za template
+            selected_attributes[key] = values
             attr_id = key.split('_')[1]
+            subquery = Q()
+
             for val in values:
-                matching_products = ProductAttributeValue.objects.filter(
-                    attribute_id=attr_id,
-                    value=val
-                ).values_list('product_id', flat=True)
-                attribute_queries &= Q(id__in=matching_products)
+                subquery |= Q(attributes__attribute_id=attr_id, attributes__value=val)
+
+            attribute_queries |= subquery  # Ovdje je ključna razlika: koristimo OR između atributa
 
     if attribute_queries:
-        products = products.filter(attribute_queries)
+        products = products.filter(attribute_queries).distinct()
+
 
     sort_by = request.GET.get('sort')
     if sort_by == 'price_asc':
@@ -125,7 +129,7 @@ def products_list_view(request, slug=None):
         'products': page_obj.object_list,
         'page_obj': page_obj,
         'category': category,
-        'selected_manufacturer': selected_manufacturer,
+        'selected_manufacturers': selected_manufacturers,
         'sort_by': sort_by,
         'paginator': paginator,
         'categories': Category.objects.filter(parent__isnull=True).prefetch_related('subcategories'),
@@ -137,6 +141,13 @@ def products_list_view(request, slug=None):
     })
 
 
+def product_detail_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    product_attributes = product.attributes.select_related('attribute') # type: ignore
+    return render(request, 'shop/product_detail.html', {
+        'product': product,
+        'product_attributes': product_attributes,
+    })
 
 # Autentikacija
 def register_view(request):
@@ -207,6 +218,7 @@ def admin_products_list(request):
     products = Product.objects.all().select_related('category')
     return render(request, 'shop/dashboard/products_list_dashboard.html', {'products': products})
 
+"""
 @staff_member_required
 def admin_product_create(request):
     if request.method == 'POST':
@@ -226,8 +238,39 @@ def admin_product_create(request):
     else:
         form = ProductForm()
     return render(request, 'shop/dashboard/product_form_dashboard.html', {'form': form, 'action': 'Dodaj novi proizvod', 'attribute_values': {},})
+"""
+
+@staff_member_required
+def admin_product_create(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        formset = ProductImageFormSet(request.POST, request.FILES)
+        if form.is_valid() and formset.is_valid():
+            product = form.save()
+            formset.instance = product
+            formset.save()
+            # Atributi
+            for key, value in request.POST.items():
+                if key.startswith('attribute_') and value.strip():
+                    attr_id = key.split('_')[1]
+                    ProductAttributeValue.objects.create(
+                        product=product,
+                        attribute_id=attr_id,
+                        value=value.strip()
+                    )
+            return redirect('admin_products_list')
+    else:
+        form = ProductForm()
+        formset = ProductImageFormSet()
+    return render(request, 'shop/dashboard/product_form_dashboard.html', {
+        'form': form,
+        'formset': formset,
+        'action': 'Dodaj novi proizvod',
+        'attribute_values': {},
+    })
 
 
+"""
 @staff_member_required
 def admin_product_edit(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -253,7 +296,37 @@ def admin_product_edit(request, pk):
             'action': 'Uredi proizvod',
             'attribute_values': attribute_values,
         })
+"""
 
+@staff_member_required
+def admin_product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        formset = ProductImageFormSet(request.POST, request.FILES, instance=product)
+        if form.is_valid() and formset.is_valid():
+            product = form.save()
+            formset.save()
+            product.attributes.all().delete()
+            for key, value in request.POST.items():
+                if key.startswith('attribute_') and value.strip():
+                    attr_id = key.split('_')[1]
+                    ProductAttributeValue.objects.create(
+                        product=product,
+                        attribute_id=attr_id,
+                        value=value.strip()
+                    )
+            return redirect('admin_products_list')
+    else:
+        form = ProductForm(instance=product)
+        formset = ProductImageFormSet(instance=product)
+        attribute_values = {av.attribute.id: av.value for av in product.attributes.all()} # type: ignore
+        return render(request, 'shop/dashboard/product_form_dashboard.html', {
+            'form': form,
+            'formset': formset,
+            'action': 'Uredi proizvod',
+            'attribute_values': attribute_values,
+        })
 
 
 @staff_member_required

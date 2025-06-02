@@ -1,0 +1,128 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'shop/css/products.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/drift-zoom/dist/drift-basic.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Lijevi dio: slike -->
+        <div class="col-md-6 text-center">
+            <div class="main-product-image mb-3">
+                <a href="{{ product.image.url }}" class="drift-trigger">
+                    <img id="zoom-image" src="{{ product.image.url }}" data-zoom="{{ product.image.url }}" class="img-fluid">
+                </a>
+            </div>
+
+            {% if product.extra_images.all %}
+            <div class="additional-images d-flex justify-content-center gap-2">
+
+                <!-- Glavna slika kao prva u nizu -->
+                <img src="{{ product.image.url }}" class="img-thumbnail thumb-image" data-full="{{ product.image.url }}">
+
+                <!-- Sve dodatne slike -->
+                {% for img in product.extra_images.all %}
+                    <img src="{{ img.image.url }}" class="img-thumbnail thumb-image" data-full="{{ img.image.url }}">
+                {% endfor %}
+
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Desni dio: detalji -->
+        <div class="col-md-6">
+            <h2 class="product-title">{{ product.name }}</h2>
+            <h4 class="product-price">{{ product.price }} €</h4>
+            <p class="product-availability"><strong>Dostupnost:</strong> 
+                {% if product.in_stock %}
+                    <span class="text-success">Na skladištu</span>
+                {% else %}
+                    <span class="text-danger">Nije dostupno</span>
+                {% endif %}
+            </p>
+
+            <!-- Količina -->
+            <div class="mb-3 product-quantity">
+                <label for="quantity" class="form-label">Količina:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" style="width: 120px;">
+            </div>
+
+            <!-- Gumb -->
+            <a href="#" class="btn btn-warning btn-lg add-to-cart-btn">Dodaj u košaricu</a>
+            <!-- Informacije -->
+            <div class="product-icons mt-4">
+                <div class="icon-box">
+                    <img src="{% static 'shop/images/truck.svg' %}" alt="Dostava" width="30">
+                    <span>Besplatna dostava za narudžbe iznad 100 €</span>
+                </div>
+                <div class="icon-box">
+                    <img src="{% static 'shop/images/phone.svg' %}" alt="Pomoć" width="30">
+                    <span>Pomoć pri kupnji: <strong>091 234 5678</strong></span>
+                </div>
+                <div class="icon-box">
+                    <img src="{% static 'shop/images/undo.svg' %}" alt="Povrat" width="30">
+                    <span>15 dana pravo na povrat</span>
+                </div>
+                <div class="icon-box">
+                    <img src="{% static 'shop/images/credit-card.svg' %}" alt="Sigurno plaćanje" width="30">
+                    <span>100% sigurno plaćanje</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opis i dodatni info -->
+    <div class="mt-5 product-specs">
+        <h2>Opis proizvoda</h2>
+        <p>{{ product.description }}</p>
+
+        <hr>
+        <p><strong>Proizvođač:</strong> {{ product.manufacturer|default:"-" }}</p>
+        <p><strong>Model:</strong> {{ product.model|default:"-" }}</p>
+        {% if product_attributes %}
+            {% for attr in product_attributes %}
+                <p><strong>{{ attr.attribute.name }}:</strong> {{ attr.value }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/drift-zoom/dist/Drift.min.js"></script>
+<script>
+    const zoomImage = document.querySelector('#zoom-image');
+    const imageContainer = document.querySelector('.main-product-image');
+
+    // Pokreni zoom
+    let drift = new Drift(zoomImage, {
+        paneContainer: imageContainer,
+        inlinePane: false,
+        containInline: true,
+        hoverBoundingBox: false,
+        zoomFactor: 1.5
+    });
+
+    // Klikom na thumbnail promijeni glavnu sliku
+    document.querySelectorAll('.thumb-image').forEach(thumb => {
+        thumb.addEventListener('click', function () {
+            const newSrc = this.getAttribute('data-full');
+            zoomImage.setAttribute('src', newSrc);
+            zoomImage.setAttribute('data-zoom', newSrc);
+            drift.disable(); // uništi stari instance
+            drift = new Drift(zoomImage, {
+                paneContainer: imageContainer,
+                inlinePane: false,
+                containInline: true,
+                hoverBoundingBox: false,
+                zoomFactor: 1.5
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
