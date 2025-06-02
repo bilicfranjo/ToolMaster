@@ -59,7 +59,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'category', 'slug', 'price', 'image', 'description', 'in_stock', 'popular']
+        fields = ['name', 'category', 'manufacturer', 'slug', 'price', 'image', 'description', 'in_stock', 'popular']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }

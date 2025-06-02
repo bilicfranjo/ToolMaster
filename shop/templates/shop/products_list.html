@@ -1,0 +1,247 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'shop/css/products.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- NASLOV -->
+    <h2 class="mb-4 products-list-title">
+        {% if category %}
+            {{ category.name }}
+        {% else %}
+            Svi proizvodi
+        {% endif %}
+    </h2>
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products_list' %}">Svi proizvodi</a></li>
+            {% if category %}
+                {% if category.parent %}
+                    <li class="breadcrumb-item"><a href="{% url 'products_by_category' category.parent.slug %}">{{ category.parent.name }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+
+
+    <!-- GRID PROIZVODA -->
+    <div class="row">
+        <!-- Lijevi sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="products-sidebar">
+
+                <!-- KATEGORIJE -->
+                <div class="filter-title" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="true">
+                    <span>Kategorije</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div id="categoryCollapse" class="collapse filter-options">
+                    {% for cat in categories %}
+                        <div class="mb-2">
+                            <a href="{% url 'products_by_category' cat.slug %}" class="d-block fw-bold" style="font-size: 20px; color: #000;">
+                                {{ cat.name }}
+                            </a>
+                            {% if cat.subcategories.all %}
+                                <div class="ms-3 mt-1">
+                                    {% for subcat in cat.subcategories.all %}
+                                        <a href="{% url 'products_by_category' subcat.slug %}" class="d-block" style="font-size: 18px; color: #444;">
+                                            {{ subcat.name }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <!-- FILTERI -->
+                <!-- FILTER SEKCIJA -->
+                <div class="filter-title" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                    <span>Filtriraj</span>
+                    <span class="toggle-icon" data-icon-for="#filterCollapse">+</span>
+                </div>
+
+
+                <div id="filterCollapse" class="collapse filter-options">
+                    <form method="get">
+                        <!-- COLLAPSE: PROIZVOĐAČ -->
+                        <div class="filter-subtitle" data-bs-toggle="collapse" data-bs-target="#manufacturerCollapse">
+                            <span>Proizvođač</span>
+                        </div>
+                        <div id="manufacturerCollapse" class="collapse ms-2">
+                            {% for item in manufacturers %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="manufacturer" value="{{ item }}" id="manuf-{{ forloop.counter }}" {% if selected_manufacturer == item %}checked{% endif %}>
+                                <label class="form-check-label" for="manuf-{{ forloop.counter }}">{{ item }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- COLLAPSE: CIJENA -->
+                        <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#priceCollapse">
+                            <span>Cijena</span>
+                        </div>
+                        <div id="priceCollapse" class="collapse ms-2">
+                            <div class="mb-2">Od:
+                                <input type="number" class="form-control form-control-sm" name="price_min" value="{{ price_min }}">
+                            </div>
+                            <div class="mb-2">Do:
+                                <input type="number" class="form-control form-control-sm" name="price_max" value="{{ price_max }}">
+                            </div>
+                        </div>
+
+                        <!-- DODATNI ATRIBUTI -->
+                        {% for attribute in attribute_filters %}
+                            {% with "attr_"|add:attribute.id|stringformat:"s" as attr_key %}
+                                {% with attribute_selected_values.attr_key as selected_values %}
+                                    <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#attrCollapse{{ attribute.id }}">
+                                        <span>{{ attribute.name }}</span>
+                                    </div>
+                                    <div id="attrCollapse{{ attribute.id }}" class="collapse ms-2 {% if selected_values %}show{% endif %}">
+                                        {% for val in attribute.productattributevalue_set.all %}
+                                            {% with val.value as value %}
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                        type="checkbox"
+                                                        name="{{ attr_key }}"
+                                                        value="{{ value }}"
+                                                        id="attr{{ attribute.id }}_{{ forloop.counter }}"
+                                                        {% if value in selected_values %}checked{% endif %}>
+                                                    <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
+                                                        {{ value }}
+                                                    </label>
+                                                </div>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </div>
+                                {% endwith %}
+                            {% endwith %}
+                        {% endfor %}
+
+
+
+                        <!-- DUGMAD -->
+                        <div class="mt-3 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-dark">Primijeni filter</button>
+                            {% if selected_manufacturer or price_min or price_max %}
+                            <a href="{% url 'products_list' %}" class="btn btn-outline-secondary">Ukloni filtere</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desni dio: proizvodi -->
+        <div class="col-md-9">
+            <!-- VRH: BROJ + SORTIRANJE -->
+            <div class="row align-items-center justify-content-between mb-4 product-toolbar">
+                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+                    <strong>
+                        Prikaz {{ page_obj.start_index }} – {{ page_obj.end_index }} od {{ paginator.count }} rezultata
+                    </strong>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <form method="get" class="d-inline">
+                        <label for="sort" class="me-2">Sortiraj po:</label>
+                        <select name="sort" id="sort" class="form-select d-inline w-auto" onchange="this.form.submit()">
+                            <option value="">-- Odaberi --</option>
+                            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Cijena: rastuće</option>
+                            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Cijena: padajuće</option>
+                            <option value="manufacturer_asc" {% if sort_by == 'manufacturer_asc' %}selected{% endif %}>Proizvođač: A–Ž</option>
+                            <option value="manufacturer_desc" {% if sort_by == 'manufacturer_desc' %}selected{% endif %}>Proizvođač: Ž–A</option>
+                        </select>
+
+                        {# Ako postoje dodatni GET parametri (npr. manufacturer), sačuvaj ih hidden #}
+                        {% if selected_manufacturer %}
+                            <input type="hidden" name="manufacturer" value="{{ selected_manufacturer }}">
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            <!-- Proizvodi -->
+            <div class="row g-4">
+                {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card product-card h-100">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.price|floatformat:2 }} €</p>
+                        </div>
+                        <div class="card-corner-arrow">→</div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Nema proizvoda za prikaz.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PAGINACIJA -->
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">«</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">»</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const filterToggle = document.querySelector('[data-bs-target="#filterCollapse"]');
+    const icon = document.querySelector('.toggle-icon[data-icon-for="#filterCollapse"]');
+
+    if (filterToggle && icon) {
+        filterToggle.addEventListener('click', function () {
+            const collapse = document.querySelector('#filterCollapse');
+            const isOpen = collapse.classList.contains('show');
+            setTimeout(() => {
+                icon.textContent = isOpen ? '+' : '–';
+            }, 300); // čekaj dok Bootstrap završi animaciju
+        });
+
+        // početno stanje
+        icon.textContent = document.querySelector('#filterCollapse').classList.contains('show') ? '–' : '+';
+    }
+});
+</script>
+{% endblock %}
+
+
+
+{% endblock %}

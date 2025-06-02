@@ -10,6 +10,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Order, UserProfile
 from .forms import ProfileUpdateForm
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Home 
 def home_view(request):
@@ -52,6 +54,93 @@ def profile_edit_view(request):
 def user_order_detail(request, pk):
     order = get_object_or_404(Order, pk=pk, user=request.user)
     return render(request, 'shop/order_detail_user.html', {'order': order})
+
+
+# Proizvodi
+def products_list_view(request, slug=None):
+    products = Product.objects.all()
+    category = None
+    manufacturers = Product.objects.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
+    price_min = request.GET.get('price_min')
+    price_max = request.GET.get('price_max')
+    attribute_filters = request.GET.dict()
+    attribute_queries = Q()
+
+    if price_min:
+        try:
+            products = products.filter(price__gte=float(price_min))
+        except ValueError:
+            pass
+
+    if price_max:
+        try:
+            products = products.filter(price__lte=float(price_max))
+        except ValueError:
+            pass
+
+    attribute_filters = []
+
+    if slug:
+        category = Category.objects.get(slug=slug)
+        if category.subcategories.exists(): # type: ignore
+            subcategories = category.subcategories.all() # type: ignore
+            products = products.filter(category__in=subcategories)
+            # glavna kategorija → bez dodatnih atributa
+        else:
+            products = products.filter(category=category)
+            # podkategorija → dohvaćamo atribute
+            attribute_filters = ProductAttribute.objects.filter(category=category)
+
+
+    # Filtriranje po proizvođaču
+    selected_manufacturer = request.GET.get('manufacturer')
+    if selected_manufacturer:
+        products = products.filter(manufacturer=selected_manufacturer)
+        
+        
+    for key, value in request.GET.lists():
+        if key.startswith('attr_'):
+            attr_id = key.split('_')[1]
+            for val in value:
+                matching_products = ProductAttributeValue.objects.filter(
+                    attribute_id=attr_id,
+                    value=val
+                ).values_list('product_id', flat=True)
+                attribute_queries &= Q(id__in=matching_products)
+
+    if attribute_queries:
+        products = products.filter(attribute_queries)
+
+    # Sortiranje
+    sort_by = request.GET.get('sort')
+    if sort_by == 'price_asc':
+        products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')
+    elif sort_by == 'manufacturer_asc':
+        products = products.order_by('manufacturer')
+    elif sort_by == 'manufacturer_desc':
+        products = products.order_by('-manufacturer')
+
+    # Paginacija
+    paginator = Paginator(products, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'shop/products_list.html', {
+        'products': page_obj.object_list,
+        'page_obj': page_obj,
+        'category': category,
+        'selected_manufacturer': selected_manufacturer,
+        'sort_by': sort_by,
+        'paginator': paginator,
+        'categories': Category.objects.filter(parent__isnull=True).prefetch_related('subcategories'),
+        'manufacturers': manufacturers,
+        'price_min': price_min,
+        'price_max': price_max,
+        'attribute_filters': attribute_filters,
+    })
+
 
 
 # Autentikacija

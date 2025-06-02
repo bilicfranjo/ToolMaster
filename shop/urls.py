@@ -10,7 +10,7 @@ from .views import (home_view, register_view, login_view,
                     admin_category_edit, admin_category_delete, get_attributes_for_category,
                     admin_user_list, admin_user_delete, toggle_user_staff_status,
                     admin_order_list, admin_order_detail, profile_view, profile_edit_view,
-                    user_order_detail)
+                    user_order_detail, products_list_view)
 
 urlpatterns = [
     path('', home_view, name="home"),
@@ -47,5 +47,7 @@ urlpatterns = [
     path('profil/promijeni-lozinku/', auth_views.PasswordChangeView.as_view(template_name='shop/password_change.html'), name='password_change'),
     path('profil/promijeni-lozinku/gotovo/', auth_views.PasswordChangeDoneView.as_view(template_name='shop/password_change_done.html'), name='password_change_done'),
     path('profil/narudzba/<int:pk>/', user_order_detail, name='user_order_detail'),
+    path('proizvodi/', products_list_view, name='products_list'),
+    path('proizvodi/kategorija/<slug:slug>/', products_list_view, name='products_by_category'),
 ]
 
