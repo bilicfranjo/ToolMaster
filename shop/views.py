@@ -63,8 +63,17 @@ def products_list_view(request, slug=None):
     manufacturers = Product.objects.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
-    attribute_filters = request.GET.dict()
+    attribute_filters = []
     attribute_queries = Q()
+
+    if slug:
+        category = get_object_or_404(Category, slug=slug)
+        if category.subcategories.exists(): # type: ignore
+            subcategories = category.subcategories.all() # type: ignore
+            products = products.filter(category__in=subcategories)
+        else:
+            products = products.filter(category=category)
+            attribute_filters = ProductAttribute.objects.filter(category=category)
 
     if price_min:
         try:
@@ -78,30 +87,17 @@ def products_list_view(request, slug=None):
         except ValueError:
             pass
 
-    attribute_filters = []
-
-    if slug:
-        category = Category.objects.get(slug=slug)
-        if category.subcategories.exists(): # type: ignore
-            subcategories = category.subcategories.all() # type: ignore
-            products = products.filter(category__in=subcategories)
-            # glavna kategorija → bez dodatnih atributa
-        else:
-            products = products.filter(category=category)
-            # podkategorija → dohvaćamo atribute
-            attribute_filters = ProductAttribute.objects.filter(category=category)
-
-
-    # Filtriranje po proizvođaču
     selected_manufacturer = request.GET.get('manufacturer')
     if selected_manufacturer:
         products = products.filter(manufacturer=selected_manufacturer)
-        
-        
-    for key, value in request.GET.lists():
+
+    # Filtriranje po dodatnim atributima
+    selected_attributes = {}
+    for key, values in request.GET.lists():
         if key.startswith('attr_'):
+            selected_attributes[key] = values  # sačuvaj za template
             attr_id = key.split('_')[1]
-            for val in value:
+            for val in values:
                 matching_products = ProductAttributeValue.objects.filter(
                     attribute_id=attr_id,
                     value=val
@@ -111,7 +107,6 @@ def products_list_view(request, slug=None):
     if attribute_queries:
         products = products.filter(attribute_queries)
 
-    # Sortiranje
     sort_by = request.GET.get('sort')
     if sort_by == 'price_asc':
         products = products.order_by('price')
@@ -122,7 +117,6 @@ def products_list_view(request, slug=None):
     elif sort_by == 'manufacturer_desc':
         products = products.order_by('-manufacturer')
 
-    # Paginacija
     paginator = Paginator(products, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -139,6 +133,7 @@ def products_list_view(request, slug=None):
         'price_min': price_min,
         'price_max': price_max,
         'attribute_filters': attribute_filters,
+        'selected_attributes': selected_attributes,
     })
 
 

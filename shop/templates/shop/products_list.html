@@ -1,5 +1,7 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% load static custom_tags %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'shop/css/products.css' %}">
@@ -102,7 +104,7 @@
                         <!-- DODATNI ATRIBUTI -->
                         {% for attribute in attribute_filters %}
                             {% with "attr_"|add:attribute.id|stringformat:"s" as attr_key %}
-                                {% with attribute_selected_values.attr_key as selected_values %}
+                                {% with selected_attributes|get_item:attr_key as selected_values %}
                                     <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#attrCollapse{{ attribute.id }}">
                                         <span>{{ attribute.name }}</span>
                                     </div>
