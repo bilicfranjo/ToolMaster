@@ -45,21 +45,32 @@
             </p>
 
             <!-- Forma: količina i gumb unutar iste forme, čvrsto povezani -->
-            <form action="{% url 'cart_add' product.id %}" method="post">
-                {% csrf_token %}
+            {% if user.is_authenticated %}
+                <form action="{% url 'cart_add' product.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3 product-quantity">
+                        <label for="quantity" class="form-label">Količina:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" style="width: 120px;" {% if not product.in_stock %}disabled{% endif %}>
+                    </div>
+                    <button type="submit" id="add-to-cart-btn" class="btn add-to-cart-btn"
+                        {% if not product.in_stock %}disabled{% endif %}>
+                        {% if product.in_stock %}
+                            Dodaj u košaricu
+                        {% else %}
+                            Nije dostupno
+                        {% endif %}
+                    </button>
+                </form>
+            {% else %}
                 <div class="mb-3 product-quantity">
                     <label for="quantity" class="form-label">Količina:</label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" style="width: 120px;" {% if not product.in_stock %}disabled{% endif %}>
+                    <input type="number" value="1" class="form-control" style="width: 120px;" disabled>
                 </div>
-                <button type="submit" id="add-to-cart-btn" class="btn add-to-cart-btn"
-                    {% if not product.in_stock %}disabled{% endif %}>
-                    {% if product.in_stock %}
-                        Dodaj u košaricu
-                    {% else %}
-                        Nije dostupno
-                    {% endif %}
-                </button>
-            </form>
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn add-to-cart-btn">
+                    Prijavi se
+                </a>
+            {% endif %}
+
 
             <!-- Informacije -->
             <div class="product-icons mt-4">

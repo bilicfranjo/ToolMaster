@@ -533,10 +533,21 @@ def admin_order_detail(request, pk):
 
 
 # Košarica
+@login_required
 def cart_detail_view(request):
     cart = Cart(request)
-    return render(request, 'shop/cart.html', {'cart': cart})
+    subtotal = cart.get_total_price()
+    shipping = 0 if subtotal >= 100 else 10.99
+    total = subtotal + shipping
 
+    return render(request, 'shop/cart.html', {
+        'cart': cart,
+        'subtotal': subtotal,
+        'shipping': shipping,
+        'total': total,
+    })
+
+@login_required
 def cart_add_view(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -544,13 +555,14 @@ def cart_add_view(request, product_id):
     cart.add(product, quantity=quantity)
     return JsonResponse({'cart_item_count': len(cart)})
 
-
+@login_required
 def cart_remove_view(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     return redirect('cart_detail')
 
+@login_required
 def cart_update_view(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)

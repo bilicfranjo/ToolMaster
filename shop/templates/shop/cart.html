@@ -16,7 +16,7 @@
     <div class="row">
         <!-- Proizvodi -->
         <div class="col-md-8">
-            <table class="table table-bordered align-middle">
+            <table class="table table-bordered align-middle cart-table">
                 <thead class="table-dark">
                     <tr>
                         <th>Slika</th>
@@ -30,22 +30,22 @@
                 <tbody>
                     {% for item in cart %}
                     <tr>
+                        <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"></td>
                         <td>
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="60">
+                            <a href="{% url 'product_detail' category_slug=item.product.category.slug slug=item.product.slug %}">
+                                {{ item.product.name }}
+                            </a>
                         </td>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.price }} €</td>
+                        <td class="fs-5">{{ item.price }} €</td>
                         <td>
                             <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-flex">
                                 {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2" style="width: 80px;">
-                                <button type="submit" class="btn btn-sm btn-primary">Ažuriraj</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2 fs-6" style="width: 80px;">
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Ažuriraj</button>
                             </form>
                         </td>
-                        <td>{{ item.total_price }} €</td>
-                        <td>
-                            <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-danger">Ukloni</a>
-                        </td>
+                        <td class="fs-5">{{ item.total_price }} €</td>
+                        <td><a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger">Ukloni</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -54,10 +54,23 @@
 
         <!-- Obračun -->
         <div class="col-md-4">
-            <div class="border p-4 bg-light">
-                <h4>Ukupno:</h4>
-                <p class="fs-4"><strong>{{ cart.get_total_price }} €</strong></p>
-                <a href="#" class="btn btn-success w-100">Idi na naplatu</a>
+            <div class="cart-summary">
+                <h4>Pregled narudžbe</h4>
+                {% with total=cart.get_total_price %}
+                    <p>Međuzbroj: <span class="float-end">{{ total }} €</span></p>
+                    {% if total >= 100 %}
+                        {% with 0 as shipping %}
+                        <p>Dostava: <span class="float-end text-success">0.00 €</span></p>
+                        {% endwith %}
+                    {% else %}
+                        {% with 10.99 as shipping %}
+                        <p>Dostava: <span class="float-end text-muted">10.99 €</span></p>
+                        {% endwith %}
+                    {% endif %}
+                    <hr>
+                    <p class="fs-5">Ukupno: <strong class="float-end">{{ total|add:shipping|floatformat:2 }} €</strong></p>
+                {% endwith %}
+                <a href="#" class="btn btn-success w-100 mt-3">Idi na naplatu</a>
             </div>
         </div>
     </div>
