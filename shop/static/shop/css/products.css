@@ -171,6 +171,42 @@
     color: black;
 }
 
+/* Animacija dodavanja proizvoda u košaricu*/
+.add-to-cart-btn.clicked {
+    position: relative;
+    overflow: hidden;
+    background-color: green !important;
+    color: white !important;
+    border-color: green;
+}
+
+.add-to-cart-btn.clicked::after {
+    content: '✔ Dodano u košaricu';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideIn 0.4s forwards;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
+
 /* Ikonice i dodatne informacije */
 .product-icons .icon-box {
     display: flex;

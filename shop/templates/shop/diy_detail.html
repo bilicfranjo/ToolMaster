@@ -33,13 +33,15 @@
                 <div class="swiper-wrapper">
                     {% for tool in video.tools_used.all %}
                     <div class="swiper-slide">
-                        <div class="card product-card">
-                            <img src="{{ tool.image.url }}" class="card-img-top" alt="{{ tool.name }}">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ tool.name }}</h5>
-                                <p class="card-text">{{ tool.price }} €</p>
+                        <a href="{% url 'product_detail' tool.category.slug tool.slug %}" class="text-decoration-none">
+                            <div class="card product-card">
+                                <img src="{{ tool.image.url }}" class="card-img-top" alt="{{ tool.name }}">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ tool.name }}</h5>
+                                    <p class="card-text">{{ tool.price }} €</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     {% endfor %}
                 </div>

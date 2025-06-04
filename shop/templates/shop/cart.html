@@ -1,0 +1,66 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'shop/css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Tvoja košarica ({{ cart|length }} {{ cart|length|pluralize:"proizvod,proizvoda,proizvoda" }})</h2>
+
+    {% if cart|length == 0 %}
+        <p>Košarica je prazna.</p>
+        <a href="{% url 'home' %}" class="btn btn-warning mt-3">Natrag u trgovinu</a>
+    {% else %}
+    <div class="row">
+        <!-- Proizvodi -->
+        <div class="col-md-8">
+            <table class="table table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Slika</th>
+                        <th>Proizvod</th>
+                        <th>Cijena</th>
+                        <th>Količina</th>
+                        <th>Ukupno</th>
+                        <th>Akcija</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                    <tr>
+                        <td>
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="60">
+                        </td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.price }} €</td>
+                        <td>
+                            <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-flex">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2" style="width: 80px;">
+                                <button type="submit" class="btn btn-sm btn-primary">Ažuriraj</button>
+                            </form>
+                        </td>
+                        <td>{{ item.total_price }} €</td>
+                        <td>
+                            <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-danger">Ukloni</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Obračun -->
+        <div class="col-md-4">
+            <div class="border p-4 bg-light">
+                <h4>Ukupno:</h4>
+                <p class="fs-4"><strong>{{ cart.get_total_price }} €</strong></p>
+                <a href="#" class="btn btn-success w-100">Idi na naplatu</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,17 +1,14 @@
-from django.shortcuts import render, redirect
-from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order, UserProfile
 from django.contrib.auth import login, authenticate, logout
-from .forms import CustomAuthenticationForm, CustomUserCreationForm
+from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet, ProfileUpdateForm
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import Order, UserProfile
-from .forms import ProfileUpdateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from .cart import Cart
 
 # Home 
 def home_view(request):
@@ -141,13 +138,14 @@ def products_list_view(request, slug=None):
     })
 
 
-def product_detail_view(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+def product_detail_view(request, category_slug ,slug):
+    product = get_object_or_404(Product, slug=slug, category__slug=category_slug)
     product_attributes = product.attributes.select_related('attribute') # type: ignore
     return render(request, 'shop/product_detail.html', {
         'product': product,
         'product_attributes': product_attributes,
     })
+    
 
 # Autentikacija
 def register_view(request):
@@ -531,3 +529,31 @@ def admin_order_detail(request, pk):
             return redirect('admin_order_detail', pk=pk)
 
     return render(request, 'shop/dashboard/order_detail_dashboard.html', {'order': order})
+
+
+
+# Košarica
+def cart_detail_view(request):
+    cart = Cart(request)
+    return render(request, 'shop/cart.html', {'cart': cart})
+
+def cart_add_view(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+    cart.add(product, quantity=quantity)
+    return JsonResponse({'cart_item_count': len(cart)})
+
+
+def cart_remove_view(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
+    return redirect('cart_detail')
+
+def cart_update_view(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+    cart.add(product, quantity=quantity, update_quantity=True)
+    return redirect('cart_detail')

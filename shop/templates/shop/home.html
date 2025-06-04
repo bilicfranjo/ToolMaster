@@ -56,11 +56,13 @@
             <div class="swiper-wrapper">
                 {% for category in categories %}
                 <div class="swiper-slide">
-                    <div class="category-card-img" style="background-image: {% if category.image %}url('{{ category.image.url }}'){% else %}linear-gradient(135deg, #4A5D23, #f1c40f){% endif %};">
-                        <div class="overlay">
-                            <h3>{{ category.name }}</h3>
+                    <a href="{% url 'products_by_category' category.slug %}" class="text-decoration-none">
+                        <div class="category-card-img" style="background-image: {% if category.image %}url('{{ category.image.url }}'){% else %}linear-gradient(135deg, #4A5D23, #f1c40f){% endif %};">
+                            <div class="overlay">
+                                <h3>{{ category.name }}</h3>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
@@ -117,7 +119,7 @@
         <div class="swiper-wrapper">
             {% for product in popular_products %}
             <div class="swiper-slide">
-                <a href="{% url 'product_detail' product.pk %}" class="text-decoration-none">
+                <a href="{% url 'product_detail' product.category.slug product.slug %}" class="text-decoration-none">
                     <div class="card product-card">
                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                         <div class="card-body text-center">

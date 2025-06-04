@@ -48,9 +48,7 @@
                 {% endif %}
             </td>
             <td>
-                <!-- OVO OBAVEZNO VRATITI-->
-                {# <a href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a> #}
-                <a href="#">{{ item.product.name }}</a>
+                <a href="{% url 'product_detail' item.product.category.slug item.product.slug %}">{{ item.product.name }}</a>
             </td>
             <td>{{ item.quantity }}</td>
             <td>{{ item.price|floatformat:2 }} €</td>

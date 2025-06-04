@@ -72,13 +72,14 @@ button {
 /* NAVBAR */
 
 .custom-navbar {
+    position: fixed;
     background-color: #4A5D23;
     color: white;
     padding: 12px 0;
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 1000;
     border-bottom: 8px solid #f1c40f;
     transition: all 0.3s ease;
 }
@@ -201,6 +202,119 @@ button {
     to { opacity: 1; transform: scale(1); }
 }
 
+/* KATEORIJE DROPDOWN */
+.category-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+}
+
+.category-toggle:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.category-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 5%;
+    right: 68%;
+    background: white;
+    z-index: 1001;
+    display: none;
+    padding: 30px 50px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.category-dropdown.active {
+    display: block;
+}
+
+.dropdown-inner {
+    display: flex;
+    gap: 50px;
+}
+
+.main-categories {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 200px;
+}
+
+.main-categories li {
+    margin-bottom: 10px;
+}
+
+.main-category-btn,
+.main-categories .main-category-btn-all-products {
+    font-size: 22px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    padding: 4px 6px;
+}
+
+
+.main-category-btn.active,
+.main-categories .main-category-btn-all-products.active {
+    color: #f1c40f;
+}
+
+.main-category-btn span,
+.main-category-btn-all-products span {
+    margin-left: auto;
+    padding-left: 100px;
+    font-weight: normal;
+}
+
+.subcategories {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.subcategories li a {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+.subcategories li a:hover {
+    text-decoration: underline;
+}
+
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    z-index: 999;
+}
+
+.dropdown-overlay.active {
+    display: block;
+}
+
+.subcategories {
+    display: none;
+}
+
+
 
 /* BANNER */
 
@@ -209,7 +323,7 @@ button {
 }
 
 .carousel-banner {
-    position: relative; /* Dodano da strelice budu u odnosu na ovaj blok */
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 600px;

@@ -10,7 +10,8 @@ from .views import (home_view, register_view, login_view,
                     admin_category_edit, admin_category_delete, get_attributes_for_category,
                     admin_user_list, admin_user_delete, toggle_user_staff_status,
                     admin_order_list, admin_order_detail, profile_view, profile_edit_view,
-                    user_order_detail, products_list_view, product_detail_view)
+                    user_order_detail, products_list_view, product_detail_view,
+                    cart_detail_view, cart_add_view, cart_remove_view, cart_update_view)
 
 urlpatterns = [
     path('', home_view, name="home"),
@@ -49,6 +50,10 @@ urlpatterns = [
     path('profil/narudzba/<int:pk>/', user_order_detail, name='user_order_detail'),
     path('proizvodi/', products_list_view, name='products_list'),
     path('proizvodi/kategorija/<slug:slug>/', products_list_view, name='products_by_category'),
-    path('proizvodi/<int:pk>/', product_detail_view, name='product_detail'),
+    path('proizvodi/<slug:category_slug>/<slug:slug>/', product_detail_view, name='product_detail'),
+    path('kosarica/', cart_detail_view, name='cart_detail'),
+    path('kosarica/dodaj/<int:product_id>/', cart_add_view, name='cart_add'),
+    path('kosarica/ukloni/<int:product_id>/', cart_remove_view, name='cart_remove'),
+    path('kosarica/azuriraj/<int:product_id>/', cart_update_view, name='cart_update'),
 ]
 
