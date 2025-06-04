@@ -11,7 +11,8 @@ from .views import (home_view, register_view, login_view,
                     admin_user_list, admin_user_delete, toggle_user_staff_status,
                     admin_order_list, admin_order_detail, profile_view, profile_edit_view,
                     user_order_detail, products_list_view, product_detail_view,
-                    cart_detail_view, cart_add_view, cart_remove_view, cart_update_view)
+                    cart_detail_view, cart_add_view, cart_remove_view, cart_update_view,
+                    checkout_view, order_success_view)
 
 urlpatterns = [
     path('', home_view, name="home"),
@@ -55,5 +56,7 @@ urlpatterns = [
     path('kosarica/dodaj/<int:product_id>/', cart_add_view, name='cart_add'),
     path('kosarica/ukloni/<int:product_id>/', cart_remove_view, name='cart_remove'),
     path('kosarica/azuriraj/<int:product_id>/', cart_update_view, name='cart_update'),
+    path('naplata/', checkout_view, name='checkout'),
+    path('narudzba/uspjesna/<int:pk>/', order_success_view, name='order_success'),
 ]
 

@@ -70,7 +70,7 @@
                     <hr>
                     <p class="cart-price">Ukupno: <strong class="float-end">{{ total|add:shipping|floatformat:2 }} €</strong></p>
                 {% endwith %}
-                <a href="#" class="checkout-btn">Idi na naplatu</a>
+                <a href="{% url 'checkout' %}" class="checkout-btn">Idi na naplatu</a>
             </div>
         </div>
     </div>

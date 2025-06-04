@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order, UserProfile
+from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order, UserProfile, OrderItem
 from django.contrib.auth import login, authenticate, logout
-from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet, ProfileUpdateForm
+from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet, ProfileUpdateForm, CheckoutForm
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -585,3 +585,63 @@ def cart_update_view(request, product_id):
     item.save()
 
     return redirect('cart_detail')
+
+
+# Naplata
+@login_required
+def checkout_view(request):
+    cart = request.user.cart
+    items = cart.items.select_related('product')
+    user_profile = getattr(request.user, 'userprofile', None)
+
+    if not items.exists():
+        return redirect('cart_detail')
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            # Logika za adresu
+            if form.cleaned_data['use_profile_address']:
+                address = user_profile.address if user_profile and user_profile.address else ''
+            else:
+                address = form.cleaned_data['shipping_address']
+
+            # Logika za telefon
+            if form.cleaned_data['use_profile_phone']:
+                phone = user_profile.phone if user_profile and user_profile.phone else ''
+            else:
+                phone = form.cleaned_data['phone']
+
+            if not address or not phone:
+                form.add_error(None, "Adresa i broj mobitela su obavezni.")
+            else:
+                order = Order.objects.create(
+                    user=request.user,
+                    total_price=cart.total_price(),
+                    shipping_address=address,
+                    phone=phone,
+                )
+
+                for item in items:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item.product,
+                        quantity=item.quantity,
+                        price=item.product.price,
+                    )
+
+                items.delete()
+                return redirect('order_success', pk=order.pk)
+    else:
+        form = CheckoutForm()
+
+    return render(request, 'shop/checkout.html', {
+        'form': form,
+        'user_profile': user_profile,
+    })
+
+
+@login_required
+def order_success_view(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    return render(request, 'shop/order_success.html', {'order': order})

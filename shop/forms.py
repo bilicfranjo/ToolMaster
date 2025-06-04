@@ -149,3 +149,11 @@ class ProfileUpdateForm(forms.ModelForm):
         if commit:
             self.profile.save()
         return user
+
+
+class CheckoutForm(forms.Form):
+    use_profile_address = forms.BooleanField(required=False, label='Koristi svoju adresu')
+    shipping_address = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 2}), label='Unesi drugu adresu')
+
+    use_profile_phone = forms.BooleanField(required=False, label='Koristi svoj broj')
+    phone = forms.CharField(required=False, label='Unesi drugi broj')
