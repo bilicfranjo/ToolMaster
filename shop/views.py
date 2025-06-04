@@ -171,7 +171,9 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                next_url = request.GET.get('next') or request.POST.get('next')
+                return redirect(next_url) if next_url else redirect('home')
+
             else:
                 error_message = "Neispravno korisničko ime ili lozinka."
         else:

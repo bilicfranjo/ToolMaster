@@ -36,16 +36,16 @@
                                 {{ item.product.name }}
                             </a>
                         </td>
-                        <td class="fs-5">{{ item.price }} €</td>
+                        <td class="cart-price">{{ item.price }} €</td>
                         <td>
                             <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-flex">
                                 {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2 fs-6" style="width: 80px;">
-                                <button type="submit" class="btn btn-sm btn-outline-primary">Ažuriraj</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2 fs-6">
+                                <button type="submit" class="btn btn-sm btn-outline-primary cart-btn">Ažuriraj</button>
                             </form>
                         </td>
-                        <td class="fs-5">{{ item.total_price }} €</td>
-                        <td><a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger">Ukloni</a></td>
+                        <td class="cart-price">{{ item.total_price }} €</td>
+                        <td><a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger cart-btn">Ukloni</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -68,9 +68,9 @@
                         {% endwith %}
                     {% endif %}
                     <hr>
-                    <p class="fs-5">Ukupno: <strong class="float-end">{{ total|add:shipping|floatformat:2 }} €</strong></p>
+                    <p class="cart-price">Ukupno: <strong class="float-end">{{ total|add:shipping|floatformat:2 }} €</strong></p>
                 {% endwith %}
-                <a href="#" class="btn btn-success w-100 mt-3">Idi na naplatu</a>
+                <a href="#" class="checkout-btn">Idi na naplatu</a>
             </div>
         </div>
     </div>
