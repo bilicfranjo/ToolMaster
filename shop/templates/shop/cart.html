@@ -7,11 +7,11 @@
 
 {% block content %}
 <div class="container py-5">
-    <h2 class="mb-4">Tvoja košarica ({{ cart|length }} {{ cart|length|pluralize:"proizvod,proizvoda,proizvoda" }})</h2>
+    <h2 class="mb-4">Tvoja košarica ({{ items|length }} {{ items|length|pluralize:"proizvod,proizvoda,proizvoda" }})</h2>
 
-    {% if cart|length == 0 %}
-        <p>Košarica je prazna.</p>
-        <a href="{% url 'home' %}" class="btn btn-warning mt-3">Natrag u trgovinu</a>
+    {% if items|length == 0 %}
+        <p class="empty-cart-text">Košarica je prazna.</p>
+        <a href="{% url 'home' %}" class="btn btn-warning mt-3 cart-btn">Natrag u trgovinu</a>
     {% else %}
     <div class="row">
         <!-- Proizvodi -->
@@ -28,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in cart %}
+                    {% for item in items %}
                     <tr>
                         <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"></td>
                         <td>
@@ -36,7 +36,7 @@
                                 {{ item.product.name }}
                             </a>
                         </td>
-                        <td class="cart-price">{{ item.price }} €</td>
+                        <td class="cart-price">{{ item.product.price }} €</td>
                         <td>
                             <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-flex">
                                 {% csrf_token %}
@@ -44,7 +44,7 @@
                                 <button type="submit" class="btn btn-sm btn-outline-primary cart-btn">Ažuriraj</button>
                             </form>
                         </td>
-                        <td class="cart-price">{{ item.total_price }} €</td>
+                        <td class="cart-price">{{ item.total }} €</td>
                         <td><a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger cart-btn">Ukloni</a></td>
                     </tr>
                     {% endfor %}
@@ -56,7 +56,7 @@
         <div class="col-md-4">
             <div class="cart-summary">
                 <h4>Pregled narudžbe</h4>
-                {% with total=cart.get_total_price %}
+                {% with total=cart.total_price %}
                     <p>Međuzbroj: <span class="float-end">{{ total }} €</span></p>
                     {% if total >= 100 %}
                         {% with 0 as shipping %}

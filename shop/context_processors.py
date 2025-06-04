@@ -1,5 +1,5 @@
 from .models import Category
-from .cart import Cart
+from .models import Cart
 
 def categories_context(request):
     return {
@@ -8,6 +8,9 @@ def categories_context(request):
 
 
 def cart_context(request):
-    return {
-        'cart_item_count': len(Cart(request))
-    }
+    if request.user.is_authenticated:
+        cart = getattr(request.user, 'cart', None)
+        if cart:
+            count = sum(item.quantity for item in cart.items.all())
+            return {'cart_item_count': count}
+    return {'cart_item_count': 0}

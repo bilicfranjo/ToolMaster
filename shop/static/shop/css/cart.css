@@ -1,3 +1,4 @@
+/* Košarica */
 .cart-summary {
     background-color: #f8f9fa;
     padding: 24px;
@@ -14,7 +15,7 @@
     font-weight: 600;
 }
 
-.cart-table td, .cart-table th {
+.cart-table td, .cart-table th, .cart-price {
     font-size: 20px;
 }
 
@@ -27,8 +28,8 @@
     width: 80px;
 }
 
-.cart-price {
-    font-size: 20px;
+.empty-cart-text {
+    font-size: 24px;
 }
 
 /* Gumbi za ažuriranje i brisanje*/

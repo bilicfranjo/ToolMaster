@@ -8,7 +8,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .cart import Cart
 
 # Home 
 def home_view(request):
@@ -537,13 +536,15 @@ def admin_order_detail(request, pk):
 # Košarica
 @login_required
 def cart_detail_view(request):
-    cart = Cart(request)
-    subtotal = cart.get_total_price()
+    cart = request.user.cart
+    items = cart.items.select_related('product')
+    subtotal = cart.total_price()
     shipping = 0 if subtotal >= 100 else 10.99
     total = subtotal + shipping
 
     return render(request, 'shop/cart.html', {
         'cart': cart,
+        'items': items,
         'subtotal': subtotal,
         'shipping': shipping,
         'total': total,
@@ -551,23 +552,36 @@ def cart_detail_view(request):
 
 @login_required
 def cart_add_view(request, product_id):
-    cart = Cart(request)
+    cart = request.user.cart
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
-    cart.add(product, quantity=quantity)
-    return JsonResponse({'cart_item_count': len(cart)})
+
+    item, created = cart.items.get_or_create(product=product)
+    if not created:
+        item.quantity += quantity
+    else:
+        item.quantity = quantity
+    item.save()
+
+    return JsonResponse({
+    'cart_item_count': sum(i.quantity for i in cart.items.all())
+    })
+
 
 @login_required
 def cart_remove_view(request, product_id):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    cart.remove(product)
+    cart = request.user.cart
+    cart.items.filter(product_id=product_id).delete()
     return redirect('cart_detail')
 
 @login_required
 def cart_update_view(request, product_id):
-    cart = Cart(request)
+    cart = request.user.cart
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
-    cart.add(product, quantity=quantity, update_quantity=True)
+
+    item, created = cart.items.get_or_create(product=product)
+    item.quantity = quantity
+    item.save()
+
     return redirect('cart_detail')
