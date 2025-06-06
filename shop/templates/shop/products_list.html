@@ -113,7 +113,7 @@
                                             <div class="form-check">
                                                 <input class="form-check-input"
                                                     type="checkbox"
-                                                    name="attr_{{ attribute.id }}"
+                                                    name="attr_{{ attribute.id }}[]"
                                                     value="{{ value }}"
                                                     id="attr{{ attribute.id }}_{{ forloop.counter }}"
                                                     {% if value in selected_values %}checked{% endif %}>
