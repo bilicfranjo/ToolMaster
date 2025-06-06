@@ -73,13 +73,13 @@
                 </div>
 
 
-                <div id="filterCollapse" class="collapse filter-options">
+                <div id="filterCollapse" class="collapse filter-options {% if selected_manufacturers or price_min or price_max or selected_attributes %}show{% endif %}">
                     <form method="get">
                         <!-- COLLAPSE: PROIZVOĐAČ -->
                         <div class="filter-subtitle" data-bs-toggle="collapse" data-bs-target="#manufacturerCollapse">
                             <span>Proizvođač</span>
                         </div>
-                        <div id="manufacturerCollapse" class="collapse ms-2">
+                        <div id="manufacturerCollapse" class="collapse ms-2 {% if selected_manufacturers %}show{% endif %}">
                             {% for item in manufacturers %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="manufacturer" value="{{ item }}" id="manuf-{{ forloop.counter }}" {% if item in selected_manufacturers %}checked{% endif %}>
@@ -90,9 +90,9 @@
 
                         <!-- COLLAPSE: CIJENA -->
                         <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#priceCollapse">
-                            <span>Cijena</span>
+                            <span>Cijena (€)</span>
                         </div>
-                        <div id="priceCollapse" class="collapse ms-2">
+                        <div id="priceCollapse" class="collapse ms-2 price-collapse {% if price_min or price_max %}show{% endif %}">
                             <div class="mb-2">Od:
                                 <input type="number" class="form-control form-control-sm" name="price_min" value="{{ price_min }}">
                             </div>
@@ -131,11 +131,11 @@
 
 
 
-                        <!-- DUGMAD -->
+                        <!-- GUMBI -->
                         <div class="mt-3 d-flex flex-wrap gap-2">
-                            <button type="submit" class="btn btn-dark">Primijeni filter</button>
-                            {% if selected_manufacturer or price_min or price_max %}
-                            <a href="{% url 'products_list' %}" class="btn btn-outline-secondary">Ukloni filtere</a>
+                            <button type="submit" class="btn btn-dark filter-button">Primijeni filter</button>
+                            {% if selected_manufacturer or price_min or price_max or selected_attributes %}
+                            <a href="{% url 'products_list' %}" class="btn btn-outline-secondary filter-button">Ukloni filtere</a>
                             {% endif %}
                         </div>
                     </form>
@@ -188,7 +188,7 @@
                     </a>
                 </div>
                 {% empty %}
-                <p>Nema proizvoda za prikaz.</p>
+                <p class="no-products-text">Nema proizvoda za prikaz.</p>
                 {% endfor %}
             </div>
         </div>

@@ -95,13 +95,15 @@ def products_list_view(request, slug=None):
     for key, values in request.GET.lists():
         if key.startswith('attr_'):
             selected_attributes[key] = values
-            attr_id = key.split('_')[1]
+            try:
+                attr_id = int(key.split('_')[1])
+            except ValueError:
+                continue
             subquery = Q()
-
             for val in values:
                 subquery |= Q(attributes__attribute_id=attr_id, attributes__value=val)
+            attribute_queries |= subquery
 
-            attribute_queries |= subquery  # Ovdje je ključna razlika: koristimo OR između atributa
 
     if attribute_queries:
         products = products.filter(attribute_queries).distinct()

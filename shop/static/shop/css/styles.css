@@ -202,7 +202,7 @@ button {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* KATEORIJE DROPDOWN */
+/* Kategorije dropdown */
 .category-toggle {
     background: none;
     border: none;

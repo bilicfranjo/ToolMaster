@@ -25,7 +25,6 @@
 .form-check-label {
     font-size: 18px;
 }
-/* Opcionalno*/
 
 
 /* Filter zaglavlja (collapse trigger) */
@@ -72,7 +71,6 @@
     transform: scale(1.2);
 }
 
-
 .product-toolbar {
     font-size: 18px;
 }
@@ -80,6 +78,10 @@
 .product-toolbar select {
     font-size: 20px;
     padding: 4px 8px;
+}
+
+.price-collapse input, div {
+    font-size: 20px;
 }
 
 /* Breadcrumb */
@@ -100,7 +102,13 @@
     color: black;
 }
 
+.no-products-text {
+    font-size: 24px;
+}
 
+.filter-button {
+    font-size: 20px;
+}
 
 
 /* DETALNJI PRIKAZ PROIZVODA */
@@ -141,12 +149,12 @@
 
 /* Dostupnost i količina */
 .product-availability {
-    font-size: 24px;
+    font-size: 22px;
     margin-bottom: 20px;
 }
 
 .product-quantity {
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .product-quantity input {
