@@ -103,32 +103,29 @@
 
                         <!-- DODATNI ATRIBUTI -->
                         {% for attribute in attribute_filters %}
-                            {% with "attr_"|add:attribute.id|stringformat:"s" as attr_key %}
-                                {% with selected_attributes|get_item:attr_key as selected_values %}
-                                    <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#attrCollapse{{ attribute.id }}">
-                                        <span>{{ attribute.name }}</span>
-                                    </div>
-                                    <div id="attrCollapse{{ attribute.id }}" class="collapse ms-2 {% if selected_values %}show{% endif %}">
-                                        {% for val in attribute.productattributevalue_set.all %}
-                                            {% with val.value as value %}
-                                                <div class="form-check">
-                                                    <input class="form-check-input"
-                                                        type="checkbox"
-                                                        name="{{ attr_key }}"
-                                                        value="{{ value }}"
-                                                        id="attr{{ attribute.id }}_{{ forloop.counter }}"
-                                                        {% if value in selected_values %}checked{% endif %}>
-                                                    <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
-                                                        {{ value }}
-                                                    </label>
-                                                </div>
-                                            {% endwith %}
-                                        {% endfor %}
-                                    </div>
-                                {% endwith %}
+                            {% with selected_attributes|get_item:"attr_{{ attribute.id }}" as selected_values %}
+                                <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#attrCollapse{{ attribute.id }}">
+                                    <span>{{ attribute.name }}</span>
+                                </div>
+                                <div id="attrCollapse{{ attribute.id }}" class="collapse ms-2 {% if selected_values %}show{% endif %}">
+                                    {% for val in attribute.productattributevalue_set.all %}
+                                        {% with val.value as value %}
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                    type="checkbox"
+                                                    name="attr_{{ attribute.id }}"
+                                                    value="{{ value }}"
+                                                    id="attr{{ attribute.id }}_{{ forloop.counter }}"
+                                                    {% if value in selected_values %}checked{% endif %}>
+                                                <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
+                                                    {{ value }}
+                                                </label>
+                                            </div>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </div>
                             {% endwith %}
                         {% endfor %}
-
 
 
                         <!-- GUMBI -->
@@ -221,6 +218,8 @@
         </ul>
     </nav>
     {% endif %}
+
+    <!--<pre>{{ request.GET }}</pre>-->
 
 </div>
 

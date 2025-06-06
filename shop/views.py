@@ -55,6 +55,7 @@ def user_order_detail(request, pk):
 # Proizvodi
 def products_list_view(request, slug=None):
     products = Product.objects.all()
+    print("GET parametri:", request.GET)
     category = None
     manufacturers = Product.objects.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
     price_min = request.GET.get('price_min')
@@ -93,16 +94,19 @@ def products_list_view(request, slug=None):
     attribute_queries = Q()
 
     for key, values in request.GET.lists():
-        if key.startswith('attr_'):
-            selected_attributes[key] = values
+        print(">>> KEY:", key, "| VALUES:", values) 
+        clean_key = key.replace('[]', '')  # makni zagrade
+        if clean_key.startswith('attr_'):
+            selected_attributes[clean_key] = values
             try:
-                attr_id = int(key.split('_')[1])
+                attr_id = int(clean_key.split('_')[1])
             except ValueError:
                 continue
             subquery = Q()
             for val in values:
                 subquery |= Q(attributes__attribute_id=attr_id, attributes__value=val)
             attribute_queries |= subquery
+
 
 
     if attribute_queries:
