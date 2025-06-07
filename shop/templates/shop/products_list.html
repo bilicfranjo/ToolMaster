@@ -132,7 +132,7 @@
                         <!-- GUMBI -->
                         <div class="mt-3 d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-dark filter-button">Primijeni filter</button>
-                            {% if selected_manufacturer or price_min or price_max or selected_attributes %}
+                            {% if selected_manufacturers or price_min or price_max or selected_attributes %}
                             <a href="{% url 'products_list' %}" class="btn remove-filter-button">Ukloni filtere</a>
                             {% endif %}
                         </div>

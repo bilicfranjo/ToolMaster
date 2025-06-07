@@ -212,6 +212,10 @@ button {
     padding: 0;
 }
 
+.category-toggle:hover {
+    color: #f1c40f;
+}
+
 .category-toggle:focus {
     outline: none;
     box-shadow: none;
