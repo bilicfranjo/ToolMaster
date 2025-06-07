@@ -103,20 +103,21 @@
 
                         <!-- DODATNI ATRIBUTI -->
                         {% for attribute in attribute_filters %}
-                            {% with selected_attributes|get_item:"attr_{{ attribute.id }}" as selected_values %}
+                            {% make_key attribute.id as key %}
+                            {% with selected_attributes|get_item:key as selected_values %}
                                 <div class="filter-subtitle mt-3" data-bs-toggle="collapse" data-bs-target="#attrCollapse{{ attribute.id }}">
                                     <span>{{ attribute.name }}</span>
                                 </div>
                                 <div id="attrCollapse{{ attribute.id }}" class="collapse ms-2 {% if selected_values %}show{% endif %}">
                                     {% for val in attribute.productattributevalue_set.all %}
-                                        {% with val.value as value %}
+                                        {% with val.value|stringformat:"s" as value %}
                                             <div class="form-check">
                                                 <input class="form-check-input"
                                                     type="checkbox"
                                                     name="attr_{{ attribute.id }}[]"
                                                     value="{{ value }}"
                                                     id="attr{{ attribute.id }}_{{ forloop.counter }}"
-                                                    {% if value in selected_values %}checked{% endif %}>
+                                                    {% if selected_values and value in selected_values %}checked{% endif %}>
                                                 <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
                                                     {{ value }}
                                                 </label>
@@ -132,7 +133,7 @@
                         <div class="mt-3 d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-dark filter-button">Primijeni filter</button>
                             {% if selected_manufacturer or price_min or price_max or selected_attributes %}
-                            <a href="{% url 'products_list' %}" class="btn btn-outline-secondary filter-button">Ukloni filtere</a>
+                            <a href="{% url 'products_list' %}" class="btn remove-filter-button">Ukloni filtere</a>
                             {% endif %}
                         </div>
                     </form>

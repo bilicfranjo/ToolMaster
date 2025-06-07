@@ -106,8 +106,19 @@
     font-size: 24px;
 }
 
-.filter-button {
+.filter-button, .remove-filter-button {
     font-size: 20px;
+}
+
+.remove-filter-button {
+    color: black;
+    border: 1px solid black;
+    transition: all 0.3s ease;
+}
+
+.remove-filter-button:hover {
+    color: white !important; 
+    background-color: black;
 }
 
 

@@ -61,7 +61,7 @@ def products_list_view(request, slug=None):
     price_max = request.GET.get('price_max')
     attribute_filters = []
     attribute_queries = Q()
-
+    
     if slug:
         category = get_object_or_404(Category, slug=slug)
         if category.subcategories.exists(): # type: ignore
@@ -104,8 +104,7 @@ def products_list_view(request, slug=None):
             for val in values:
                 subquery |= Q(attributes__attribute_id=attr_id, attributes__value=val)
             attribute_queries |= subquery
-
-
+            
 
     if attribute_queries:
         products = products.filter(attribute_queries).distinct()
