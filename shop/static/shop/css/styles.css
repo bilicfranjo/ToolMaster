@@ -164,7 +164,7 @@ button {
     background-color: white;
     color: black;
     font-family: 'Teko', sans-serif;
-    width: 280px;
+    width: 300px;
     transition: all 0.3s ease;
 }
 
@@ -201,6 +201,73 @@ button {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
 }
+
+#search-wrapper {
+    position: relative;
+}
+
+.search-results-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1010;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-results-list.hidden {
+    display: none;
+}
+
+.search-results-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-results-list li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    gap: 10px;
+}
+
+.search-results-list li a:hover {
+    background-color: #f1f1f1;
+}
+
+.search-thumb {
+    width: 40px;
+    height: auto;
+}
+
+.search-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.search-price {
+    margin-left: auto;
+    color: #4A5D23;
+    font-weight: 500;
+    font-size: 20px;
+    white-space: nowrap;
+}
+
+.no-results {
+    padding: 8px;
+    font-size: 18px;
+    text-align: center;
+    color: #777;
+}
+
 
 /* Kategorije dropdown */
 .category-toggle {
@@ -509,10 +576,6 @@ button {
     width: 28px;
     height: 28px;
     fill: black;
-}
-
-.category-section .swiper {
-    padding: 20px 10px;
 }
 
 .category-section .swiper-button-next::after,

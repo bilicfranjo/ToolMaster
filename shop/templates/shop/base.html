@@ -39,6 +39,7 @@
                             <input type="text" name="q" placeholder="Unesite pojam..." />
                             <button type="button" id="search-close" title="Zatvori">×</button>
                         </form>
+                        <ul id="search-results" class="search-results-list hidden"></ul>
                     </div>
                 </div>
 
@@ -91,8 +92,6 @@
                     </ul>
                 </div>
             </div>
-            <!-- Overlay -->
-            
         </header>
        
         <div id="overlay" class="dropdown-overlay"></div>
@@ -107,29 +106,21 @@
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Scroll navbar stil
-        const navbar = document.getElementById('main-navbar');
-        const logo = document.getElementById('main-logo');
-        window.addEventListener('scroll', function () {
-            if (window.scrollY > 10) {
-                navbar.classList.add('scrolled');
-                logo.classList.add('scrolled-logo');
-            } else {
-                navbar.classList.remove('scrolled');
-                logo.classList.remove('scrolled-logo');
-            }
-        });
-
-        // Pretraga
         const wrapper = document.getElementById('search-wrapper');
         const toggleLink = document.getElementById('search-toggle');
         const searchForm = document.getElementById('search-form');
         const searchInput = searchForm.querySelector('input');
         const closeBtn = document.getElementById('search-close');
+        const resultsContainer = document.getElementById('search-results');
+
+        function hideResults() {
+            resultsContainer.innerHTML = '';
+            resultsContainer.classList.add('hidden');
+        }
 
         toggleLink.addEventListener('click', function (e) {
             e.preventDefault();
@@ -139,54 +130,74 @@
 
         closeBtn.addEventListener('click', function () {
             wrapper.classList.remove('show-input');
+            hideResults();
         });
 
         document.addEventListener('click', function (e) {
             if (!wrapper.contains(e.target) && !toggleLink.contains(e.target)) {
                 wrapper.classList.remove('show-input');
+                hideResults();
             }
         });
 
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 wrapper.classList.remove('show-input');
-                closeDropdown();
+                hideResults();
             }
         });
 
-        // Dropdown kategorije
-        const toggleBtn = document.getElementById('category-toggle');
-        const dropdown = document.getElementById('category-dropdown');
-        const overlay = document.getElementById('overlay');
-        const mainButtons = document.querySelectorAll('.main-category-btn');
-        const subLists = document.querySelectorAll('.subcategories');
-
-        toggleBtn.addEventListener('click', () => {
-            dropdown.classList.add('active');
-            overlay.classList.add('active');
-        });
-
-        overlay.addEventListener('click', closeDropdown);
-
-        function closeDropdown() {
-            dropdown.classList.remove('active');
-            overlay.classList.remove('active');
-            mainButtons.forEach(btn => btn.classList.remove('active'));
-            subLists.forEach(list => list.style.display = 'none');
+        // Debounce helper funkcija
+        function debounce(func, delay) {
+            let timer;
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(context, args), delay);
+            };
         }
 
-        mainButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                mainButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const id = btn.getAttribute('data-category');
-                subLists.forEach(list => {
-                    list.style.display = list.getAttribute('data-parent') === id ? 'block' : 'none';
-                });
-            });
-        });
+        // AJAX pretraga proizvoda s debounce
+        const performSearch = debounce(function () {
+            const query = searchInput.value.trim();
+            resultsContainer.innerHTML = '';
+
+            if (query.length > 1) {
+                fetch(`/ajax/search-products/?q=` + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.classList.remove('hidden');
+                        if (data.results.length > 0) {
+                            data.results.forEach(product => {
+                                const li = document.createElement('li');
+                                li.innerHTML = `
+                                    <a href="${product.url}">
+                                        ${product.image ? `<img src="${product.image}" alt="${product.name}" class="search-thumb">` : ''}
+                                        <span class="search-name">${product.name}</span>
+                                        <span class="search-price">${product.price}</span>
+                                    </a>
+                                `;
+                                resultsContainer.appendChild(li);
+
+                                li.querySelector('a').addEventListener('click', () => {
+                                    wrapper.classList.remove('show-input');
+                                    hideResults();
+                                });
+                            });
+                        } else {
+                            resultsContainer.innerHTML = '<li class="no-results">Nema rezultata</li>';
+                        }
+                    });
+            } else {
+                hideResults();
+            }
+        }, 300);
+
+        searchInput.addEventListener('input', performSearch);
     });
-    </script>
+</script>
+
 
 {% block extra_js %}{% endblock %}
 </body>

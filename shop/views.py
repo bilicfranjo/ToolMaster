@@ -19,6 +19,28 @@ def home_view(request):
         'categories': categories, 
         'popular_products' : popular_products,
         })
+    
+def ajax_search_products(request):
+    query = request.GET.get('q', '')
+    results = []
+
+    if query:
+        keywords = query.split()
+        q_obj = Q()
+        for word in keywords:
+            q_obj &= Q(name__icontains=word)
+
+        products = Product.objects.filter(q_obj)[:10]
+
+        for product in products:
+            results.append({
+                'name': product.name,
+                'price': f"{product.price} €",
+                'image': product.image.url if product.image else '',
+                'url': product.get_absolute_url()
+            })
+
+    return JsonResponse({'results': results})
 
 # Profil 
 @login_required
