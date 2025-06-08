@@ -78,21 +78,24 @@ def user_order_detail(request, pk):
 def products_list_view(request, slug=None):
     products = Product.objects.all()
     category = None
-    manufacturers = Product.objects.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
     attribute_filters = []
+    selected_manufacturers = request.GET.getlist('manufacturer')
+    selected_attributes = {}
     attribute_queries = Q()
-    
+
+    # Filtriranje po kategoriji
     if slug:
         category = get_object_or_404(Category, slug=slug)
-        if category.subcategories.exists(): # type: ignore
-            subcategories = category.subcategories.all() # type: ignore
+        if category.subcategories.exists():  # type: ignore
+            subcategories = category.subcategories.all()  # type: ignore
             products = products.filter(category__in=subcategories)
         else:
             products = products.filter(category=category)
             attribute_filters = ProductAttribute.objects.filter(category=category)
 
+    # Filtriranje po cijeni
     if price_min:
         try:
             products = products.filter(price__gte=float(price_min))
@@ -105,15 +108,11 @@ def products_list_view(request, slug=None):
         except ValueError:
             pass
 
-    # Višestruki proizvođači (checkbox logika)
-    selected_manufacturers = request.GET.getlist('manufacturer')
+    # Filtriranje po proizvođačima
     if selected_manufacturers:
         products = products.filter(manufacturer__in=selected_manufacturers)
 
-    # Višestruki atributi (checkbox logika po OR-u)
-    selected_attributes = {}
-    attribute_queries = Q()
-
+    # Filtriranje po atributima (checkbox logika po OR-u)
     for key, values in request.GET.lists():
         clean_key = key.replace('[]', '')
         if clean_key.startswith('attr_'):
@@ -126,7 +125,6 @@ def products_list_view(request, slug=None):
             for val in values:
                 subquery |= Q(attributes__attribute_id=attr_id, attributes__value=val)
             attribute_queries |= subquery
-            
 
     if attribute_queries:
         products = products.filter(attribute_queries).distinct()
@@ -142,6 +140,9 @@ def products_list_view(request, slug=None):
     elif sort_by == 'manufacturer_desc':
         products = products.order_by('-manufacturer')
 
+    manufacturers = products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
+    
+    # Paginacija
     paginator = Paginator(products, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
