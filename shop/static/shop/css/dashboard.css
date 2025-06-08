@@ -234,6 +234,19 @@ form button {
     font-weight: 600;
 }
 
+.dashboard-search-form input,
+.dashboard-search-form button {
+    font-size: 20px;
+    padding: 4px 4px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.dashboard-search-form {
+    gap: 10px;
+}
+
+
 /* Detalji narudžbe */
 
 .order-detail-info p {

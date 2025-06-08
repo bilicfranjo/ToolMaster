@@ -239,8 +239,16 @@ def dashboard_home(request):
 # Proizvodi admin
 @staff_member_required
 def admin_products_list(request):
+    query = request.GET.get('q', '')
     products = Product.objects.all().select_related('category')
-    return render(request, 'shop/dashboard/products_list_dashboard.html', {'products': products})
+
+    if query:
+        products = products.filter(name__icontains=query)
+
+    return render(request, 'shop/dashboard/products_list_dashboard.html', {
+        'products': products,
+        'query': query,
+    })
 
 """
 @staff_member_required

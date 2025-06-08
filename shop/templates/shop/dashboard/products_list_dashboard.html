@@ -5,8 +5,17 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Proizvodi</h2>
-    <a href="{% url 'admin_product_create' %}" class="btn btn-success">+ Dodaj novi</a>
+
+    <div class="d-flex align-items-center dashboard-search-form">
+        <form method="get" class="d-flex align-items-center dashboard-search-form">
+            <input type="text" name="q" class="form-control" placeholder="Pretraži..." value="{{ query }}">
+            <button type="submit" class="btn btn-outline-dark">Pretraži</button>
+        </form>
+        <a href="{% url 'admin_product_create' %}" class="btn btn-success">+ Dodaj novi</a>
+    </div>
 </div>
+
+
 
 <table class="table table-bordered table-striped align-middle">
     <thead class="table-dark">
@@ -69,5 +78,11 @@
 
         {% endfor %}
     </tbody>
+    {% if not products %}
+      <tr>
+          <td colspan="7" class="text-center text-muted">Nema rezultata za "{{ query }}".</td>
+      </tr>
+    {% endif %}
+
 </table>
 {% endblock %}
