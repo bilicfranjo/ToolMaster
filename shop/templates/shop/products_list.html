@@ -109,20 +109,18 @@
                                     <span>{{ attribute.name }}</span>
                                 </div>
                                 <div id="attrCollapse{{ attribute.id }}" class="collapse ms-2 {% if selected_values %}show{% endif %}">
-                                    {% for val in attribute.productattributevalue_set.all %}
-                                        {% with val.value|stringformat:"s" as value %}
-                                            <div class="form-check">
-                                                <input class="form-check-input"
-                                                    type="checkbox"
-                                                    name="attr_{{ attribute.id }}[]"
-                                                    value="{{ value }}"
-                                                    id="attr{{ attribute.id }}_{{ forloop.counter }}"
-                                                    {% if selected_values and value in selected_values %}checked{% endif %}>
-                                                <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
-                                                    {{ value }}
-                                                </label>
-                                            </div>
-                                        {% endwith %}
+                                    {% for value in attribute.unique_values %}
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                type="checkbox"
+                                                name="attr_{{ attribute.id }}[]"
+                                                value="{{ value }}"
+                                                id="attr{{ attribute.id }}_{{ forloop.counter }}"
+                                                {% if selected_values and value in selected_values %}checked{% endif %}>
+                                            <label class="form-check-label" for="attr{{ attribute.id }}_{{ forloop.counter }}">
+                                                {{ value }}
+                                            </label>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             {% endwith %}
@@ -173,7 +171,7 @@
                 {% for product in products %}
                 <div class="col-md-4">
                     <a href="{% url 'product_detail' product.category.slug product.slug %}" class="text-decoration-none">
-                        <div class="card product-card h-100">
+                        <div class="card product-card">
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                             {% endif %}

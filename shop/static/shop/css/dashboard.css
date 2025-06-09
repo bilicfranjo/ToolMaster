@@ -197,6 +197,10 @@ form button {
     font-weight: 600;
 }
 
+#attributes-wrapper input {
+    font-size: 20px;
+}
+
 
 
 /* Select2 kod DIY forme */

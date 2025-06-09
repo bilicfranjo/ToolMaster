@@ -8,6 +8,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from decimal import Decimal
 
 # Home 
 def home_view(request):
@@ -95,6 +96,14 @@ def products_list_view(request, slug=None):
             products = products.filter(category=category)
             attribute_filters = ProductAttribute.objects.filter(category=category)
 
+            # ✅ DODANO: Ukloni duplikate atributnih vrijednosti i pošalji ih u template
+            for attr in attribute_filters:
+                unique_values = ProductAttributeValue.objects.filter(
+                    attribute=attr,
+                    product__in=products
+                ).values_list('value', flat=True).distinct()
+                attr.unique_values = sorted(unique_values) #type: ignore
+
     # Filtriranje po cijeni
     if price_min:
         try:
@@ -129,7 +138,7 @@ def products_list_view(request, slug=None):
     if attribute_queries:
         products = products.filter(attribute_queries).distinct()
 
-
+    # Sortiranje
     sort_by = request.GET.get('sort')
     if sort_by == 'price_asc':
         products = products.order_by('price')
@@ -140,8 +149,9 @@ def products_list_view(request, slug=None):
     elif sort_by == 'manufacturer_desc':
         products = products.order_by('-manufacturer')
 
+    # Proizvođači
     manufacturers = products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
-    
+
     # Paginacija
     paginator = Paginator(products, 9)
     page_number = request.GET.get('page')
@@ -161,6 +171,7 @@ def products_list_view(request, slug=None):
         'attribute_filters': attribute_filters,
         'selected_attributes': selected_attributes,
     })
+
 
 
 def product_detail_view(request, category_slug ,slug):
@@ -573,7 +584,7 @@ def cart_detail_view(request):
     cart = request.user.cart
     items = cart.items.select_related('product')
     subtotal = cart.total_price()
-    shipping = 0 if subtotal >= 100 else 10.99
+    shipping = Decimal('0.00') if subtotal >= 100 else Decimal('10.99')
     total = subtotal + shipping
 
     return render(request, 'shop/cart.html', {

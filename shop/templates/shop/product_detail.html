@@ -101,7 +101,10 @@
 
         <hr>
         <p><strong>Proizvođač:</strong> {{ product.manufacturer|default:"-" }}</p>
-        <p><strong>Model:</strong> {{ product.model|default:"-" }}</p>
+        {% if product.model %}
+            <p><strong>Model:</strong> {{ product.model }}</p>
+        {% endif %}
+
         {% if product_attributes %}
             {% for attr in product_attributes %}
                 <p><strong>{{ attr.attribute.name }}:</strong> {{ attr.value }}</p>
