@@ -276,6 +276,10 @@
 
 /* Specifikacije proizvoda*/
 .product-specs {
+    font-size: 22px;
+}
+
+.product-specs strong {
     font-size: 20px;
 }
 
