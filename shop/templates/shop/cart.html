@@ -11,7 +11,7 @@
 
     {% if items|length == 0 %}
         <p class="empty-cart-text">Košarica je prazna.</p>
-        <a href="{% url 'home' %}" class="btn btn-warning mt-3 cart-btn">Natrag u trgovinu</a>
+        <a href="{% url 'home' %}" class="btn btn-warning mt-3 empty-cart-btn">Natrag u trgovinu</a>
     {% else %}
     <div class="row">
         <!-- Proizvodi -->
@@ -68,7 +68,7 @@
                         {% endwith %}
                     {% endif %}
                     <hr>
-                    <p class="cart-price">Ukupno: <strong class="float-end">{{ total|add:shipping|floatformat:2 }} €</strong></p>
+                    <p class="cart-price">Ukupno: <strong class="float-end">{{ total|floatformat:2 }} €</strong></p>
                 {% endwith %}
                 <a href="{% url 'checkout' %}" class="checkout-btn">Idi na naplatu</a>
             </div>
