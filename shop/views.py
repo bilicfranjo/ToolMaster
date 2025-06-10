@@ -268,27 +268,6 @@ def admin_products_list(request):
         'query': query,
     })
 
-"""
-@staff_member_required
-def admin_product_create(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            product = form.save()
-            # Spremi atribute
-            for key, value in request.POST.items():
-                if key.startswith('attribute_') and value.strip():
-                    attr_id = key.split('_')[1]
-                    ProductAttributeValue.objects.create(
-                        product=product,
-                        attribute_id=attr_id,
-                        value=value.strip()
-                    )
-            return redirect('admin_products_list')
-    else:
-        form = ProductForm()
-    return render(request, 'shop/dashboard/product_form_dashboard.html', {'form': form, 'action': 'Dodaj novi proizvod', 'attribute_values': {},})
-"""
 
 @staff_member_required
 def admin_product_create(request):
@@ -319,34 +298,6 @@ def admin_product_create(request):
         'attribute_values': {},
     })
 
-
-"""
-@staff_member_required
-def admin_product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES, instance=product)
-        if form.is_valid():
-            product = form.save()
-            product.attributes.all().delete()
-            for key, value in request.POST.items():
-                if key.startswith('attribute_') and value.strip():
-                    attr_id = key.split('_')[1]
-                    ProductAttributeValue.objects.create(
-                        product=product,
-                        attribute_id=attr_id,
-                        value=value.strip()
-                    )
-            return redirect('admin_products_list')
-    else:
-        form = ProductForm(instance=product)
-        attribute_values = {av.attribute.id: av.value for av in product.attributes.all()} # type: ignore
-        return render(request, 'shop/dashboard/product_form_dashboard.html', {
-            'form': form,
-            'action': 'Uredi proizvod',
-            'attribute_values': attribute_values,
-        })
-"""
 
 @staff_member_required
 def admin_product_edit(request, pk):
@@ -581,7 +532,6 @@ def admin_order_detail(request, pk):
             return redirect('admin_order_detail', pk=pk)
 
     return render(request, 'shop/dashboard/order_detail_dashboard.html', {'order': order})
-
 
 
 # Košarica
