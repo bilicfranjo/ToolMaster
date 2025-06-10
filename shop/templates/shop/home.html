@@ -116,35 +116,35 @@
         <h2 class="section-title-left mb-4">Popularni proizvodi</h2>
 
         <div class="swiper popularSwiper">
-        <div class="swiper-wrapper">
-            {% for product in popular_products %}
-            <div class="swiper-slide">
-                <a href="{% url 'product_detail' product.category.slug product.slug %}" class="text-decoration-none">
-                    <div class="card product-card">
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">{{ product.price }} €</p>
+            <div class="swiper-wrapper">
+                {% for product in popular_products %}
+                <div class="swiper-slide">
+                    <a href="{% url 'product_detail' product.category.slug product.slug %}" class="text-decoration-none">
+                        <div class="card product-card">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.price }} €</p>
+                            </div>
+                            <div class="card-corner-arrow">→</div>
                         </div>
-                        <div class="card-corner-arrow">→</div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
 
-    <div class="swiper-button-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
-        </svg>
-    </div>
-        
-    <div class="swiper-button-next">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
-        </svg>
-    </div>
+        <div class="swiper-button-prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.354 1.354a.5.5 0 0 1 0 .708L6.707 6.707l4.647 4.647a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </div>
+            
+        <div class="swiper-button-next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.354a.5.5 0 0 0 0 .708L9.293 6.707 4.646 11.354a.5.5 0 1 0 .708.708l5-5a.5.5 0 0 0 0-.708l-5-5a.5.5 0 0 0-.708 0z"/>
+            </svg>
+        </div>
     </div>
 </section>
 

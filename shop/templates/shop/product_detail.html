@@ -1,6 +1,8 @@
 {% extends 'shop/base.html' %}
 {% load static %}
 
+{% block title %}{{ product.name }} - ToolMaster{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'shop/css/products.css' %}">
 <link rel="stylesheet" href="https://unpkg.com/drift-zoom/dist/drift-basic.min.css">

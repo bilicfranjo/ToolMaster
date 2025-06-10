@@ -121,6 +121,30 @@
     background-color: black;
 }
 
+/* Paginator */
+
+.pagination .page-item.active .page-link {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+.pagination .page-link {
+    color: black;
+    font-size: 18px;
+}
+
+.pagination .page-link:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Uklanjanje plave sjene */
+.page-link:focus {
+    box-shadow: none;
+    outline: none;
+}
+
 
 /* DETALNJI PRIKAZ PROIZVODA */
 
@@ -254,3 +278,5 @@
 .product-specs {
     font-size: 20px;
 }
+
+

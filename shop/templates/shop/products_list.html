@@ -131,7 +131,7 @@
                         <div class="mt-3 d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-dark filter-button">Primijeni filter</button>
                             {% if selected_manufacturers or price_min or price_max or selected_attributes %}
-                            <a href="{% url 'products_list' %}" class="btn remove-filter-button">Ukloni filtere</a>
+                            <a href="{% if category %}{% url 'products_by_category' category.slug %}{% else %}{% url 'products_list' %}{% endif %}" class="btn remove-filter-button">Ukloni filtere</a>
                             {% endif %}
                         </div>
                     </form>
@@ -197,7 +197,7 @@
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">«</a>
+                    <a class="page-link" href="?{% url_without_param request 'page' %}&page={{ page_obj.previous_page_number }}">«</a>
                 </li>
             {% endif %}
 
@@ -205,20 +205,21 @@
                 {% if page_obj.number == num %}
                     <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">{{ num }}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="?{% url_without_param request 'page' %}&page={{ num }}">{{ num }}</a>
+                    </li>
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if selected_manufacturer %}&manufacturer={{ selected_manufacturer }}{% endif %}">»</a>
+                    <a class="page-link" href="?{% url_without_param request 'page' %}&page={{ page_obj.next_page_number }}">»</a>
                 </li>
             {% endif %}
         </ul>
     </nav>
     {% endif %}
 
-    <!--<pre>{{ request.GET }}</pre>-->
 
 </div>
 
@@ -234,10 +235,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const isOpen = collapse.classList.contains('show');
             setTimeout(() => {
                 icon.textContent = isOpen ? '+' : '–';
-            }, 300); // čekaj dok Bootstrap završi animaciju
+            }, 300); 
         });
 
-        // početno stanje
+        
         icon.textContent = document.querySelector('#filterCollapse').classList.contains('show') ? '–' : '+';
     }
 });

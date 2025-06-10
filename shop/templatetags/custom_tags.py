@@ -8,3 +8,15 @@ def get_item(dictionary, key):
 @register.simple_tag
 def make_key(attr_id):
     return f"attr_{attr_id}"
+
+@register.simple_tag
+def url_replace(request, field, value):
+    querydict = request.GET.copy()
+    querydict[field] = value
+    return querydict.urlencode()
+
+@register.simple_tag
+def url_without_param(request, param):
+    querydict = request.GET.copy()
+    querydict.pop(param, None)
+    return querydict.urlencode()
