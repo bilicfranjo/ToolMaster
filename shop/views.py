@@ -147,13 +147,13 @@ def products_list_view(request, slug=None):
     # Sortiranje
     sort_by = request.GET.get('sort')
     if sort_by == 'price_asc':
-        products = products.order_by('price')
+        products = products.order_by('price', 'name')
     elif sort_by == 'price_desc':
-        products = products.order_by('-price')
+        products = products.order_by('-price', 'name')
     elif sort_by == 'manufacturer_asc':
-        products = products.order_by('manufacturer')
+        products = products.order_by('manufacturer', 'name')
     elif sort_by == 'manufacturer_desc':
-        products = products.order_by('-manufacturer')
+        products = products.order_by('-manufacturer', 'name')
 
     # ✅ PROMJENA: proizvođači se dohvaćaju iz početnog queryseta (ne iz filtriranih proizvoda)
     manufacturers = initial_products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')

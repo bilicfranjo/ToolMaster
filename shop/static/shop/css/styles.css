@@ -610,7 +610,7 @@ button {
 /* DIY */
 
 .diy-section {
-    background-color: white; /* ili neka druga boja koja ti paše */
+    background-color: white;
 }
 
 .section-title {
@@ -668,7 +668,7 @@ button {
 
 .card-title {
     font-size: 24px;
-    height: 56px; /* točno za 2 linije */
+    height: 56px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
