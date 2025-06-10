@@ -27,6 +27,9 @@
     <button type="submit" class="btn btn-success">Spremi</button>
     <a href="{% url 'admin_products_list' %}" class="btn btn-secondary">Odustani</a>
 </form>
+{% endblock %}
+
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const categorySelect = document.getElementById('id_category');
@@ -65,5 +68,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-
 {% endblock %}
