@@ -77,7 +77,6 @@ def user_order_detail(request, pk):
 
 # Proizvodi
 def products_list_view(request, slug=None):
-    products = Product.objects.all()
     category = None
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
@@ -86,14 +85,19 @@ def products_list_view(request, slug=None):
     selected_attributes = {}
     attribute_queries = Q()
 
+    # ✅ NOVO: Početni queryset za filtriranje proizvođača (bez duplikata)
+    initial_products = Product.objects.all()
+
     # Filtriranje po kategoriji
     if slug:
         category = get_object_or_404(Category, slug=slug)
         if category.subcategories.exists():  # type: ignore
             subcategories = category.subcategories.all()  # type: ignore
-            products = products.filter(category__in=subcategories)
+            products = Product.objects.filter(category__in=subcategories)
+            initial_products = initial_products.filter(category__in=subcategories)
         else:
-            products = products.filter(category=category)
+            products = Product.objects.filter(category=category)
+            initial_products = initial_products.filter(category=category)
             attribute_filters = ProductAttribute.objects.filter(category=category)
 
             # ✅ DODANO: Ukloni duplikate atributnih vrijednosti i pošalji ih u template
@@ -102,7 +106,9 @@ def products_list_view(request, slug=None):
                     attribute=attr,
                     product__in=products
                 ).values_list('value', flat=True).distinct()
-                attr.unique_values = sorted(unique_values) #type: ignore
+                attr.unique_values = sorted(unique_values)  # type: ignore
+    else:
+        products = Product.objects.all()
 
     # Filtriranje po cijeni
     if price_min:
@@ -149,8 +155,8 @@ def products_list_view(request, slug=None):
     elif sort_by == 'manufacturer_desc':
         products = products.order_by('-manufacturer')
 
-    # Proizvođači
-    manufacturers = products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
+    # ✅ PROMJENA: proizvođači se dohvaćaju iz početnog queryseta (ne iz filtriranih proizvoda)
+    manufacturers = initial_products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
 
     # Paginacija
     paginator = Paginator(products, 9)
