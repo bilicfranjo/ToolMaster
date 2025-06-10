@@ -159,10 +159,14 @@
                             <option value="manufacturer_desc" {% if sort_by == 'manufacturer_desc' %}selected{% endif %}>Proizvođač: Ž–A</option>
                         </select>
 
-                        {# Ako postoje dodatni GET parametri (npr. manufacturer), sačuvaj ih hidden #}
-                        {% if selected_manufacturer %}
-                            <input type="hidden" name="manufacturer" value="{{ selected_manufacturer }}">
-                        {% endif %}
+                        {# Dodaj sve ostale GET parametre osim 'sort' kao hidden inpute #}
+                        {% for key, value_list in request.GET.lists %}
+                            {% if key != 'sort' %}
+                                {% for val in value_list %}
+                                    <input type="hidden" name="{{ key }}" value="{{ val }}">
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
                     </form>
                 </div>
             </div>
