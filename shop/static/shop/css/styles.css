@@ -6,6 +6,12 @@
 }
 
 /* Osnovne postavke */
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 html {
     scroll-behavior: smooth;
     height: 100%;
@@ -60,6 +66,7 @@ button {
     height: 110px;
     overflow: hidden;
     line-height: 0;
+    margin-top: -10px;
 }
 
 .diy-popular-divider {
@@ -290,7 +297,7 @@ button {
 
 .category-dropdown {
     position: absolute;
-    top: 68px;
+    top: 100%;
     left: 5%;
     right: 68%;
     background: white;
@@ -791,17 +798,15 @@ button {
 }
 
 
-/* Prikaz samo na desktopu */
-.nav-desktop {
-    display: flex;
-}
-
 /* Prikaz samo na mobitelima */
 .nav-mobile, .mobile-nav-menu {
     display: none;
 }
 
+/* RESPONZIVNOST ZA MOBITELE */
 @media (max-width: 768px) {
+
+    /* NAVBAR */
     .nav-desktop {
         display: none;
     }
@@ -847,4 +852,159 @@ button {
         margin-left: 20px;
         z-index: 1002;
     }
+    
+    .category-dropdown {
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 20px 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .main-categories {
+        min-width: 100%;
+    }
+
+    .main-category-btn span,
+    .main-category-btn-all-products span {
+        padding-left: 10px;
+    }
+
+    /* POČETNA STRANICA */
+
+    /* Strelice - kompletno uklonjene */
+    .carousel-wrapper .carousel-control-prev,
+    .carousel-wrapper .carousel-control-next,
+    .category-section .swiper-button-prev,
+    .category-section .swiper-button-next,
+    .popular-products-section .swiper-button-prev,
+    .popular-products-section .swiper-button-next {
+        display: none !important;
+    }
+
+    /* BANNER */
+    .carousel-banner {
+        flex-direction: column;
+    }
+
+    .carousel-image {
+        background-size: contain;
+        background-position: top;
+        background-repeat: no-repeat;
+        min-height: unset;
+    }
+
+    .carousel-text {
+        padding: 10px 15px;
+    }
+
+    .carousel-text h2 {
+        font-size: 24px;
+    }
+
+    .banner-button {
+        padding: 10px 20px;
+        font-size: 20px;
+    }  
+
+    /* SWIPER */
+    .swiper {
+        position: relative;
+        overflow: hidden;
+        padding: 0 10px;
+        margin-bottom: 30px;
+    }
+  
+    /* KATEGORIJE */
+    .category-section h2 {
+        font-size: 32px;
+    }
+
+    .categorySwiper h3{
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .category-slide {
+        max-width: 80%;
+        margin: auto;
+    }
+
+    .category-card-img {
+        height: 300px;
+    }
+
+    /* DIY */
+    .diy-section .section-title {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .diy-section .diy-text {
+        font-size: 22px;
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .diy-section .btn {
+        font-size: 22px;
+        padding: 10px 20px;
+    }
+
+    /* POPULARNI PROIZVODI */
+    .popular-products-section .section-title-left {
+        font-size: 32px;
+    }
+
+    .product-card {
+        height: auto;
+        padding: 10px;
+    }
+
+    .product-card img {
+        max-height: 160px;
+        object-fit: contain;
+    }
+
+    .product-card .card-title {
+        font-size: 22px;
+    }
+
+    .product-card .card-text {
+        font-size: 24px;
+    }
+
+    /* O NAMA */
+    .about-section {
+        padding: 20px 10px;
+        text-align: center;
+    }
+
+    .about-title {
+        font-size: 32px;
+    }
+
+    .about-text {
+        font-size: 22px;
+        padding: 0 10px;
+    }
+
+    .contact-info .contact-icon,
+    .contact-info .contact-text {
+        font-size: 24px;
+    }
+
+}
+
+
+/* RESPONZIVNOST ZA TABLETE */
+
+@media (min-width: 768px) and (max-width: 991px) {
+    /* Stilovi za tablete */
 }
