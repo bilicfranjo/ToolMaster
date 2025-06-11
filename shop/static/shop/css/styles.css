@@ -290,7 +290,7 @@ button {
 
 .category-dropdown {
     position: absolute;
-    top: 100%;
+    top: 68px;
     left: 5%;
     right: 68%;
     background: white;
@@ -791,3 +791,60 @@ button {
 }
 
 
+/* Prikaz samo na desktopu */
+.nav-desktop {
+    display: flex;
+}
+
+/* Prikaz samo na mobitelima */
+.nav-mobile, .mobile-nav-menu {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-desktop {
+        display: none;
+    }
+
+    .nav-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        position: relative;
+    }
+
+    .mobile-nav-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #4A5D23;
+        padding: 15px 20px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1001;
+    }
+
+    .mobile-nav-menu.show {
+        display: flex;
+    }
+
+    .mobile-nav-menu a {
+        color: white;
+        font-size: 22px;
+        padding: 10px 0;
+        text-decoration: none;
+        border-bottom: 1px solid #f1c40f;
+    }
+
+    .hamburger-menu {
+        font-size: 32px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        margin-left: 20px;
+        z-index: 1002;
+    }
+}

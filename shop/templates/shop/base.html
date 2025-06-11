@@ -24,76 +24,105 @@
 
     <div class="wrapper">
         <header class="custom-navbar" id="main-navbar">
-            <div class="navbar-container navbar-content">
+                <!-- DESKTOP NAVBAR -->
+                <div class="navbar-container navbar-content nav-desktop">
+                    <div class="nav-left">
+                        <a href="/">Početna</a>
+                        <span class="divider">|</span>
+                        <button id="category-toggle" class="category-toggle">Kategorije</button>
+                        <span class="divider">|</span>
+                        <a href="{% url 'diy_list' %}">DIY</a>
+                        <span class="divider">|</span>
+                        <div class="search-toggle-wrapper" id="search-wrapper">
+                            <a href="#" id="search-toggle" class="search-link">Pretraži</a>
+                            <form action="{% url 'home' %}" method="get" id="search-form">
+                                <input type="text" name="q" placeholder="Unesite pojam..." />
+                                <button type="button" id="search-close" title="Zatvori">×</button>
+                            </form>
+                            <ul id="search-results" class="search-results-list hidden"></ul>
+                        </div>
+                    </div>
 
-                <div class="nav-left">
-                    <a href="/">Početna</a>
-                    <span class="divider">|</span>
-                    <button id="category-toggle" class="category-toggle">Kategorije</button>
-                    <span class="divider">|</span>
-                    <a href="{% url 'diy_list' %}">DIY</a>
-                    <span class="divider">|</span>
-                    <div class="search-toggle-wrapper" id="search-wrapper">
-                        <a href="#" id="search-toggle" class="search-link">Pretraži</a>
-                        <form action="{% url 'home' %}" method="get" id="search-form">
-                            <input type="text" name="q" placeholder="Unesite pojam..." />
-                            <button type="button" id="search-close" title="Zatvori">×</button>
-                        </form>
-                        <ul id="search-results" class="search-results-list hidden"></ul>
+                    <div class="nav-center">
+                        <a href="/" class="logo">
+                            <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img" id="main-logo">
+                        </a>
+                    </div>
+
+                    <div class="nav-right">
+                        {% if user.is_staff %}
+                            <a href="{% url 'dashboard_home' %}">Dashboard</a>
+                            <span class="divider">|</span>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'cart_detail' %}">Košarica [<span id="cart-count">{{ cart_item_count }}</span>]</a>
+                            <span class="divider">|</span>
+                            <a href="{% url 'user_profile' %}">Profil</a>
+                            <span class="divider">|</span>
+                            <a href="{% url 'logout' %}">Odjava</a>
+                        {% else %}
+                            <a href="{% url 'login' %}">Prijava</a>
+                            <span class="divider">|</span>
+                            <a href="{% url 'register' %}">Registracija</a>
+                        {% endif %}
                     </div>
                 </div>
 
-                <div class="nav-center">
-                    <a href="/" class="logo">
-                        <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img" id="main-logo">
-                    </a>
+                <!-- MOBILNI NAVBAR -->
+                <div class="navbar-container navbar-content nav-mobile">
+                    <button class="hamburger-menu" id="hamburger-toggle">☰</button>
+                    <div class="nav-center">
+                        <a href="/" class="logo">
+                            <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img" id="main-logo-mobile">
+                        </a>
+                    </div>
                 </div>
 
-                <div class="nav-right">
+                <!-- MOBILNI MENI -->
+                <div id="mobile-nav" class="mobile-nav-menu">
+                    <a href="/">Početna</a>
+                    <a href="#" id="mobile-category-toggle">Kategorije</a>
+                    <a href="{% url 'diy_list' %}">DIY</a>
                     {% if user.is_staff %}
                         <a href="{% url 'dashboard_home' %}">Dashboard</a>
-                        <span class="divider">|</span>
                     {% endif %}
                     {% if user.is_authenticated %}
-                        <a href="{% url 'cart_detail' %}">Košarica [<span id="cart-count">{{ cart_item_count }}</span>]</a>
-                        <span class="divider">|</span>
+                        <a href="{% url 'cart_detail' %}">Košarica</a>
                         <a href="{% url 'user_profile' %}">Profil</a>
-                        <span class="divider">|</span>
                         <a href="{% url 'logout' %}">Odjava</a>
                     {% else %}
                         <a href="{% url 'login' %}">Prijava</a>
-                        <span class="divider">|</span>
                         <a href="{% url 'register' %}">Registracija</a>
                     {% endif %}
                 </div>
 
-            </div>
-            <!-- Dropdown za kategije -->
-             <div id="category-dropdown" class="category-dropdown">
-                <div class="dropdown-inner">
-                    <ul class="main-categories">
-                        <li>
-                             <a href="{% url 'products_list' %}" class="main-category-btn-all-products">Svi proizvodi <span>→</span></a>
-                        </li>
-                        {% for cat in nav_categories %}
-                            <li>
-                                <button class="main-category-btn" data-category="{{ cat.id }}">{{ cat.name }} <span>→</span></button>
-                                {% if cat.subcategories.exists %}
-                                    <ul class="subcategories" data-parent="{{ cat.id }}">
-                                        {% for sub in cat.subcategories.all %}
-                                            <li>
-                                                <a href="{% url 'products_by_category' sub.slug %}">{{ sub.name }}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+        
         </header>
-       
+
+        <!-- Dropdown za kategije -->
+        <div id="category-dropdown" class="category-dropdown">
+            <div class="dropdown-inner">
+                <ul class="main-categories">
+                    <li>
+                        <a href="{% url 'products_list' %}" class="main-category-btn-all-products">Svi proizvodi <span>→</span></a>
+                    </li>
+                    {% for cat in nav_categories %}
+                        <li>
+                            <button class="main-category-btn" data-category="{{ cat.id }}">{{ cat.name }} <span>→</span></button>
+                            {% if cat.subcategories.exists %}
+                                <ul class="subcategories" data-parent="{{ cat.id }}">
+                                    {% for sub in cat.subcategories.all %}
+                                        <li>
+                                            <a href="{% url 'products_by_category' sub.slug %}">{{ sub.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
         <div id="overlay" class="dropdown-overlay"></div>
 
         <main>
@@ -110,6 +139,15 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
+        const hamburger = document.getElementById('hamburger-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+
+        hamburger.addEventListener('click', () => {
+            mobileNav.classList.toggle('show');
+        });
+
+
         const navbar = document.getElementById('main-navbar');
         const logo = document.getElementById('main-logo');
         window.addEventListener('scroll', function () {
