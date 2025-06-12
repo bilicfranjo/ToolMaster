@@ -7,44 +7,46 @@
     <a href="{% url 'admin_category_create' %}" class="btn btn-success">+ Dodaj kategoriju</a>
 </div>
 
-<table class="table table-bordered table-striped align-middle">
-    <thead class="table-dark">
-        <tr>
-            <th>Naziv</th>
-            <th>Vrsta</th>
-            <th>Roditeljska kategorija</th>
-            <th>Akcije</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for category in categories %}
-        <tr>
-            <td><strong>{{ category.name }}</strong></td>
-            <td>Glavna kategorija</td>
-            <td>-</td>
-            <td>
-                <a href="{% url 'admin_category_edit' category.pk %}" class="btn btn-sm btn-primary">Uredi</a>
-                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ category.id }}">
-                    Obriši
-                </button>
-            </td>
-        </tr>
-        {% for sub in category.subcategories.all %}
-        <tr>
-            <td>↳ {{ sub.name }}</td>
-            <td>Podkategorija</td>
-            <td>{{ sub.parent.name }}</td>
-            <td>
-                <a href="{% url 'admin_category_edit' sub.pk %}" class="btn btn-sm btn-primary">Uredi</a>
-                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ sub.id }}">
-                    Obriši
-                </button>
-            </td>
-        </tr>
-        {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Naziv</th>
+                <th>Vrsta</th>
+                <th>Roditeljska kategorija</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td><strong>{{ category.name }}</strong></td>
+                <td>Glavna kategorija</td>
+                <td>-</td>
+                <td>
+                    <a href="{% url 'admin_category_edit' category.pk %}" class="btn btn-sm btn-primary">Uredi</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ category.id }}">
+                        Obriši
+                    </button>
+                </td>
+            </tr>
+            {% for sub in category.subcategories.all %}
+            <tr>
+                <td>↳ {{ sub.name }}</td>
+                <td>Podkategorija</td>
+                <td>{{ sub.parent.name }}</td>
+                <td>
+                    <a href="{% url 'admin_category_edit' sub.pk %}" class="btn btn-sm btn-primary">Uredi</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ sub.id }}">
+                        Obriši
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% for category in categories %}
     <!-- Modal za glavnu -->

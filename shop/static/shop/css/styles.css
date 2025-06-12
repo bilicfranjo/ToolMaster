@@ -798,15 +798,14 @@ button {
 }
 
 
-/* Prikaz samo na mobitelima */
+
 .nav-mobile, .mobile-nav-menu {
     display: none;
 }
 
-/* RESPONZIVNOST ZA MOBITELE */
-@media (max-width: 768px) {
+/* RESPONZIVNOST ZA ZAJEDNIČKI NAVBAR */
+@media (max-width: 1024px) {
 
-    /* NAVBAR */
     .nav-desktop {
         display: none;
     }
@@ -819,7 +818,6 @@ button {
         position: relative;
         height: 40px;
     }
-
 
     .mobile-nav-menu {
         display: none;
@@ -855,7 +853,7 @@ button {
         z-index: 1002;
         margin-top: 14px;
     }
-    
+
     .category-dropdown {
         top: 100%;
         left: 0;
@@ -879,9 +877,6 @@ button {
         padding-left: 10px;
     }
 
-    /* POČETNA STRANICA */
-
-    /* Strelice - kompletno uklonjene */
     .carousel-wrapper .carousel-control-prev,
     .carousel-wrapper .carousel-control-next,
     .category-section .swiper-button-prev,
@@ -890,6 +885,13 @@ button {
     .popular-products-section .swiper-button-next {
         display: none !important;
     }
+}
+
+
+/* RESPONZIVNOST ZA MOBITELE */
+@media (max-width: 767px) {
+
+    /* POČETNA STRANICA */
 
     /* BANNER */
     .carousel-banner {
@@ -1008,6 +1010,52 @@ button {
 
 /* RESPONZIVNOST ZA TABLETE */
 
-@media (min-width: 768px) and (max-width: 991px) {
-    /* Stilovi za tablete */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    .carousel-text {
+        padding: 30px;
+    }
+
+    .carousel-text h2 {
+        font-size: 40px;
+    }
+
+    .banner-button {
+        font-size: 24px;
+        padding: 6px 10px;
+    }
+
+    .section-title,
+    .section-title-left,
+    .about-title {
+        font-size: 34px;
+    }
+
+    .diy-text,
+    .about-text,
+    .contact-info .contact-text {
+        font-size: 24px;
+    }
+
+    .card-title,
+    .card-text {
+        font-size: 20px;
+    }
+
+    .site-footer {
+        font-size: 20px;
+    }
+
+    .search-thumb {
+        width: 36px;
+    }
+
+    .search-name {
+        font-size: 18px;
+    }
+
+    .search-price {
+        font-size: 18px;
+    }
 }
+

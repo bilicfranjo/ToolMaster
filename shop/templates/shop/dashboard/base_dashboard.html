@@ -23,8 +23,9 @@
 
 <!-- Navigacija -->
 <header class="custom-navbar" id="main-navbar">
-    <div class="navbar-container navbar-content">
 
+    <!-- DESKTOP NAVBAR -->
+    <div class="navbar-container navbar-content nav-desktop">
         <div class="nav-left">
             <a href="{% url 'dashboard_home' %}">Nadzorna ploča</a>
             <span class="divider">|</span>
@@ -52,9 +53,32 @@
             <span class="divider">|</span>
             <a href="{% url 'logout' %}">Odjava</a>
         </div>
+    </div>
 
+    <!-- MOBILNI NAVBAR -->
+    <div class="navbar-container navbar-content nav-mobile">
+        <button class="hamburger-menu" id="hamburger-toggle">☰</button>
+        <div class="nav-center">
+            <a href="{% url 'dashboard_home' %}" class="logo">
+                <img src="{% static 'shop/images/logo.png' %}" alt="ToolMaster logo" class="logo-img" id="main-logo-mobile">
+            </a>
+        </div>
+    </div>
+
+    <!-- MOBILNI MENI -->
+    <div id="mobile-nav" class="mobile-nav-menu">
+        <a href="{% url 'dashboard_home' %}">Nadzorna ploča</a>
+        <a href="{% url 'admin_products_list' %}">Proizvodi</a>
+        <a href="{% url 'admin_category_list' %}">Kategorije</a>
+        <a href="{% url 'admin_diy_list' %}">DIY</a>
+        <a href="{% url 'admin_banner_list'%}">Banneri</a>
+        <a href="{% url 'admin_order_list' %}">Narudžbe</a>
+        <a href="{% url 'admin_user_list' %}">Korisnici</a>
+        <a href="/">← Trgovina</a>
+        <a href="{% url 'logout' %}">Odjava</a>
     </div>
 </header>
+
 
 
 <!-- Sadržaj stranice -->
@@ -66,19 +90,38 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    window.addEventListener('scroll', function () {
-    const navbar = document.getElementById('main-navbar');
-    const logo = document.getElementById('main-logo');
+    document.addEventListener('DOMContentLoaded', function () {
+        const hamburger = document.getElementById('hamburger-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const navbar = document.getElementById('main-navbar');
+        const logo = document.getElementById('main-logo');
 
-    if (window.scrollY > 10) {
-        navbar.classList.add('scrolled');
-        logo.classList.add('scrolled-logo');
-    } else {
-        navbar.classList.remove('scrolled');
-        logo.classList.remove('scrolled-logo');
-    }
-});
+        // Otvaranje i zatvaranje mobilnog menija
+        hamburger.addEventListener('click', () => {
+            mobileNav.classList.toggle('show');
+        });
+
+        // Zatvaranje menija klikom izvan njega
+        document.addEventListener('click', function (e) {
+            const isInside = mobileNav.contains(e.target) || hamburger.contains(e.target);
+            if (!isInside && mobileNav.classList.contains('show')) {
+                mobileNav.classList.remove('show');
+            }
+        });
+
+        // Scroll efekt na navbar
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+                logo.classList.add('scrolled-logo');
+            } else {
+                navbar.classList.remove('scrolled');
+                logo.classList.remove('scrolled-logo');
+            }
+        });
+    });
 </script>
+
 
 {% block extra_js %}{% endblock %}
 </body>

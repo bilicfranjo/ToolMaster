@@ -232,7 +232,7 @@ form button {
     padding: 6px 12px;
 }
 
-.btn.btn-success {
+.btn.btn-success, .btn.btn-secondary {
     font-size: 18px;
     padding: 6px 12px;
     font-weight: 600;
@@ -266,4 +266,127 @@ form button {
 .order-form-back-button  {
     font-size: 20px;
     padding: 6px 8px;
+}
+
+
+
+.nav-mobile,
+.mobile-nav-menu {
+    display: none;
+}
+
+/* RESPONZIVNOST ZA ZAJEDNIČKI NAVBAR */
+
+@media (max-width: 1024px) {
+    .nav-desktop {
+        display: none;
+    }
+
+    .nav-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        position: relative;
+        height: 40px;
+    }
+
+    .mobile-nav-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #4A5D23;
+        padding: 15px 20px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1001;
+    }
+
+    .mobile-nav-menu.show {
+        display: flex;
+    }
+
+    .mobile-nav-menu a {
+        color: white;
+        font-size: 22px;
+        padding: 10px 0;
+        text-decoration: none;
+        border-bottom: 1px solid #f1c40f;
+    }
+
+    .hamburger-menu {
+        font-size: 32px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        margin-left: 10px;
+        z-index: 1002;
+        margin-top: 14px;
+    }
+}
+
+/* RESPONZIVNOST ZA MOBITELE */
+
+@media (max-width: 767px) {
+
+    /* PROIZVODI */
+    .dashboard-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .dashboard-toolbar h2 {
+        font-size: 26px;
+    }
+
+    .dashboard-toolbar .dashboard-search-form {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .dashboard-toolbar .dashboard-search-form input,
+    .dashboard-toolbar .dashboard-search-form button,
+    .dashboard-toolbar .btn-success {
+        width: 100%;
+    }
+
+    .dashboard-toolbar .btn-success {
+        font-size: 20px;
+    }
+}
+
+
+/* RESPONZIVNOST ZA TABLETE */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    .stat-cards {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .quick-actions a {
+        font-size: 18px;
+        padding: 12px;
+    }
+
+    .table {
+        font-size: 18px;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        padding: 8px 10px;
+        font-size: 18px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
 }

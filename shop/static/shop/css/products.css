@@ -283,4 +283,10 @@
     font-size: 20px;
 }
 
-
+/* RESPONZIVNOST ZA TABLETE */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-md-4 {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+    }
+}
