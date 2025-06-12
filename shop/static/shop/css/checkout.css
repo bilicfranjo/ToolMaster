@@ -88,3 +88,20 @@ label {
 .checkout-container a {
     font-size: 22px;
 }
+
+
+/* RESPONZIVNOST ZA MOBITELE */
+@media (max-width: 768px) {
+   body {
+        display: block;
+        background-color: white;
+        padding: 0;
+    }
+
+    .checkout-container {
+        margin: 0 auto;
+        padding: 20px;
+    }
+}
+
+/* RESPONZIVNOST ZA TABLETE */

@@ -134,3 +134,27 @@
 .swiper-button-prev::after {
     display: none;
 }
+
+
+/* RESPONZIVNOST ZA MOBITELE */
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 32px;
+    }
+
+    .diy-centered-title {
+        font-size: 26px;
+    }
+
+    .diy-header-wrapper a {
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+
+    .video-description {
+        font-size: 22px;
+    }
+}
+
+/* RESPONZIVNOST ZA TABLETE */

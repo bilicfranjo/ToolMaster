@@ -817,7 +817,9 @@ button {
         justify-content: space-between;
         width: 100%;
         position: relative;
+        height: 40px;
     }
+
 
     .mobile-nav-menu {
         display: none;
@@ -849,8 +851,9 @@ button {
         border: none;
         color: white;
         cursor: pointer;
-        margin-left: 20px;
+        margin-left: 10px;
         z-index: 1002;
+        margin-top: 14px;
     }
     
     .category-dropdown {

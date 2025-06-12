@@ -87,7 +87,7 @@
                     <a href="{% url 'dashboard_home' %}">Dashboard</a>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <a href="{% url 'cart_detail' %}">Košarica</a>
+                    <a href="{% url 'cart_detail' %}">Košarica [<span id="cart-count">{{ cart_item_count }}</span>]</a>
                     <a href="{% url 'user_profile' %}">Profil</a>
                     <a href="{% url 'logout' %}">Odjava</a>
                 {% else %}
@@ -142,11 +142,15 @@
         const hamburger = document.getElementById('hamburger-toggle');
         const mobileNav = document.getElementById('mobile-nav');
         const mobileToggle = document.getElementById('mobile-category-toggle');
+        const overlay = document.getElementById('overlay'); // ✅ overlay referenca
 
+        // Otvaranje/zatvaranje mobilnog menija i prikazivanje overlaya
         hamburger.addEventListener('click', () => {
             mobileNav.classList.toggle('show');
+            overlay.classList.toggle('active');
         });
 
+        // Otvaranje dropdowna iz mobilnog menija
         if (mobileToggle) {
             mobileToggle.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -156,6 +160,14 @@
             });
         }
 
+        //  Klik izvan mobilnog dropdowna zatvara dropdown i overlay
+        document.addEventListener('click', function (e) {
+            const isInsideMobile = mobileNav.contains(e.target) || hamburger.contains(e.target);
+            if (!isInsideMobile && mobileNav.classList.contains('show')) {
+                mobileNav.classList.remove('show');
+                overlay.classList.remove('active');
+            }
+        });
 
         const navbar = document.getElementById('main-navbar');
         const logo = document.getElementById('main-logo');
@@ -168,7 +180,7 @@
                 logo.classList.remove('scrolled-logo');
             }
         });
-        
+
         // Pretraga
         const wrapper = document.getElementById('search-wrapper');
         const toggleLink = document.getElementById('search-toggle');
@@ -197,14 +209,6 @@
             if (!wrapper.contains(e.target) && !toggleLink.contains(e.target)) {
                 wrapper.classList.remove('show-input');
                 hideResults();
-            }
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                wrapper.classList.remove('show-input');
-                hideResults();
-                closeDropdown();
             }
         });
 
@@ -255,10 +259,9 @@
 
         searchInput.addEventListener('input', performSearch);
 
-        // Dropdown kategorije
+        // Dropdown kategorije (desktop)
         const toggleBtn = document.getElementById('category-toggle');
         const dropdown = document.getElementById('category-dropdown');
-        const overlay = document.getElementById('overlay');
         const mainButtons = document.querySelectorAll('.main-category-btn');
         const subLists = document.querySelectorAll('.subcategories');
 
@@ -267,7 +270,12 @@
             overlay.classList.add('active');
         });
 
-        overlay.addEventListener('click', closeDropdown);
+        //  Klik na overlay zatvara sve
+        overlay.addEventListener('click', () => {
+            closeDropdown();
+            mobileNav.classList.remove('show');
+            overlay.classList.remove('active');
+        });
 
         function closeDropdown() {
             dropdown.classList.remove('active');
@@ -275,6 +283,16 @@
             mainButtons.forEach(btn => btn.classList.remove('active'));
             subLists.forEach(list => list.style.display = 'none');
         }
+
+        // Gašenje sa ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                wrapper.classList.remove('show-input');
+                hideResults();
+                closeDropdown();
+            }
+        });
+
 
         mainButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -286,8 +304,10 @@
                 });
             });
         });
+
     });
 </script>
+
 
 {% block extra_js %}{% endblock %}
 </body>

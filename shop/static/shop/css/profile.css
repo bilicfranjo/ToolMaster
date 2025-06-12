@@ -55,3 +55,25 @@
     font-size: 18px;
     padding: 6px 12px;
 }
+
+
+/* RESPONZIVNOST ZA MOBITELE */
+
+@media (max-width: 768px) {
+    .profile-info h2 {
+        font-size: 32px;
+    }
+
+    .btn-outline-success {
+        background-color: #198754;
+        color: white;
+    }
+
+    .btn-outline-warning {
+        background-color: #ffc107;
+        color: white;
+    }
+}
+
+
+/* RESPONZIVNOST ZA TABLETE */
