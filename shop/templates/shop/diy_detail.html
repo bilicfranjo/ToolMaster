@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"
+      onerror="this.onerror=null;this.href='{% static 'shop/css/plyr.css' %}'">
 <link rel="stylesheet" href="{% static 'shop/css/diy.css' %}">
 {% endblock %}
 
