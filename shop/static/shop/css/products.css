@@ -1,4 +1,4 @@
-/* PRODUCTS PAGE */
+/* LISTA PROIZVODA */
 
 .products-list-title {
     font-size: 40px;
@@ -38,6 +38,33 @@
     align-items: center;
     padding: 10px 0;
 }
+
+.category-link {
+    font-size: 20px;
+    color: black !important;
+    font-weight: 600;
+    display: block;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.category-link:hover {
+    color: #4A5D23;
+}
+
+.subcategory-link {
+    font-size: 20px;
+    color: grey;
+    display: block;
+    margin-left: 12px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.subcategory-link:hover {
+    color: #4A5D23;
+}
+
 
 /* Podsekcije unutar collapsa */
 .filter-subtitle {
@@ -194,6 +221,7 @@
 
 .product-quantity input {
     font-size: 20px;
+    width: 120px;
 }
 
 

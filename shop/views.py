@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order, UserProfile, OrderItem
+from .models import Banner, Category, Product, DIYVideo, ProductAttribute, ProductAttributeValue, Order, UserProfile, OrderItem, Cart
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProductForm, DIYVideoForm, BannerForm, CategoryForm, ProductAttributeFormSet, ProductImageFormSet, ProfileUpdateForm, CheckoutForm
 from django.contrib.auth.models import User
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from decimal import Decimal
+from django.urls import reverse
 
 # Home 
 def home_view(request):
@@ -38,7 +39,7 @@ def ajax_search_products(request):
                 'name': product.name,
                 'price': f"{product.price} €",
                 'image': product.image.url if product.image else '',
-                'url': product.get_absolute_url()
+                'url': reverse('product_detail', args=[product.category.slug, product.slug])
             })
 
     return JsonResponse({'results': results})
@@ -85,7 +86,7 @@ def products_list_view(request, slug=None):
     selected_attributes = {}
     attribute_queries = Q()
 
-    # ✅ NOVO: Početni queryset za filtriranje proizvođača (bez duplikata)
+
     initial_products = Product.objects.all()
 
     # Filtriranje po kategoriji
@@ -100,7 +101,7 @@ def products_list_view(request, slug=None):
             initial_products = initial_products.filter(category=category)
             attribute_filters = ProductAttribute.objects.filter(category=category)
 
-            # ✅ DODANO: Ukloni duplikate atributnih vrijednosti i pošalji ih u template
+            
             for attr in attribute_filters:
                 unique_values = ProductAttributeValue.objects.filter(
                     attribute=attr,
@@ -127,7 +128,7 @@ def products_list_view(request, slug=None):
     if selected_manufacturers:
         products = products.filter(manufacturer__in=selected_manufacturers)
 
-    # Filtriranje po atributima (checkbox logika po OR-u)
+    # Filtriranje po atributima
     for key, values in request.GET.lists():
         clean_key = key.replace('[]', '')
         if clean_key.startswith('attr_'):
@@ -155,7 +156,7 @@ def products_list_view(request, slug=None):
     elif sort_by == 'manufacturer_desc':
         products = products.order_by('-manufacturer', 'name')
 
-    # ✅ PROMJENA: proizvođači se dohvaćaju iz početnog queryseta (ne iz filtriranih proizvoda)
+    
     manufacturers = initial_products.values_list('manufacturer', flat=True).distinct().exclude(manufacturer='')
 
     # Paginacija
@@ -195,6 +196,8 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            UserProfile.objects.create(user=user)
+            Cart.objects.create(user=user)
             login(request, user)
             return redirect('home')
     else:
@@ -202,8 +205,6 @@ def register_view(request):
     return render(request, 'shop/register.html', {'form': form})
 
 def login_view(request):
-    error_message = None
-
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -215,15 +216,10 @@ def login_view(request):
                 login(request, user)
                 next_url = request.GET.get('next') or request.POST.get('next')
                 return redirect(next_url) if next_url else redirect('home')
-
-            else:
-                error_message = "Neispravno korisničko ime ili lozinka."
-        else:
-            error_message = "Neispravan unos. Pokušaj ponovno."
     else:
         form = CustomAuthenticationForm()
 
-    return render(request, 'shop/login.html', {'form': form, 'error_message': error_message})
+    return render(request, 'shop/login.html', {'form': form})
 
 
 def logout_view(request):
@@ -236,7 +232,7 @@ def diy_list_view(request):
     return render(request, 'shop/diy_list.html', {'videos': videos})
 
 def diy_detail_view(request, pk):
-    video = DIYVideo.objects.get(pk=pk)
+    video = get_object_or_404(DIYVideo, pk=pk)
     return render(request, 'shop/diy_detail.html', {'video': video})
 
 # Admin
@@ -278,7 +274,6 @@ def admin_product_create(request):
             product = form.save()
             formset.instance = product
             formset.save()
-            # Atributi
             for key, value in request.POST.items():
                 if key.startswith('attribute_') and value.strip():
                     attr_id = key.split('_')[1]
@@ -512,10 +507,19 @@ def toggle_user_staff_status(request, pk):
     user.save()
     return redirect('admin_user_list')
 
+@staff_member_required
+def admin_user_detail(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    profile = getattr(user, 'userprofile', None)
+    return render(request, 'shop/dashboard/user_detail_dashboard.html', {
+        'user': user,
+        'profile': profile,
+    })
+
+
 # Narudžba admin
 @staff_member_required
 def admin_order_list(request):
-    from .models import Order
     orders = Order.objects.all().order_by('-created_at')
     return render(request, 'shop/dashboard/orders_list_dashboard.html', {'orders': orders})
 
@@ -581,7 +585,7 @@ def cart_update_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
 
-    item, created = cart.items.get_or_create(product=product)
+    item, _ = cart.items.get_or_create(product=product)
     item.quantity = quantity
     item.save()
 
@@ -601,13 +605,13 @@ def checkout_view(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            # Logika za adresu
+            # Adresa
             if form.cleaned_data['use_profile_address']:
                 address = user_profile.address if user_profile and user_profile.address else ''
             else:
                 address = form.cleaned_data['shipping_address']
 
-            # Logika za telefon
+            # Telefon
             if form.cleaned_data['use_profile_phone']:
                 phone = user_profile.phone if user_profile and user_profile.phone else ''
             else:

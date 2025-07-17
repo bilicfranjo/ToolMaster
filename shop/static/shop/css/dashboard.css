@@ -51,12 +51,11 @@ body {
 .stat-number {
     font-size: 32px;
     font-weight: bold;
-    color: #000;
+    color: black;
 }
 
 .stat-icon {
     font-size: 32px;
-    color: #000;
 }
 
 
@@ -181,7 +180,7 @@ form select {
     font-size: 20px;
     padding: 10px 12px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
 }
 
 form button {
@@ -193,7 +192,6 @@ form button {
 
 .clearable-file-input {
     font-size: 20px;
-    font-family: 'Teko', sans-serif;
     font-weight: 600;
 }
 
@@ -303,7 +301,7 @@ form button {
         z-index: 1001;
     }
 
-    .mobile-nav-menu.show {
+    .mobile-nav-menu.active {
         display: flex;
     }
 

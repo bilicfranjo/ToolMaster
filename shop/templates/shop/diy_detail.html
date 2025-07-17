@@ -1,9 +1,10 @@
 {% extends 'shop/base.html' %}
 {% load static %}
 
+{% block title %}{{ video.title }} - ToolMaster{% endblock %}
+
 {% block extra_css %}
-<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"
-      onerror="this.onerror=null;this.href='{% static 'shop/css/plyr.css' %}'">
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
 <link rel="stylesheet" href="{% static 'shop/css/diy.css' %}">
 {% endblock %}
 
@@ -22,7 +23,7 @@
         </video>
     </div>
 
-    <p class="video-description text-center">{{ video.description }}</p>
+    <p class="video-description">{{ video.description }}</p>
 
     {% if video.tools_used.all %}
     <div class="mt-5">
@@ -30,7 +31,7 @@
         <div class="diy-popular-divider"></div>
 
         <div class="tools-swiper-section position-relative">
-            <div class="swiper popularSwiper">
+            <div class="swiper usedToolsSwiper">
                 <div class="swiper-wrapper">
                     {% for tool in video.tools_used.all %}
                     <div class="swiper-slide">
@@ -73,7 +74,7 @@
     window.onload = () => {
         const player = new Plyr('#diy-video');
 
-        const swiper = new Swiper(".popularSwiper", {
+        const swiper = new Swiper(".usedToolsSwiper", {
             slidesPerView: 4,
             spaceBetween: 30,
             navigation: {

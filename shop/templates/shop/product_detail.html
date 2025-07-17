@@ -22,10 +22,10 @@
             {% if product.extra_images.all %}
             <div class="additional-images d-flex justify-content-center gap-2">
 
-                <!-- Glavna slika kao prva u nizu -->
+                <!-- Glavna slika -->
                 <img src="{{ product.image.url }}" class="img-thumbnail thumb-image" data-full="{{ product.image.url }}">
 
-                <!-- Sve dodatne slike -->
+                <!-- Dodatne slike -->
                 {% for img in product.extra_images.all %}
                     <img src="{{ img.image.url }}" class="img-thumbnail thumb-image" data-full="{{ img.image.url }}">
                 {% endfor %}
@@ -46,13 +46,13 @@
                 {% endif %}
             </p>
 
-            <!-- Forma: količina i gumb unutar iste forme, čvrsto povezani -->
+
             {% if user.is_authenticated %}
                 <form action="{% url 'cart_add' product.id %}" method="post">
                     {% csrf_token %}
                     <div class="mb-3 product-quantity">
                         <label for="quantity" class="form-label">Količina:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" style="width: 120px;" {% if not product.in_stock %}disabled{% endif %}>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" {% if not product.in_stock %}disabled{% endif %}>
                     </div>
                     <button type="submit" id="add-to-cart-btn" class="btn add-to-cart-btn"
                         {% if not product.in_stock %}disabled{% endif %}>
@@ -122,52 +122,47 @@
     const zoomImage = document.querySelector('#zoom-image');
     const imageContainer = document.querySelector('.main-product-image');
 
-    // Pokreni zoom
+    // Zoom
     let drift = new Drift(zoomImage, {
         paneContainer: imageContainer,
         inlinePane: false,
-        containInline: true,
         hoverBoundingBox: false,
         zoomFactor: 1.5
     });
 
-    // Klikom na thumbnail promijeni glavnu sliku
+    // Promjeni sliku
     document.querySelectorAll('.thumb-image').forEach(thumb => {
         thumb.addEventListener('click', function () {
             const newSrc = this.getAttribute('data-full');
             zoomImage.setAttribute('src', newSrc);
             zoomImage.setAttribute('data-zoom', newSrc);
-            drift.disable(); // uništi stari instance
+            drift.disable();
             drift = new Drift(zoomImage, {
                 paneContainer: imageContainer,
                 inlinePane: false,
-                containInline: true,
                 hoverBoundingBox: false,
                 zoomFactor: 1.5
             });
         });
     });
 
-    // Dodavanje u košaricu s animacijom i AJAX-om
+    // Dodavanje u košaricu
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     if (addToCartBtn) {
         const form = addToCartBtn.closest('form');
 
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // spriječi reload
+            e.preventDefault();
 
-            // Aktiviraj efekt
             addToCartBtn.classList.add('clicked');
             addToCartBtn.disabled = true;
 
-            // Vrati gumb nakon 3 sekunde
             setTimeout(() => {
                 addToCartBtn.classList.remove('clicked');
                 addToCartBtn.disabled = false;
                 addToCartBtn.innerHTML = 'Dodaj u košaricu';
-            }, 3000);
+            }, 2000);
 
-            // AJAX slanje forme
             fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form),
@@ -177,7 +172,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Ažuriraj broj u navbaru
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) {
                     cartCount.textContent = data.cart_item_count;
@@ -186,6 +180,7 @@
             .catch(error => console.error('Greška prilikom dodavanja u košaricu:', error));
         });
     }
+    
 </script>
 {% endblock %}
 

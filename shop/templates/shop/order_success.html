@@ -3,7 +3,7 @@
 <html lang="hr">
 <head>
     <meta charset="UTF-8">
-    <title>Uspješna narudžba | ToolMaster</title>
+    <title>Uspješna narudžba - ToolMaster</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap -->
@@ -17,7 +17,7 @@
     <!-- CSS-->
     <link rel="stylesheet" href="{% static 'shop/css/checkout.css' %}">
 </head>
-<body class="body">
+<body>
 
     <div class="checkout-container text-center">
         <h2 class="checkout-title">Hvala na narudžbi!</h2>
@@ -30,7 +30,7 @@
             <p><strong>Ukupno:</strong> {{ order.total_price|floatformat:2 }} €</p>
         </div>
 
-        <div class="d-grid mt-4">
+        <div class="mt-4">
             <a href="{% url 'home' %}" class="btn btn-success w-100">Natrag u trgovinu</a>
         </div>
     </div>

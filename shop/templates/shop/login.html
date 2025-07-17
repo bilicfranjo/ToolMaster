@@ -29,54 +29,35 @@
 </head>
 <body>
 
-<div class="auth-container">
+    <div class="auth-container">
 
-    <div class="auth-form-side">
+        <div class="auth-form-side">
 
-        <div class="back-link">
-            <a href="{% url 'home' %}">← Natrag u trgovinu</a>
+            <div class="back-link">
+                <a href="{% url 'home' %}">← Natrag u trgovinu</a>
+            </div>
+
+
+            <div class="logo-wrapper">
+                <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
+            </div>
+
+            <h2>Prijava</h2>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                {{form.as_p}}
+                <button type="submit">Prijavi se</button>
+            </form>
+
+            <p class="login-link">Nemaš račun? <a href="{% url 'register' %}">Registriraj se</a></p>
+
         </div>
 
-
-        <div class="logo-wrapper">
-            <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
-        </div>
-
-        <h2>Prijava</h2>
-
-        {% if error_message %}
-            <div class="login-error">
-                {{ error_message }}
-            </div>
-        {% endif %}
-
-
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.GET.next }}">
-
-            <div>
-                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                {{ form.username }}
-                {{ form.username.errors }}
-            </div>
-
-            <div>
-                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-                {{ form.password }}
-                {{ form.password.errors }}
-            </div>
-
-            <button type="submit">Prijavi se</button>
-        </form>
-
-        <p class="login-link">Nemaš račun? <a href="{% url 'register' %}">Registriraj se</a></p>
+        <div class="auth-image-side login-bg-image"></div>
 
     </div>
-
-    <div class="auth-image-side login-bg-image"></div>
-
-</div>
 
 </body>
 </html>

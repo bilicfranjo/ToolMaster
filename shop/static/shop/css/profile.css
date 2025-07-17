@@ -22,6 +22,7 @@
     font-size: 20px;
 }
 
+
 .password-change-container form label,
 .password-change-container form input,
 .password-change-container form button,
@@ -59,7 +60,7 @@
 
 /* RESPONZIVNOST ZA MOBITELE */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .profile-info h2 {
         font-size: 32px;
     }
@@ -74,6 +75,3 @@
         color: white;
     }
 }
-
-
-/* RESPONZIVNOST ZA TABLETE */

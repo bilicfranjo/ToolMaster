@@ -2,6 +2,14 @@
 {% load static %}
 {% load static custom_tags %}
 
+{% block title %}
+    {% if category %}
+        {{ category.name }} - ToolMaster
+    {% else %}
+        Svi proizvodi - ToolMaster
+    {% endif %}
+{% endblock %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'shop/css/products.css' %}">
@@ -20,7 +28,7 @@
         {% endif %}
     </h2>
 
-    <nav aria-label="breadcrumb" class="mb-4">
+    <nav class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'products_list' %}">Svi proizvodi</a></li>
             {% if category %}
@@ -48,13 +56,13 @@
                 <div id="categoryCollapse" class="collapse filter-options">
                     {% for cat in categories %}
                         <div class="mb-2">
-                            <a href="{% url 'products_by_category' cat.slug %}" class="d-block fw-bold" style="font-size: 20px; color: #000;">
+                            <a href="{% url 'products_by_category' cat.slug %}" class="category-link">
                                 {{ cat.name }}
                             </a>
                             {% if cat.subcategories.all %}
                                 <div class="ms-3 mt-1">
                                     {% for subcat in cat.subcategories.all %}
-                                        <a href="{% url 'products_by_category' subcat.slug %}" class="d-block" style="font-size: 18px; color: #444;">
+                                        <a href="{% url 'products_by_category' subcat.slug %}" class="subcategory-link">
                                             {{ subcat.name }}
                                         </a>
                                     {% endfor %}
@@ -62,11 +70,9 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-
                 </div>
 
                 <!-- FILTERI -->
-                <!-- FILTER SEKCIJA -->
                 <div class="filter-title" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
                     <span>Filtriraj</span>
                     <span class="toggle-icon" data-icon-for="#filterCollapse">+</span>
@@ -159,7 +165,6 @@
                             <option value="manufacturer_desc" {% if sort_by == 'manufacturer_desc' %}selected{% endif %}>Proizvođač: Ž–A</option>
                         </select>
 
-                        {# Dodaj sve ostale GET parametre osim 'sort' kao hidden inpute #}
                         {% for key, value_list in request.GET.lists %}
                             {% if key != 'sort' %}
                                 {% for val in value_list %}

@@ -3,11 +3,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from .models import Product, DIYVideo, Banner, Category, ProductAttribute, ProductImage
-from django.forms import modelformset_factory, PasswordInput
+from django.forms import modelformset_factory, inlineformset_factory
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, label='Email')
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = User
@@ -15,33 +15,36 @@ class CustomUserCreationForm(UserCreationForm):
         labels = {
             'username': 'Korisničko ime',
             'email': 'Email',
+            'password1': 'Lozinka',
+            'password2': 'Ponovi lozinku'
         }
         help_texts = {field: '' for field in fields}
-
+        error_messages = {
+            'username': {
+                'required': _("Unesi korisničko ime."),
+            },
+            'email': {
+                'required': _("Unesi email adresu."),
+                'invalid': _("Unesi ispravnu email adresu."),
+            },
+            'password1': {
+                'required': _("Unesi lozinku."),
+            },
+            'password2': {
+                'required': _("Ponovi lozinku."),
+            },
+        }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['password1'].help_text = ''
         self.fields['password2'].help_text = ''
-        self.fields['password1'].label = 'Lozinka'
-        self.fields['password2'].label = 'Ponovi lozinku'
 
-        self.error_messages.update({
-            'password_mismatch': _("Lozinke se ne podudaraju."),
-        })
-        self.fields['username'].error_messages.update({
-            'required': _("Unesi korisničko ime."),
-            'unique': _("Korisničko ime je već zauzeto.")
-        })
-        self.fields['email'].error_messages.update({
-            'required': _("Unesi email adresu."),
-            'invalid': _("Unesi ispravnu email adresu."),
-        })
-        self.fields['password1'].error_messages.update({
-            'required': _("Unesi lozinku."),
-        })
-        self.fields['password2'].error_messages.update({
-            'required': _("Ponovi lozinku."),
-        })
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("To korisničko ime je već registrirano.")
+        return username
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -60,17 +63,28 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'category', 'manufacturer', 'model','slug', 'price', 'image', 'description', 'in_stock', 'popular']
+        labels = {
+            'name': 'Naziv proizvoda',
+            'category': 'Kategorija',
+            'manufacturer': 'Proizvođač',
+            'model': 'Model',
+            'slug': 'Slug (opcionalno)',
+            'price': 'Cijena (€)',
+            'image': 'Glavna slika',
+            'description': 'Opis proizvoda',
+            'in_stock': 'Na stanju',
+            'popular': 'Popularan proizvod?',
+        }
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
         
 
-ProductImageFormSet = forms.inlineformset_factory(
+ProductImageFormSet = inlineformset_factory(
     Product,
     ProductImage,
     fields=('image',),
     extra=1,
-    can_delete=True,
     labels={'image': 'Dodatna slika'}
 )
 
@@ -100,7 +114,7 @@ class BannerForm(forms.ModelForm):
         labels = {
             'title': 'Naslov bannera',
             'image': 'Slika bannera',
-            'link': 'Poveznica (opcionalno)',
+            'link': 'Poveznica',
         }
         widgets = {
             'link': forms.URLInput(attrs={'placeholder': 'https://...'}),
@@ -135,12 +149,20 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+        labels = {
+            'username': 'Korisničko ime',
+            'email': 'Email',
+        }
+        help_texts = {
+            'username': '',
+            'email': '',
+        }
 
     def __init__(self, *args, **kwargs):
         self.profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = 'Korisničko ime'
-        self.fields['email'].label = 'Email'
+        self.fields['phone'].initial = self.profile.phone
+        self.fields['address'].initial = self.profile.address
 
     def save(self, commit=True):
         user = super().save(commit)

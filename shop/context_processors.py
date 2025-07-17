@@ -1,5 +1,4 @@
 from .models import Category
-from .models import Cart
 
 def categories_context(request):
     return {

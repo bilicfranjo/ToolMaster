@@ -136,10 +136,9 @@ ul.errorlist {
     padding: 0;
     margin-bottom: 10px;
     color: red;
-    font-size: 18px;
+    font-size: 20px;
     list-style: none;
 }
-
 
 form button:hover {
     background-color: #d4ac0d;
@@ -171,7 +170,7 @@ form button:hover {
 
 
 /* RESPONZIVNOST ZA MOBITELE */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .auth-container {
         flex-direction: column;
     }
@@ -186,5 +185,3 @@ form button:hover {
         padding: 30px 20px;
     }
 }
-
-/* RESPONZIVNOST ZA TABLETE */

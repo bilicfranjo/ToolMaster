@@ -1,6 +1,6 @@
 {% extends 'shop/dashboard/base_dashboard.html' %}
 
-{% block title %}Dodaj proizvod{% endblock %}
+{% block title %}{{action}} - ToolMaster{% endblock %}
 
 {% block content %}
 <h2>{{ action }}</h2>
@@ -14,11 +14,6 @@
         <div class="mb-3">
             {{ form.image.label_tag }}
             {{ form.image }}
-            {% if form.instance.pk %}
-                <label>
-                    {{ form.DELETE }} Obriši ovu sliku
-                </label>
-            {% endif %}
         </div>
     {% endfor %}
     <hr>
@@ -62,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
-    // Ako je stranica za uređivanje, automatski pokreni dohvat ako je odabrana kategorija
+
     if (categorySelect.value) {
         categorySelect.dispatchEvent(new Event('change'));
     }

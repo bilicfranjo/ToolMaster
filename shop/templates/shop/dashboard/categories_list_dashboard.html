@@ -1,6 +1,8 @@
 {% extends 'shop/dashboard/base_dashboard.html' %}
 {% load static %}
 
+{% block title %}Kategorije - ToolMaster{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Kategorije</h2>
@@ -30,19 +32,19 @@
                     </button>
                 </td>
             </tr>
-            {% for sub in category.subcategories.all %}
-            <tr>
-                <td>↳ {{ sub.name }}</td>
-                <td>Podkategorija</td>
-                <td>{{ sub.parent.name }}</td>
-                <td>
-                    <a href="{% url 'admin_category_edit' sub.pk %}" class="btn btn-sm btn-primary">Uredi</a>
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ sub.id }}">
-                        Obriši
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
+                {% for sub in category.subcategories.all %}
+                <tr>
+                    <td>↳ {{ sub.name }}</td>
+                    <td>Podkategorija</td>
+                    <td>{{ sub.parent.name }}</td>
+                    <td>
+                        <a href="{% url 'admin_category_edit' sub.pk %}" class="btn btn-sm btn-primary">Uredi</a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ sub.id }}">
+                            Obriši
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
             {% endfor %}
         </tbody>
     </table>

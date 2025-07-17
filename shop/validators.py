@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 class CustomSimilarityValidator:
     def validate(self, password, user=None):
-        if user and user.username.lower() in password.lower():
+        if user and user.username and user.username.lower() in password.lower():
             raise ValidationError(
                 _("Lozinka je previše slična korisničkom imenu."),
                 code='password_too_similar',
@@ -31,7 +31,7 @@ class CustomMinimumLengthValidator:
 
 class CustomCommonPasswordValidator:
     def validate(self, password, user=None):
-        common_passwords = ["123456", "password", "12345678", "lozinka", "admin", "qwerty"]  # možeš proširiti
+        common_passwords = ["123456", "12345678", "password",  "lozinka", "admin"]
         if password.lower() in common_passwords:
             raise ValidationError(
                 _("Lozinka je previše jednostavna. Odaberi složeniju."),

@@ -1,0 +1,37 @@
+{% extends 'shop/dashboard/base_dashboard.html' %}
+
+{% block title %}Detalji korisnika - ToolMaster{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="diy-centered-title mt-3">Korisnik: {{ user.username }}</h2>
+</div>
+
+<div class="container table-responsive">
+    <table class="table table-bordered w-100">
+        <tbody>
+            <tr>
+                <th>Korisničko ime</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Broj mobitela</th>
+                <td>{{ profile.phone|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Adresa</th>
+                <td>{{ profile.address|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Datum registracije</th>
+                <td>{{ user.date_joined|date:"d.m.Y. H:i" }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'admin_user_list' %}" class="btn btn-secondary">← Natrag</a>
+</div>
+{% endblock %}

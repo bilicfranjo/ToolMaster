@@ -36,7 +36,7 @@
                     <div class="search-toggle-wrapper" id="search-wrapper">
                         <a href="#" id="search-toggle" class="search-link">Pretraži</a>
                         <form action="{% url 'home' %}" method="get" id="search-form">
-                            <input type="text" name="q" placeholder="Unesite pojam..." />
+                            <input type="text" name="q" placeholder="Unesite pojam..." autocomplete="off"/>
                             <button type="button" id="search-close" title="Zatvori">×</button>
                         </form>
                         <ul id="search-results" class="search-results-list hidden"></ul>
@@ -78,7 +78,6 @@
                 </div>
             </div>
 
-            <!-- MOBILNI MENI -->
             <div id="mobile-nav" class="mobile-nav-menu">
                 <a href="/">Početna</a>
                 <a href="#" id="mobile-category-toggle">Kategorije</a>
@@ -142,11 +141,11 @@
         const hamburger = document.getElementById('hamburger-toggle');
         const mobileNav = document.getElementById('mobile-nav');
         const mobileToggle = document.getElementById('mobile-category-toggle');
-        const overlay = document.getElementById('overlay'); // ✅ overlay referenca
+        const overlay = document.getElementById('overlay');
 
-        // Otvaranje/zatvaranje mobilnog menija i prikazivanje overlaya
+        // Otvaranje/zatvaranje mobilnog menija
         hamburger.addEventListener('click', () => {
-            mobileNav.classList.toggle('show');
+            mobileNav.classList.toggle('active');
             overlay.classList.toggle('active');
         });
 
@@ -156,19 +155,20 @@
                 e.preventDefault();
                 dropdown.classList.add('active');
                 overlay.classList.add('active');
-                mobileNav.classList.remove('show');
+                mobileNav.classList.remove('active');
             });
         }
 
-        //  Klik izvan mobilnog dropdowna zatvara dropdown i overlay
+        //  Zatvaranje mobilnog dropdowna
         document.addEventListener('click', function (e) {
             const isInsideMobile = mobileNav.contains(e.target) || hamburger.contains(e.target);
-            if (!isInsideMobile && mobileNav.classList.contains('show')) {
-                mobileNav.classList.remove('show');
+            if (!isInsideMobile && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
                 overlay.classList.remove('active');
             }
         });
 
+        // Skrolanje
         const navbar = document.getElementById('main-navbar');
         const logo = document.getElementById('main-logo');
         window.addEventListener('scroll', function () {
@@ -270,19 +270,21 @@
             overlay.classList.add('active');
         });
 
-        //  Klik na overlay zatvara sve
-        overlay.addEventListener('click', () => {
-            closeDropdown();
-            mobileNav.classList.remove('show');
-            overlay.classList.remove('active');
-        });
-
         function closeDropdown() {
             dropdown.classList.remove('active');
             overlay.classList.remove('active');
             mainButtons.forEach(btn => btn.classList.remove('active'));
             subLists.forEach(list => list.style.display = 'none');
         }
+
+        //  Klik na overlay zatvara sve
+        overlay.addEventListener('click', () => {
+            closeDropdown();
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+       
 
         // Gašenje sa ESC
         document.addEventListener('keydown', function (e) {
@@ -307,8 +309,6 @@
 
     });
 </script>
-
-
 {% block extra_js %}{% endblock %}
 </body>
 </html>

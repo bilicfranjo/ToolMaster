@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -38,10 +37,7 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
-    
-    def get_absolute_url(self):
-        return reverse('product_detail', args=[self.category.slug, self.slug])
-    
+
     
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='extra_images', on_delete=models.CASCADE)
@@ -142,7 +138,6 @@ class UserProfile(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Košarica ({self.user.username})"

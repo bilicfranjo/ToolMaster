@@ -15,74 +15,73 @@
     </div>
 </div>
 
-
 <div class="table-responsive">
   <table class="table table-bordered table-striped align-middle">
-      <thead class="table-dark">
-          <tr>
-              <th>Slika</th>
-              <th>Naziv</th>
-              <th>Kategorija</th>
-              <th>Cijena</th>
-              <th>Dostupnost</th>
-              <th>Popularno</th>
-              <th>Akcije</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for product in products %}
-          <tr>
-              <td>
-                  {% if product.image %}
-                      <img src="{{ product.image.url }}" alt="{{ product.name }}" width="60">
-                  {% else %}
-                      <span class="text-muted">Nema slike</span>
-                  {% endif %}
-              </td>
-              <td>
-                  <a href="{% url 'product_detail' product.category.slug product.slug %}">
-                      {{ product.name }}
-                  </a>
-              </td>
-              <td>{{ product.category.name }}</td>
-              <td>{{ product.price }} €</td>
-              <td>{% if product.in_stock %}✅{% else %}❌{% endif %}</td>
-              <td>{% if product.popular %}✅{% else %}—{% endif %}</td>
-              <td>
-                  <a href="{% url 'admin_product_edit' product.pk %}" class="btn btn-sm btn-primary">Uredi</a>
-                  <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ product.pk }}">Obriši</button>
-              </td>
-          </tr>
+    <thead class="table-dark">
+      <tr>
+        <th>Slika</th>
+        <th>Naziv</th>
+        <th>Kategorija</th>
+        <th>Cijena</th>
+        <th>Dostupnost</th>
+        <th>Popularno</th>
+        <th>Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+          <td>
+              {% if product.image %}
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" width="60">
+              {% else %}
+                  <span class="text-muted">Nema slike</span>
+              {% endif %}
+          </td>
+          <td>
+              <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                  {{ product.name }}
+              </a>
+          </td>
+          <td>{{ product.category.name }}</td>
+          <td>{{ product.price }} €</td>
+          <td>{% if product.in_stock %}✅{% else %}❌{% endif %}</td>
+          <td>{% if product.popular %}✅{% else %}—{% endif %}</td>
+          <td>
+              <a href="{% url 'admin_product_edit' product.pk %}" class="btn btn-sm btn-primary">Uredi</a>
+              <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ product.pk }}">Obriši</button>
+          </td>
+      </tr>
 
-          <!-- MODAL za brisanje -->
-          <div class="modal fade" id="deleteModal{{ product.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ product.pk }}" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <form method="post" action="{% url 'admin_product_delete' product.pk %}">
-                  {% csrf_token %}
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel{{ product.pk }}">Potvrda brisanja</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
-                  </div>
-                  <div class="modal-body">
-                    Jeste li sigurni da želite obrisati <strong>{{ product.name }}</strong>?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
-                    <button type="submit" class="btn btn-danger">Obriši</button>
-                  </div>
-                </form>
+      <!-- MODAL za brisanje -->
+      <div class="modal fade" id="deleteModal{{ product.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ product.pk }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="post" action="{% url 'admin_product_delete' product.pk %}">
+              {% csrf_token %}
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ product.pk }}">Potvrda brisanja</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
               </div>
-            </div>
+              <div class="modal-body">
+                Jeste li sigurni da želite obrisati <strong>{{ product.name }}</strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                <button type="submit" class="btn btn-danger">Obriši</button>
+              </div>
+            </form>
           </div>
+        </div>
+      </div>
 
-          {% endfor %}
-      </tbody>
-      {% if not products %}
-        <tr>
-            <td colspan="7" class="text-center text-muted">Nema rezultata za "{{ query }}".</td>
-        </tr>
-      {% endif %}
+      {% endfor %}
+    </tbody>
+    {% if not products %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">Nema rezultata za "{{ query }}".</td>
+      </tr>
+    {% endif %}
 
   </table>
 </div>

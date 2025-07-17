@@ -1,6 +1,8 @@
 {% extends 'shop/dashboard/base_dashboard.html' %}
 {% load static %}
 
+{% block title %}Korisnici - ToolMaster{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Korisnici</h2>
@@ -28,6 +30,7 @@
                   <a href="{% url 'admin_user_staff_toggle' user.pk %}" class="btn btn-sm btn-warning">
                       {% if user.is_staff %}Ukloni staff{% else %}Dodaj staff{% endif %}
                   </a>
+                  <a href="{% url 'admin_user_detail' user.pk %}" class="btn btn-sm btn-info">Detalji</a>
                   <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.pk }}">Obriši</button>
                   {% else %}
                       <span class="text-muted">Superuser</span>

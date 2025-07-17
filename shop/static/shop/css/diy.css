@@ -16,13 +16,6 @@
 
 /* DIY PREGLED PROJEKTA */
 
-
-.diy-detail-page {
-    padding-top: 40px;
-    max-width: 960px;
-    margin: 0 auto;
-}
-
 .video-wrapper {
     max-width: 100%;
     display: flex;
@@ -138,7 +131,7 @@
 
 /* RESPONZIVNOST ZA MOBITELE */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .section-title {
         font-size: 32px;
     }
@@ -156,5 +149,3 @@
         font-size: 22px;
     }
 }
-
-/* RESPONZIVNOST ZA TABLETE */

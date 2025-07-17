@@ -28,56 +28,32 @@
 </head>
 <body>
 
-<div class="auth-container">
-    <div class="auth-image-side register-bg-image"></div>
+    <div class="auth-container">
+        <div class="auth-image-side register-bg-image"></div>
 
-    <div class="auth-form-side">
+        <div class="auth-form-side">
 
-        <div class="back-link">
-            <a href="{% url 'home' %}">← Natrag u trgovinu</a>
+            <div class="back-link">
+                <a href="{% url 'home' %}">← Natrag u trgovinu</a>
+            </div>
+
+
+            <div class="logo-wrapper">
+                <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
+            </div>
+
+            <h2>Registriraj račun</h2>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit">Registriraj se</button>
+            </form>
+
+
+            <p class="login-link">Već imaš račun? <a href="{% url 'login' %}">Prijavi se</a></p>
         </div>
-
-
-        <div class="logo-wrapper">
-            <img src="{% static 'shop/images/logo-green.png' %}" alt="ToolMaster logo">
-        </div>
-
-        <h2>Registriraj račun</h2>
-
-        <form method="post">
-            {% csrf_token %}
-
-            <div>
-                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                {{ form.username }}
-                {{ form.username.errors }}
-            </div>
-
-            <div>
-                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                {{ form.email }}
-                {{ form.email.errors }}
-            </div>
-
-            <div>
-                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-                {{ form.password1 }}
-                {{ form.password1.errors }}
-            </div>
-
-            <div>
-                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-                {{ form.password2 }}
-                {{ form.password2.errors }}
-            </div>
-
-            <button type="submit">Registriraj se</button>
-        </form>
-
-
-        <p class="login-link">Već imaš račun? <a href="{% url 'login' %}">Prijavi se</a></p>
     </div>
-</div>
 
 </body>
 </html>

@@ -54,7 +54,6 @@ button {
     font-weight: 600;
 }
 
-
 .site-footer p {
     margin: 0;
 }
@@ -124,10 +123,14 @@ button {
     transition: all 0.3s ease;
 }
 
+.logo-img:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
 .scrolled-logo {
     height: 22px;
 }
-
 
 .custom-navbar a {
     color: white;
@@ -145,11 +148,6 @@ button {
     user-select: none;
 }
 
-.logo-img:hover {
-    filter: brightness(1.2);
-    transform: scale(1.05);
-    transition: 0.3s;
-}
 
 /* Pretraži u navbaru */
 .search-toggle-wrapper {
@@ -170,7 +168,6 @@ button {
     outline: none;
     background-color: white;
     color: black;
-    font-family: 'Teko', sans-serif;
     width: 300px;
     transition: all 0.3s ease;
 }
@@ -186,7 +183,6 @@ button {
     padding: 0 8px;
     cursor: pointer;
     color: black;
-    font-family: 'Teko', sans-serif;
     transition: color 0.3s ease;
 }
 
@@ -204,6 +200,7 @@ button {
     gap: 5px;
     animation: fadeIn 0.3s ease;
 }
+
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
@@ -242,7 +239,7 @@ button {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #000;
+    color: black;
     gap: 10px;
 }
 
@@ -419,7 +416,6 @@ button {
     justify-content: center;
     padding: 40px;
     line-height: 1.4;
-    border-top: 1px solid #f1c40f;
 }
 
 .carousel-text h2 {
@@ -500,7 +496,6 @@ button {
 
 /* KATEGORIJE */
 
-/* Sekcija kategorija s pozadinom */
 .category-section {
     background-color: #4A5D23;
 }
@@ -509,7 +504,6 @@ button {
     position: relative;
 }
 
-/* Naslov sekcije lijevo */
 .section-title-left {
     font-size: 40px;
     font-weight: bold;
@@ -518,7 +512,6 @@ button {
     padding-left: 12px;
 }
 
-/* Kartica kao slika s overlay slojem */
 .category-card-img {
     background-size: cover;
     background-position: center;
@@ -544,7 +537,6 @@ button {
     align-items: center;
 }
 
-/* Tekst unutar kartice */
 .category-card-img h3 {
     color: white;
     font-size: 32px;
@@ -552,8 +544,8 @@ button {
     text-align: center;
     text-shadow: 1px 1px 2px black;
 }
-/* Swiper za kategorije */
 
+/* Swiper za kategorije */
 .category-section .swiper-button-prev,
 .category-section .swiper-button-next {
     top: 55%;
@@ -773,6 +765,7 @@ button {
     background-color: #4A5D23;
     padding: 60px 20px;
     color: white;
+    text-align: center;
 }
 
 .about-title {
@@ -785,8 +778,22 @@ button {
 .about-text {
     font-size: 26px;
     max-width: 800px;
-    margin: 0 auto;
+    margin: auto;
     line-height: 1.5;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.contact-info div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .contact-info .contact-icon {
@@ -831,7 +838,7 @@ button {
         z-index: 1001;
     }
 
-    .mobile-nav-menu.show {
+    .mobile-nav-menu.active {
         display: flex;
     }
 
@@ -1058,4 +1065,3 @@ button {
         font-size: 18px;
     }
 }
-

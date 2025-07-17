@@ -98,14 +98,14 @@
 
         // Otvaranje i zatvaranje mobilnog menija
         hamburger.addEventListener('click', () => {
-            mobileNav.classList.toggle('show');
+            mobileNav.classList.toggle('active');
         });
 
         // Zatvaranje menija klikom izvan njega
         document.addEventListener('click', function (e) {
             const isInside = mobileNav.contains(e.target) || hamburger.contains(e.target);
-            if (!isInside && mobileNav.classList.contains('show')) {
-                mobileNav.classList.remove('show');
+            if (!isInside && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
             }
         });
 

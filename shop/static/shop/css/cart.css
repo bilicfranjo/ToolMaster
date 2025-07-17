@@ -11,10 +11,6 @@
     margin: 8px 0;
 }
 
-.cart-summary .fs-5 {
-    font-weight: 600;
-}
-
 .cart-table td, .cart-table th, .cart-price {
     font-size: 20px;
 }
@@ -61,9 +57,3 @@
 .checkout-btn:hover {
     background-color: #0eb735;
 }
-
-
-/* RESPONZIVNOST ZA MOBITELE */
-
-
-/* RESPONZIVNOST ZA TABLETE */
