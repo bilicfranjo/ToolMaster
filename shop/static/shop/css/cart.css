@@ -28,6 +28,29 @@
     font-size: 24px;
 }
 
+.alert {
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 0;
+    display: inline-block;
+    transition: opacity 0.5s ease;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInAlert 0.4s ease forwards;
+}
+
+@keyframes fadeInAlert {
+    to {
+        opacity: 1;
+    }
+}
+
+
 /* Gumbi za ažuriranje, brisanje i povratak u trgovinu*/
 .cart-btn {
     font-size: 18px;

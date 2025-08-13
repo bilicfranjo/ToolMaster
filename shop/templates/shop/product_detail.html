@@ -39,8 +39,8 @@
             <h2 class="product-title">{{ product.name }}</h2>
             <h4 class="product-price">{{ product.price }} €</h4>
             <p class="product-availability"><strong>Dostupnost:</strong> 
-                {% if product.in_stock %}
-                    <span class="text-success">Na skladištu</span>
+                {% if product.stock_quantity > 0 %}
+                    <span class="text-success">Na skladištu ({{ product.stock_quantity }} kom)</span>
                 {% else %}
                     <span class="text-danger">Nije dostupno</span>
                 {% endif %}
@@ -52,17 +52,23 @@
                     {% csrf_token %}
                     <div class="mb-3 product-quantity">
                         <label for="quantity" class="form-label">Količina:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" class="form-control" {% if not product.in_stock %}disabled{% endif %}>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1"
+                    
+                            class="form-control"
+                            {% if product.stock_quantity == 0 %}disabled{% endif %}>
                     </div>
                     <button type="submit" id="add-to-cart-btn" class="btn add-to-cart-btn"
-                        {% if not product.in_stock %}disabled{% endif %}>
-                        {% if product.in_stock %}
+                        {% if product.stock_quantity == 0 %}disabled{% endif %}>
+                        {% if product.stock_quantity > 0 %}
                             Dodaj u košaricu
                         {% else %}
                             Nije dostupno
                         {% endif %}
                     </button>
                 </form>
+                <div id="error-alert" class="alert alert-danger alert-dismissible fade d-none mt-3" role="alert">
+                    <span id="error-alert-text"></span>
+                </div>
             {% else %}
                 <div class="mb-3 product-quantity">
                     <label for="quantity" class="form-label">Količina:</label>
@@ -151,17 +157,9 @@
     if (addToCartBtn) {
         const form = addToCartBtn.closest('form');
 
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
-            addToCartBtn.classList.add('clicked');
-            addToCartBtn.disabled = true;
-
-            setTimeout(() => {
-                addToCartBtn.classList.remove('clicked');
-                addToCartBtn.disabled = false;
-                addToCartBtn.innerHTML = 'Dodaj u košaricu';
-            }, 2000);
 
             fetch(form.action, {
                 method: 'POST',
@@ -172,6 +170,31 @@
             })
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    const alertBox = document.getElementById('error-alert');
+                    const alertText = document.getElementById('error-alert-text');
+                    alertText.textContent = data.error;
+                    alertBox.classList.remove('d-none');
+                    alertBox.classList.add('show');
+
+                    setTimeout(() => {
+                        alertBox.classList.remove('show');
+                        alertBox.classList.add('d-none');
+                    }, 4000);
+                    return;
+                }
+
+                // Ako je uspješno:
+                addToCartBtn.classList.add('clicked');
+                addToCartBtn.disabled = true;
+                addToCartBtn.innerHTML = '✔ Dodano u košaricu';
+
+                setTimeout(() => {
+                    addToCartBtn.classList.remove('clicked');
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = 'Dodaj u košaricu';
+                }, 2000);
+
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) {
                     cartCount.textContent = data.cart_item_count;
@@ -179,6 +202,7 @@
             })
             .catch(error => console.error('Greška prilikom dodavanja u košaricu:', error));
         });
+
     }
     
 </script>

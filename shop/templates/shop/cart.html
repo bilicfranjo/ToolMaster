@@ -1,5 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% load static custom_tags %}
 
 {% block title %}Košarica - ToolMaster{% endblock %}
 
@@ -9,7 +10,21 @@
 
 {% block content %}
 <div class="container py-5">
-    <h2 class="mb-4">Tvoja košarica ({{ items|length }} {{ items|length|pluralize:"proizvod,proizvoda,proizvoda" }})</h2>
+
+    <div class="d-flex align-items-center gap-4 mb-4 flex-wrap">
+        <div class="flex-grow-1">
+            <h2 class="m-0">Tvoja košarica ({{ items|length }} {{ items|length|pluralize:"proizvod,proizvoda,proizvoda" }})</h2>
+        </div>
+        {% if messages %}
+            <div class="flex-grow-1 flex-md-grow-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} fade-in">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 
     {% if items|length == 0 %}
         <p class="empty-cart-text">Košarica je prazna.</p>
@@ -31,19 +46,27 @@
                 </thead>
                 <tbody>
                     {% for item in items %}
-                    <tr>
+                    <tr class="{% if item.product.stock_quantity == 0 %}table-danger{% endif %}">
                         <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"></td>
                         <td>
                             <a href="{% url 'product_detail' category_slug=item.product.category.slug slug=item.product.slug %}">
                                 {{ item.product.name }}
                             </a>
+                            {% if item.product.stock_quantity == 0 %}
+                                <div class="text-danger small mt-1">Nema na stanju</div>
+                            {% endif %}
                         </td>
                         <td class="cart-price">{{ item.product.price }} €</td>
                         <td>
                             <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-flex">
                                 {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="50" class="form-control me-2 fs-6">
-                                <button type="submit" class="btn btn-sm btn-outline-primary cart-btn">Ažuriraj</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                                    class="form-control me-2 fs-6"
+                                    {% if item.product.stock_quantity == 0 %}disabled{% endif %}>
+                                <button type="submit" class="btn btn-sm btn-outline-primary cart-btn"
+                                        {% if item.product.stock_quantity == 0 %}disabled{% endif %}>
+                                    Ažuriraj
+                                </button>
                             </form>
                         </td>
                         <td class="cart-price">{{ item.total }} €</td>
@@ -72,10 +95,36 @@
                     <hr>
                     <p class="cart-price">Ukupno: <strong class="float-end">{{ total|floatformat:2 }} €</strong></p>
                 {% endwith %}
-                <a href="{% url 'checkout' %}" class="checkout-btn">Idi na naplatu</a>
+                {% if items|some:"product.stock_quantity == 0" %}
+                    <div class="alert alert-warning mt-3 permanent-alert">
+                        Uklonite proizvode koji nisu na stanju kako biste mogli nastaviti na naplatu.
+                    </div>
+                {% else %}
+                    <a href="{% url 'checkout' %}" class="checkout-btn">Idi na naplatu</a>
+                {% endif %}
             </div>
         </div>
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll('.alert:not(.permanent-alert)');
+    
+    if (alerts.length > 0) {
+        setTimeout(() => {
+            alerts.forEach(alert => {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 500);
+            });
+        }, 2000);
+    }
+});
+</script>
 {% endblock %}

@@ -27,13 +27,18 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='products/')
     description = models.TextField(blank=True)
-    in_stock = models.BooleanField(default=True)
+    stock_quantity = models.PositiveIntegerField(default=0)
     popular = models.BooleanField(default=False)
     
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+    
+    @property
+    def is_in_stock(self):
+        return self.stock_quantity > 0
+
     
     def __str__(self):
         return self.name

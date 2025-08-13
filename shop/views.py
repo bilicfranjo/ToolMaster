@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from decimal import Decimal
 from django.urls import reverse
+from django.contrib import messages
 
 # Home 
 def home_view(request):
@@ -561,6 +562,14 @@ def cart_add_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
 
+    existing_item = cart.items.filter(product=product).first()
+    total_quantity = quantity + (existing_item.quantity if existing_item else 0)
+
+    if total_quantity > product.stock_quantity:
+        return JsonResponse({
+            'error': f'Dostupno je samo {product.stock_quantity} komada.'
+        }, status=400)
+
     item, created = cart.items.get_or_create(product=product)
     if not created:
         item.quantity += quantity
@@ -569,8 +578,9 @@ def cart_add_view(request, product_id):
     item.save()
 
     return JsonResponse({
-    'cart_item_count': sum(i.quantity for i in cart.items.all())
+        'cart_item_count': sum(i.quantity for i in cart.items.all())
     })
+
 
 
 @login_required
@@ -584,6 +594,10 @@ def cart_update_view(request, product_id):
     cart = request.user.cart
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
+
+    if quantity > product.stock_quantity:
+        messages.warning(request, f"Dostupno je samo {product.stock_quantity} komada.")
+        return redirect('cart_detail')
 
     item, _ = cart.items.get_or_create(product=product)
     item.quantity = quantity
@@ -634,6 +648,11 @@ def checkout_view(request):
                         quantity=item.quantity,
                         price=item.product.price,
                     )
+                    
+                    item.product.stock_quantity -= item.quantity
+                    if item.product.stock_quantity < 0:
+                        item.product.stock_quantity = 0
+                    item.product.save()
 
                 items.delete()
                 return redirect('order_success', pk=order.pk)

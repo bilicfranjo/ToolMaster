@@ -127,6 +127,11 @@
                                 <p class="card-text">{{ product.price }} €</p>
                             </div>
                             <div class="card-corner-arrow">→</div>
+                            {% if product.stock_quantity == 0 %}
+                                <div class="position-absolute bottom-0 start-0 m-2">
+                                    <span class="text-danger">Nije dostupno</span>
+                                </div>
+                            {% endif %}
                         </div>
                     </a>
                 </div>

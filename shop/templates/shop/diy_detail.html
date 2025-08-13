@@ -43,6 +43,11 @@
                                     <p class="card-text">{{ tool.price }} €</p>
                                 </div>
                                 <div class="card-corner-arrow">→</div>
+                                {% if tool.stock_quantity == 0 %}
+                                <div class="position-absolute bottom-0 start-0 m-2">
+                                    <span class="text-danger">Nije dostupno</span>
+                                </div>
+                                {% endif %}
                             </div>
                         </a>
                     </div>

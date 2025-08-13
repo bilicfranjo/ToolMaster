@@ -62,7 +62,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'category', 'manufacturer', 'model','slug', 'price', 'image', 'description', 'in_stock', 'popular']
+        fields = ['name', 'category', 'manufacturer', 'model','slug', 'price', 'image', 'description', 'stock_quantity', 'popular']
         labels = {
             'name': 'Naziv proizvoda',
             'category': 'Kategorija',
@@ -72,7 +72,7 @@ class ProductForm(forms.ModelForm):
             'price': 'Cijena (€)',
             'image': 'Glavna slika',
             'description': 'Opis proizvoda',
-            'in_stock': 'Na stanju',
+            'stock_quantity': 'Količina na stanju',
             'popular': 'Popularan proizvod?',
         }
         widgets = {
