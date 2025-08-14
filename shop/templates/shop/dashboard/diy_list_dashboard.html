@@ -41,7 +41,7 @@
                     <div class="modal fade" id="deleteModal{{ video.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ video.id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form method="POST" action="{% url 'admin_diy_delete' video.pk %}">
+                                <form method="post" action="{% url 'admin_diy_delete' video.pk %}">
                                     {% csrf_token %}
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="deleteModalLabel{{ video.id }}">Potvrdi brisanje</h5>

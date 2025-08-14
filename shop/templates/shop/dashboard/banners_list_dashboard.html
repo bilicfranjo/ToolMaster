@@ -45,7 +45,7 @@
                     <div class="modal fade" id="deleteModal{{ banner.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ banner.id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form method="POST" action="{% url 'admin_banner_delete' banner.pk %}">
+                                <form method="post" action="{% url 'admin_banner_delete' banner.pk %}">
                                     {% csrf_token %}
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="deleteModalLabel{{ banner.id }}">Potvrdi brisanje</h5>

@@ -55,7 +55,7 @@
     <div class="modal fade" id="deleteModal{{ category.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ category.id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="POST" action="{% url 'admin_category_delete' category.pk %}">
+                <form method="post" action="{% url 'admin_category_delete' category.pk %}">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h5 class="modal-title">Potvrdi brisanje</h5>
@@ -76,7 +76,7 @@
     <div class="modal fade" id="deleteModal{{ sub.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ sub.id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="POST" action="{% url 'admin_category_delete' sub.pk %}">
+                <form method="post" action="{% url 'admin_category_delete' sub.pk %}">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h5 class="modal-title">Potvrdi brisanje</h5>
